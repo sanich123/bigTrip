@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Alexander Voronin](https://up.htmlacademy.ru/ecmascript/15/user/1541333).
-* Наставник: `Vladimir Artyukhov`.
+* Наставник: [Vladimir Artyukhov](https://htmlacademy.ru/profile/artman).
 
 ---
 
