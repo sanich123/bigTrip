@@ -25,10 +25,10 @@ render(toSort, loading(), 'beforeend');
 render(toSort, empty(), 'beforeend');
 
 
-const eventItem = document.querySelector('.trip-events__item:nth-child(1)');
+const eventItem = document.querySelector('.trip-events__item:first-child');
 const eventItem2 = document.querySelector('.trip-events__item:nth-child(2)');
 const eventItem3 = document.querySelector('.trip-events__item:nth-child(3)');
-const eventItem4 = document.querySelector('.trip-events__item:nth-child(4)');
+const eventItem4 = document.querySelector('.trip-events__item:last-child');
 
 render(eventItem, editPoint(), 'afterbegin');
 render(eventItem2, addNewPointWithoutDestination(), 'afterbegin');
