@@ -6,6 +6,7 @@ import { editPoint, addNewPointWithoutDestination, addNewPointWithoutOffers, add
 import { loading, empty } from './view/loading.js';
 
 
+
 const priceAndTripSection = document.querySelector('.trip-main');
 const toNavigation = document.querySelector('.trip-controls__navigation');
 const toFilters = document.querySelector('.trip-controls__filters');
