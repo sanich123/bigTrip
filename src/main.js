@@ -16,13 +16,18 @@ const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
-render(priceAndTripSection, priceAndTrip(), 'afterbegin');
-render(toNavigation, navigationMenu(), 'afterbegin');
-render(toFilters, filters(), 'afterbegin');
-render(toSort, sort(), 'afterbegin');
-render(toSort, eventsList(), 'beforeend');
-render(toSort, loading(), 'beforeend');
-render(toSort, empty(), 'beforeend');
+const renderPosition = {
+  AFTERBEGIN: 'afterbegin',
+  BEFOREEND: 'beforeend',
+};
+
+render(priceAndTripSection, priceAndTrip(), renderPosition.AFTERBEGIN);
+render(toNavigation, navigationMenu(), renderPosition.AFTERBEGIN);
+render(toFilters, filters(), renderPosition.AFTERBEGIN);
+render(toSort, sort(), renderPosition.AFTERBEGIN);
+render(toSort, eventsList(), renderPosition.BEFOREEND);
+render(toSort, loading(), renderPosition.BEFOREEND);
+render(toSort, empty(), renderPosition.BEFOREEND);
 
 
 const eventItem = document.querySelector('.trip-events__item:first-child');
@@ -30,7 +35,7 @@ const eventItem2 = document.querySelector('.trip-events__item:nth-child(2)');
 const eventItem3 = document.querySelector('.trip-events__item:nth-child(3)');
 const eventItem4 = document.querySelector('.trip-events__item:last-child');
 
-render(eventItem, editPoint(), 'afterbegin');
-render(eventItem2, addNewPointWithoutDestination(), 'afterbegin');
-render(eventItem3, addNewPointWithoutOffers(), 'afterbegin');
-render(eventItem4, addNewPoint(), 'afterbegin');
+render(eventItem, editPoint(), renderPosition.AFTERBEGIN);
+render(eventItem2, addNewPointWithoutDestination(), renderPosition.AFTERBEGIN);
+render(eventItem3, addNewPointWithoutOffers(), renderPosition.AFTERBEGIN);
+render(eventItem4, addNewPoint(), renderPosition.AFTERBEGIN);
