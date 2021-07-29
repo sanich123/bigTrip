@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "eslint": "7.31.0",
-    "eslint-config-htmlacademy": "4.0.2"
+    "eslint-config-htmlacademy": "^4.0.2"
   },
   "engines": {
     "node": "12"
