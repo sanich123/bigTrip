@@ -604,4 +604,4 @@ const addNewPoint = () => (
 
 export {
   // editPoint,
-   addNewPointWithoutDestination, addNewPointWithoutOffers, addNewPoint};
+  addNewPointWithoutDestination, addNewPointWithoutOffers, addNewPoint};

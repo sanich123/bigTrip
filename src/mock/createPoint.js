@@ -98,7 +98,7 @@ const generateDate = () => {
   // .formate('[YYYYescape] YYYY-MM-DDTHH:mm:ssZ[Z]');
 };
 
-console.log(generateDate());
+// console.log(generateDate());
 
 const generateDestination = () => ({
   description: getRandomArrayLengthByNumber(1, descriptions, 5),
