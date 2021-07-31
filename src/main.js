@@ -7,16 +7,16 @@ import {
   addNewPointWithoutDestination, addNewPointWithoutOffers, addNewPoint  } from './view/editing-point.js';
 import { loading, empty } from './view/loading.js';
 import './mock/createPoint.js';
-import { generateLocalPoint, generatePoint, generateOffer,generateDestination  } from './mock/createPoint.js';
+import { generatePoint } from './mock/createPoint.js';
 
 const NUMBER_COPIES = 1;
 
 const points = new Array(NUMBER_COPIES).fill().map(generatePoint);
-console.log(points);
+// console.log(points);
 
 const editPoint = (
   // points
-  ) => {
+) => {
   // const { base_price, date_from, date_to, destination, id, isFavorite, offers, type  } = points;
   (`
   <form class="event event--edit" action="#" method="post">
