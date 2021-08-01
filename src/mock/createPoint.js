@@ -92,12 +92,11 @@ const getRandomArrayLength = (min, arr) => {
 };
 
 const generateDate = () => {
-  const maxDaysGap = 30;
+  const maxDaysGap = 3000;
   const daysGap = getRandomInteger(-maxDaysGap, maxDaysGap);
-  return dayjs().add(daysGap, 'day').toDate();
+  return dayjs().add(daysGap, 'h').toDate();
   // .formate('[YYYYescape] YYYY-MM-DDTHH:mm:ssZ[Z]');
 };
-
 // console.log(generateDate());
 
 const generateDestination = () => ({
@@ -106,40 +105,16 @@ const generateDestination = () => ({
   pictures: getRandomArrayLength(1, pictures),
 });
 
-const generateOffer = () => ({
-  type: getRandomArrayMember(types),
-  // city: getRandomArrayMember(cities),
-  offers: getRandomArrayLength(0, options),
-  // destination: generateDestination(),
-});
-
 const generatePoint = () => ({
-  'base_price': getRandomInteger(1, 2309),
-  'date_from': generateDate(),
-  'date_to': generateDate(),
+  basePrice: getRandomInteger(1, 2309),
+  dateFrom: generateDate(),
+  dateTo: generateDate(),
   destination: generateDestination(),
-  'id': '0',
+  id: getRandomInteger(0, 15),
   isFavorite: Boolean(getRandomInteger(0, 1)),
   offers: getRandomArrayLength(0, options),
   type: getRandomArrayMember(types),
 });
 
-const generateLocalPoint = () => ({
-  'base_price': 222,
-  'date_from': '2019-07-10T22:55:56.845Z',
-  'date_to': '2019-07-11T11:22:13.375Z',
-  destination: generateDestination(),
-  isFavorite: Boolean(getRandomInteger(0, 1)),
-  offers: getRandomArrayLength(0, options),
-  type: getRandomArrayMember(types),
-});
-
-//Объект для домашнего задания
-// const generatePointOfTrip = () => ({
-//   type: getRandomArrayMember(types),
-//   name: getRandomArrayMember(cities),
-//   offers: getRandomArrayLength(0, options),
-//   destination: generateDestination(),
-// });
-export { generateLocalPoint, generatePoint, generateOffer,generateDestination  };
+export { generatePoint };
 
