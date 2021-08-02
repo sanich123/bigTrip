@@ -1,7 +1,8 @@
 import dayjs from 'dayjs';
 
-export const eventsList = (points) => {
+const eventsList = (points) => {
   const { basePrice, dateFrom, dateTo, destination, offers, type, isFavorite } = points;
+
   const titlePrice = offers.map(({ title, price }) => (
     `<li class="event__offer">
   <span class="event__offer-title">${title}</span>
@@ -16,13 +17,29 @@ export const eventsList = (points) => {
   const fromDateMinutes = dayjs(dateFrom).format('HH:mm');
   const toDateMinutes = dayjs(dateTo).format('HH:mm');
 
-  // const duration = dayjs(dateFrom).diff(dayjs(dateTo, 'h'));
-  // console.log(duration);
+  const duration = () => {
+    const millisecs = Math.round(Math.abs(dayjs(dateTo).diff(dayjs(dateFrom))));
+    if (millisecs <= 3600000) {
+      const string = dayjs(millisecs).format('HH mm').toString();
+      const finalDate = `${`${string[0] + string[1]  }M`}`;
+      return finalDate;
+    }
+    if (millisecs > 3600000 && millisecs <= 86400000) {
+      const string = dayjs(millisecs).format('HH mm').toString();
+      const finalDate = `${`${string[0] + string[1]  }H ${  string[3] + string [4] }M`}`;
+      return finalDate;
+    }
+    if (millisecs > 86400000) {
+      const string = dayjs(millisecs).format('DD HH mm').toString();
+      const finalDate = `${`${string[0] + string[1]  }D ${  string[3] + string [4] }H ${  string[6]  }${string[7]  }M`}`;
+      return finalDate;
+    }
+  };
 
-  return `<ul class="trip-events__list">
+  return `
   <li class="trip-events__item">
     <div class="event">
-      <time class="event__date" datetime="2019-03-18">${fromDate}</time>
+      <time class="event__date" datetime="${fromDate}">${fromDate}</time>
       <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
       </div>
@@ -33,7 +50,7 @@ export const eventsList = (points) => {
           —
           <time class="event__end-time" datetime="${dateTo}">${toDateMinutes}</time>
         </p>
-        <p class="event__duration">30M</p>
+        <p class="event__duration">${duration()}</p>
       </div>
       <p class="event__price">
         €&nbsp;<span class="event__price-value">${basePrice}</span>
@@ -53,7 +70,9 @@ export const eventsList = (points) => {
       </button>
     </div>
   </li>
-
-</ul>`;
+`;
 };
 
+const tripListUl = () => ('<ul class="trip-events__list"></ul>');
+
+export {tripListUl, eventsList};

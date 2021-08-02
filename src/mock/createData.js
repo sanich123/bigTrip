@@ -45,13 +45,13 @@ const options = [
 ];
 
 const descriptions = [
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-  'Cras aliquet varius magna, non porta ligula feugiat eget.',
-  'Fusce tristique felis at fermentum pharetra.',
-  'Aliquam id orci ut lectus varius viverra.',
-  ' Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.', 'Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.', 'Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.',
-  'Sed sed nisi sed augue convallis suscipit in sed felis.', 'Aliquam erat volutpat.',
-  'Nunc fermentum tortor ac porta dapibus.', 'In rutrum ac purus sit amet tempus.',
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+  'Cras aliquet varius magna, non porta ligula feugiat eget. ',
+  'Fusce tristique felis at fermentum pharetra. ',
+  'Aliquam id orci ut lectus varius viverra. ',
+  ' Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. ', 'Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. ', 'Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. ',
+  'Sed sed nisi sed augue convallis suscipit in sed felis. ', 'Aliquam erat volutpat. ',
+  'Nunc fermentum tortor ac porta dapibus. ', 'In rutrum ac purus sit amet tempus. ',
 ];
 
 const getRandomArrayMember = (arr) => (arr[getRandomInteger(0, arr.length - 1)]);
@@ -92,12 +92,11 @@ const getRandomArrayLength = (min, arr) => {
 };
 
 const generateDate = () => {
-  const maxDaysGap = 3000;
+  const maxDaysGap = 7000;
   const daysGap = getRandomInteger(-maxDaysGap, maxDaysGap);
-  return dayjs().add(daysGap, 'h').toDate();
-  // .formate('[YYYYescape] YYYY-MM-DDTHH:mm:ssZ[Z]');
+  return dayjs().add(daysGap, 'm').toDate();
 };
-// console.log(generateDate());
+
 
 const generateDestination = () => ({
   description: getRandomArrayLengthByNumber(1, descriptions, 5),
