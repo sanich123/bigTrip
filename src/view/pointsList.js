@@ -18,7 +18,7 @@ const eventsList = (points) => {
   const toDateMinutes = dayjs(dateTo).format('HH:mm');
 
   const duration = () => {
-    const millisecs = Math.round(Math.abs(dayjs(dateTo).diff(dayjs(dateFrom))));
+    const millisecs = Math.round(Math.abs(dayjs(dateFrom).diff(dayjs(dateTo))));
     if (millisecs <= 3600000) {
       const string = dayjs(millisecs).format('HH mm').toString();
       const finalDate = `${`${string[0] + string[1]  }M`}`;

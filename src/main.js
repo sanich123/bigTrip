@@ -29,7 +29,7 @@ const renderPosition = {
   BEFOREEND: 'beforeend',
 };
 
-render(priceAndTripSection, priceAndTrip(), renderPosition.AFTERBEGIN);
+render(priceAndTripSection, priceAndTrip(points), renderPosition.AFTERBEGIN);
 render(toNavigation, navigationMenu(), renderPosition.AFTERBEGIN);
 render(toFilters, filters(), renderPosition.AFTERBEGIN);
 render(toSort, sort(), renderPosition.AFTERBEGIN);
