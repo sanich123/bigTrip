@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 
 export const editPoint = (points = {}) => {
+
   const {
     basePrice = '',
     dateFrom = '31/12/1999 23:59',

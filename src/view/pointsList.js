@@ -19,17 +19,17 @@ const eventsList = (points) => {
 
   const duration = () => {
     const millisecs = Math.round(Math.abs(dayjs(dateFrom).diff(dayjs(dateTo))));
-    if (millisecs <= 3600000) {
+    if (millisecs < 3600000) {
       const string = dayjs(millisecs).format('HH mm').toString();
       const finalDate = `${`${string[0] + string[1]  }M`}`;
       return finalDate;
     }
-    if (millisecs > 3600000 && millisecs <= 86400000) {
+    if (millisecs >= 3600000 && millisecs < 86400000) {
       const string = dayjs(millisecs).format('HH mm').toString();
       const finalDate = `${`${string[0] + string[1]  }H ${  string[3] + string [4] }M`}`;
       return finalDate;
     }
-    if (millisecs > 86400000) {
+    if (millisecs >= 86400000) {
       const string = dayjs(millisecs).format('DD HH mm').toString();
       const finalDate = `${`${string[0] + string[1]  }D ${  string[3] + string [4] }H ${  string[6]  }${string[7]  }M`}`;
       return finalDate;

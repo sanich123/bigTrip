@@ -1,12 +1,14 @@
 import dayjs from 'dayjs';
 
 export const addNewPointWithoutDestination = (points = {}) => {
-  const { basePrice = '',
-    dateFrom = '31/12/1999 23:59',
-    dateTo = '01/01/2000 00:00',
-    offers = '',
+  const {
+    basePrice = '0000',
+    dateFrom = '01/01/2000 00:00',
+    dateTo = '01/01/2001 00:00',
     type = 'taxi',
-    destination } = points;
+    destination,
+    offers,
+  } = points;
   const fromDate = dayjs(dateFrom).format('DD/MM/YY HH:mm');
   const toDate = dayjs(dateTo).format('DD/MM/YY HH:mm');
 
