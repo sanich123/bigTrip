@@ -56,4 +56,3 @@ render(eventItem1, addNewPointWithoutDestination(points[1]), renderPosition.AFTE
 render(eventItem2, addNewPointWithoutOffers(points[2]), renderPosition.AFTERBEGIN);
 render(eventItem3, addNewPoint(points[3]), renderPosition.AFTERBEGIN);
 
-export { points };

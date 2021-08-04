@@ -18,3 +18,10 @@ export const differenceTime = (date1, date2) => {
 };
 
 
+export const generateDate = () => {
+  const maxDaysGap = 7000;
+  const daysGap = getRandomInteger(-maxDaysGap, maxDaysGap);
+  return dayjs().add(daysGap, 'm').toDate();
+};
+
+

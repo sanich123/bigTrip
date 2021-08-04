@@ -1,5 +1,5 @@
-import dayjs from 'dayjs';
 import { getRandomInteger } from '../utils/utils.js';
+import { generateDate } from '../utils/utils.js';
 
 const types = ['taxi',
   'bus',
@@ -9,34 +9,169 @@ const types = ['taxi',
   'flight',
   'check-in',
   'sightseeing',
-  'restaurant'];
+  'restaurant',
+];
 
-const cities = ['Amsterdam',
+const options = [
+  {
+    type: 'taxi',
+    offers: [
+      {
+        title: 'Upgrade to a business class',
+        price: 120}, {
+        title: 'Choose the radio station',
+        price: 60}, {
+        title: 'Choose meal',
+        price: 180},
+    ],
+  },
+  {
+    type: 'bus',
+    offers: [
+      {
+        title: 'Побибикать у водителя',
+        price: 120},
+      {
+        title: 'Укусить контролера',
+        price: 120,
+      },
+    ],
+  },
+  {
+    type: 'train',
+    offers: [
+      {
+        title: 'Купить чаю',
+        price: 120},
+      {
+        title: 'Понюхать носки сверхсрочника',
+        price: 120,
+      },
+      {
+        title: 'Распаковать курочку гриль',
+        price: 120,
+      },
+    ],
+  },
+  {
+    type: 'ship',
+    offers: [
+      {
+        title: 'Бухать три недели',
+        price: 120,
+      },
+      {
+        title: 'Развлекаться на танцполе',
+        price: 120,
+      },
+      {
+        title: 'Одеть пижаму',
+        price: 120,
+      },
+    ]},
+  {  type: 'drive',
+    offers: [
+      {
+        title: 'Поменять колесо',
+        price: 120},
+      {
+        title: 'Долить незамерзайку',
+        price: 120,
+      },
+      {
+        title: 'Много рулить',
+        price: 120,
+      },
+      {
+        title: 'Пить кофе',
+        price: 120,
+      }]},
+  {
+    type: 'flight',
+    offers: [
+      {
+        title: 'Укусить стюардессу',
+        price: 120},
+      {
+        title: 'Долбанный ребенок',
+        price: 120,
+      },
+      {
+        title: 'Напукать в туалете',
+        price: 120,
+      },
+      {
+        title: 'Смачно есть',
+        price: 120,
+      }]},
+  {
+    type: 'check-in',
+    offers: [
+      {
+        title: 'Просто бухать',
+        price: 120},
+      {
+        title: 'Поспать',
+        price: 120,
+      },
+      {
+        title: 'Подождать таможню',
+        price: 120,
+      },
+      {
+        title: 'Надоело писать уже описания',
+        price: 120,
+      }]},
+  {
+    type: 'sightseeing',
+    offers: [
+      {
+        title: 'Посмотреть красную площадь',
+        price: 120},
+      {
+        title: 'Погулять по охотному ряду',
+        price: 120,
+      },
+      {
+        title: 'Кофеек в cofix',
+        price: 120,
+      },
+      {
+        title: 'Сходить на концерт',
+        price: 120,
+      },
+    ],
+  },
+  {
+    type: 'restaurant',
+    offers: [
+      {
+        title: 'Хочу сибаса',
+        price: 120},
+      {
+        title: 'Стейк омара за 80 тыс рублей',
+        price: 120,
+      },
+      {
+        title: 'Труа буте ди водка, авек плезир',
+        price: 120,
+      },
+      {
+        title: 'Оливье и майонеза побольше',
+        price: 120,
+      },
+    ],
+  },
+];
+
+const cities = [
+  'Amsterdam',
   'Geneva',
   'Berlin',
   'Praga',
   'Brussel',
   'London',
   'Bratislava'];
-
-const options = [
-  {
-    'title': 'Upgrade to a business class',
-    'price': 120,
-  }, {
-    'title': 'Choose the radio station',
-    'price': 60,
-  }, {
-    'title': 'Choose meal',
-    'price': 180,
-  }, {
-    'title': 'Upgrade to comfort class',
-    'price': 50,
-  }, {
-    'title': 'Upgrade to comfort class',
-    'price': 50,
-  },
-];
 
 const descriptions = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
@@ -85,29 +220,35 @@ const getRandomArrayLength = (min, arr) => {
   return arr.slice(newLength);
 };
 
-const generateDate = () => {
-  const maxDaysGap = 7000;
-  const daysGap = getRandomInteger(-maxDaysGap, maxDaysGap);
-  return dayjs().add(daysGap, 'm').toDate();
-};
-
-
 const generateDestination = () => ({
   description: getRandomArrayLengthByNumber(1, descriptions, 5),
   name: getRandomArrayMember(cities),
   pictures: getRandomArrayLength(1, pictures),
 });
 
-const generatePoint = () => ({
-  basePrice: getRandomInteger(1, 2309),
-  dateFrom: generateDate(),
-  dateTo: generateDate(),
-  destination: generateDestination(),
-  id: getRandomInteger(0, 15),
-  isFavorite: Boolean(getRandomInteger(0, 1)),
-  offers: getRandomArrayLength(0, options),
-  type: getRandomArrayMember(types),
-});
+
+const getOffersByType = (arr, tip) => {
+  let result;
+  arr.forEach((it) => {
+    if (it.type === tip) {
+      result = it.offers;
+      return result;
+    }
+  });
+  return result;
+};
+
+const generatePoint = () => {
+  const randomType = getRandomArrayMember(types);
+  return {
+    basePrice: getRandomInteger(1, 2309),
+    dateFrom: generateDate(),
+    dateTo: generateDate(),
+    destination: generateDestination(),
+    id: getRandomInteger(0, 15),
+    isFavorite: Boolean(getRandomInteger(0, 1)),
+    type: randomType,
+    offers: getOffersByType(options, randomType),
+  };};
 
 export { generatePoint };
-
