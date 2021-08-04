@@ -3,16 +3,15 @@ import { navigationMenu, filters } from './view/navigation&filters.js';
 import { sort } from './view/sort.js';
 import { eventsList, tripListUl } from './view/pointsList.js';
 import { editPoint } from './view/editingPoint.js';
-import { addNewPointWithoutDestination } from './view/newWithoutDestination.js';
-import { addNewPointWithoutOffers } from './view/newWithoutOffers.js';
-import { addNewPoint } from './view/newPoint.js';
+// import { addNewPointWithoutDestination } from './view/newWithoutDestination.js';
+// import { addNewPointWithoutOffers } from './view/newWithoutOffers.js';
+// import { addNewPoint } from './view/newPoint.js';
 import { loading, empty } from './view/loading.js';
-
 import { generatePoint } from './mock/createData.js';
 
-const NUMBER_COPIES = 15;
+const NUMBER_OF_POINTS = 15;
 
-const points = new Array(NUMBER_COPIES).fill().map(generatePoint);
+const points = new Array(NUMBER_OF_POINTS).fill().map(generatePoint);
 points.sort((a,b) => a.dateFrom - b.dateFrom);
 
 const priceAndTripSection = document.querySelector('.trip-main');
@@ -37,22 +36,23 @@ render(toSort, tripListUl(), renderPosition.BEFOREEND);
 
 const tripList = document.querySelector('.trip-events__list');
 
-for (let i = 0; i < NUMBER_COPIES; i++) {
-  render(tripList, eventsList(points[i]), renderPosition.BEFOREEND);
+for (const point of points) {
+  render(tripList, eventsList(point), renderPosition.BEFOREEND);
 }
 
 render(toSort, loading(), renderPosition.BEFOREEND);
 render(toSort, empty(), renderPosition.BEFOREEND);
 
 const eventItem = document.querySelector('.trip-events__item');
+document.querySelector('.event:nth-child(1)').remove();
 
 render(eventItem, editPoint(points[0]), renderPosition.BEFOREEND);
 
-const eventItem1 = document.querySelector('.trip-events__item:nth-child(3)');
-const eventItem2 = document.querySelector('.trip-events__item:nth-child(4)');
-const eventItem3 = document.querySelector('.trip-events__item:nth-child(5)');
+// const eventItem1 = document.querySelector('.trip-events__item:nth-child(3)');
+// const eventItem2 = document.querySelector('.trip-events__item:nth-child(4)');
+// const eventItem3 = document.querySelector('.trip-events__item:nth-child(5)');
 
-render(eventItem1, addNewPointWithoutDestination(points[1]), renderPosition.AFTERBEGIN);
-render(eventItem2, addNewPointWithoutOffers(points[2]), renderPosition.AFTERBEGIN);
-render(eventItem3, addNewPoint(points[3]), renderPosition.AFTERBEGIN);
+// render(eventItem1, addNewPointWithoutDestination(points[1]), renderPosition.AFTERBEGIN);
+// render(eventItem2, addNewPointWithoutOffers(points[2]), renderPosition.AFTERBEGIN);
+// render(eventItem3, addNewPoint(points[3]), renderPosition.AFTERBEGIN);
 

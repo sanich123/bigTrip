@@ -251,4 +251,4 @@ const generatePoint = () => {
     offers: getOffersByType(options, randomType),
   };};
 
-export { generatePoint };
+export { generatePoint, types, cities };
