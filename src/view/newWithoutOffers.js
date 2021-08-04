@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import { humanizeDate } from '../utils/utils.js';
 
 export const addNewPointWithoutOffers = (points = {}) => {
   const {
@@ -10,8 +10,8 @@ export const addNewPointWithoutOffers = (points = {}) => {
   } = points;
 
   const descriptionOfDestination = destination.description.join('');
-  const fromDate = dayjs(dateFrom).format('DD/MM/YY HH:mm');
-  const toDate = dayjs(dateTo).format('DD/MM/YY HH:mm');
+  const fromDate = humanizeDate(dateFrom, 'DD/MM/YY HH:mm');
+  const toDate = humanizeDate(dateTo, 'DD/MM/YY HH:mm');
 
   const addPhotos = destination.pictures.map(({src}) => (`<img class="event__photo" src="${src}" alt="Event photo">
     `)).join('');

@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import { humanizeDate} from '../utils/utils.js';
 
 export const priceAndTrip = (points) => {
 
@@ -8,9 +8,8 @@ export const priceAndTrip = (points) => {
   const firstCity = threeCities[0];
   const thirdCity = threeCities[threeCities.length - 1];
   const secondCity = threeCities.length === 3 ? threeCities[threeCities.length / 2] : '...';
-
-  const fromDate = dayjs(points[0].dateFrom).format('MMMM DD');
-  const toDate = dayjs(points[points.length - 1].dateTo).format('MMMM DD');
+  const fromDate = humanizeDate(points[0].dateFrom, 'MMMM DD');
+  const toDate = humanizeDate(points[points.length - 1].dateTo, 'MMMM DD');
 
   //Не забыть, что points отсортированы в main по дате, это может измениться
 

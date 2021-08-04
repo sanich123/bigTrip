@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import { humanizeDate} from '../utils/utils.js';
 
 export const addNewPointWithoutDestination = (points = {}) => {
   const {
@@ -9,8 +9,8 @@ export const addNewPointWithoutDestination = (points = {}) => {
     destination,
     offers,
   } = points;
-  const fromDate = dayjs(dateFrom).format('DD/MM/YY HH:mm');
-  const toDate = dayjs(dateTo).format('DD/MM/YY HH:mm');
+  const fromDate = humanizeDate(dateFrom, 'DD/MM/YY HH:mm');
+  const toDate = humanizeDate(dateTo, 'DD/MM/YY HH:mm');
 
   const addOffers = offers.map(({title, price}) => (
     `<div class="event__offer-selector">

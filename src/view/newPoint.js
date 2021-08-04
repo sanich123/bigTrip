@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import { humanizeDate} from '../utils/utils.js';
 
 export const addNewPoint = (points = {}) => {
   const {
@@ -9,6 +9,7 @@ export const addNewPoint = (points = {}) => {
     type = 'taxi',
     destination,
   } = points;
+
   const addOffers = offers.map(({title, price}) => (
     `<div class="event__offer-selector">
     <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked=""
@@ -19,12 +20,12 @@ export const addNewPoint = (points = {}) => {
       <span class="event__offer-price">${price}</span>
     </label>
   </div>`)).join('');
-  const descriptionOfDestination = destination.description.join('');
-  const fromDate = dayjs(dateFrom).format('DD/MM/YY HH:mm');
-  const toDate = dayjs(dateTo).format('DD/MM/YY HH:mm');
 
-  const addPhotos = destination.pictures.map(({src}) => (`<img class="event__photo" src="${src}" alt="Event photo">
-    `)).join('');
+  const descriptionOfDestination = destination.description.join('');
+  const fromDate = humanizeDate(dateFrom, 'DD/MM/YY HH:mm');
+  const toDate = humanizeDate(dateTo, 'DD/MM/YY HH:mm');
+
+  const addPhotos = destination.pictures.map(({src}) => (`<img class="event__photo" src="${src}" alt="Event photo">`)).join('');
 
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">

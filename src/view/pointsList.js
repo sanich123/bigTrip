@@ -1,8 +1,7 @@
-import dayjs from 'dayjs';
+import { differenceTime, humanizeDate } from '../utils/utils.js';
 
 const eventsList = (points) => {
   const { basePrice, dateFrom, dateTo, destination, offers, type, isFavorite } = points;
-
   const titlePrice = offers.map(({ title, price }) => (
     `<li class="event__offer">
   <span class="event__offer-title">${title}</span>
@@ -13,24 +12,24 @@ const eventsList = (points) => {
 
   const favoritePoint = isFavorite ? 'event__favorite-btn--active' : '';
 
-  const fromDate = dayjs(dateFrom).format('MMM D');
-  const fromDateMinutes = dayjs(dateFrom).format('HH:mm');
-  const toDateMinutes = dayjs(dateTo).format('HH:mm');
+  const fromDate = humanizeDate(dateFrom, 'MMM D');
+  const fromDateMinutes = humanizeDate(dateFrom, 'HH:mm');
+  const toDateMinutes = humanizeDate(dateTo, 'HH:mm');
 
   const duration = () => {
-    const millisecs = Math.round(Math.abs(dayjs(dateFrom).diff(dayjs(dateTo))));
+    const millisecs = differenceTime(dateFrom, dateTo);
     if (millisecs < 3600000) {
-      const string = dayjs(millisecs).format('HH mm').toString();
+      const string = humanizeDate(millisecs, 'mm').toString();
       const finalDate = `${`${string[0] + string[1]  }M`}`;
       return finalDate;
     }
     if (millisecs >= 3600000 && millisecs < 86400000) {
-      const string = dayjs(millisecs).format('HH mm').toString();
+      const string = humanizeDate(millisecs, 'HH mm').toString();
       const finalDate = `${`${string[0] + string[1]  }H ${  string[3] + string [4] }M`}`;
       return finalDate;
     }
     if (millisecs >= 86400000) {
-      const string = dayjs(millisecs).format('DD HH mm').toString();
+      const string = humanizeDate(millisecs, 'DD HH mm').toString();
       const finalDate = `${`${string[0] + string[1]  }D ${  string[3] + string [4] }H ${  string[6]  }${string[7]  }M`}`;
       return finalDate;
     }
