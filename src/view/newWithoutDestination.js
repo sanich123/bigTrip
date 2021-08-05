@@ -1,6 +1,6 @@
 import { humanizeDate, currentTime} from '../utils/utils.js';
 import { TYPES, CITIES } from '../mock/createData.js';
-
+import { addOffers, createTypes, createCities } from '../utils/renderingUtils.js';
 export const addNewPointWithoutDestination = (points = {}) => {
   const {
     basePrice = 0,
@@ -9,25 +9,9 @@ export const addNewPointWithoutDestination = (points = {}) => {
     destination = 'Undefined',
     offers,
     type = 'taxi' } = points;
+
   const fromDate = humanizeDate(dateFrom, 'DD/MM/YY HH:mm');
   const toDate = humanizeDate(dateTo, 'DD/MM/YY HH:mm');
-
-  const addOffers = offers.map(({title, price}) => (
-    `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked=""
-    >
-    <label class="event__offer-label" for="event-offer-luggage-1">
-      <span class="event__offer-title">${title}</span>
-      +€&nbsp;
-      <span class="event__offer-price">${price}</span>
-    </label>
-  </div>`)).join('');
-  const createTypes = TYPES.map((it, index) => (`<div class="event__type-item">
-          <input id="event-type-${it}-${index}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${it}">
-          <label class="event__type-label  event__type-label--${it}" for="event-type-${it}-${index}">${it}</label>
-        </div>`)).join('');
-
-  const createCities = CITIES.map((it) => (`<option value="${it}"></option>`)).join('');
 
   return `<form class="event event--edit" action="#" method="post">
 <header class="event__header">
@@ -41,7 +25,7 @@ export const addNewPointWithoutDestination = (points = {}) => {
     <div class="event__type-list">
        <fieldset class="event__type-group">
        <legend class="visually-hidden">Event type</legend>
-    ${createTypes}
+    ${createTypes(TYPES)}
       </fieldset>
     </div>
   </div>
@@ -52,7 +36,7 @@ export const addNewPointWithoutDestination = (points = {}) => {
     </label>
     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
     <datalist id="destination-list-1">
-${createCities}
+${createCities(CITIES)}
     </datalist>
   </div>
 
@@ -80,7 +64,7 @@ ${createCities}
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
     <div class="event__available-offers">
-    ${addOffers}
+    ${addOffers(offers)}
     </div>
   </section>
 </section>
