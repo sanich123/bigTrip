@@ -222,7 +222,7 @@ const getRandomArrayLength = (min, arr) => {
 };
 
 const generateDestination = () => ({
-  description: getRandomArrayLengthByNumber(1, descriptions, 5),
+  description: getRandomArrayLengthByNumber(0, descriptions, 8),
   name: getRandomArrayMember(cities),
   pictures: getRandomArrayLength(1, pictures),
 });
