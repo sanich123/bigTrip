@@ -1,4 +1,4 @@
-import { priceAndTrip } from './view/price&trip.js';
+import { priceAndTrip } from './view/priceTrip.js';
 import { navigationMenu, filters } from './view/navigation&filters.js';
 import { sort } from './view/sort.js';
 import { eventsList, tripListUl } from './view/pointsList.js';
