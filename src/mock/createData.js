@@ -1,7 +1,7 @@
 import { getRandomInteger } from '../utils/utils.js';
 import { generateDate } from '../utils/utils.js';
 
-const types = [
+const TYPES = [
   'taxi',
   'bus',
   'train',
@@ -13,7 +13,7 @@ const types = [
   'restaurant',
 ];
 
-const options = [
+const OPTIONS = [
   {
     type: 'taxi',
     offers: [
@@ -170,7 +170,7 @@ const options = [
   },
 ];
 
-const cities = [
+const CITIES = [
   'Amsterdam',
   'Geneva',
   'Berlin',
@@ -179,7 +179,7 @@ const cities = [
   'London',
   'Bratislava'];
 
-const descriptions = [
+const DESCRIPTIONS = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
   'Cras aliquet varius magna, non porta ligula feugiat eget. ',
   'Fusce tristique felis at fermentum pharetra. ',
@@ -191,28 +191,28 @@ const descriptions = [
 
 const getRandomArrayMember = (arr) => (arr[getRandomInteger(0, arr.length - 1)]);
 
-const pictures = [
+const PICTURES = [
   {
     src: `http://picsum.photos/300/200?r=${Math.random(1, 12)}`,
-    description: getRandomArrayMember(descriptions)},
+    description: getRandomArrayMember(DESCRIPTIONS)},
   {    src: `http://picsum.photos/300/200?r=${Math.random(1, 12)}`,
-    description: getRandomArrayMember(descriptions)},
+    description: getRandomArrayMember(DESCRIPTIONS)},
   {    src: `http://picsum.photos/300/200?r=${Math.random(1, 12)}`,
-    description: getRandomArrayMember(descriptions)},
+    description: getRandomArrayMember(DESCRIPTIONS)},
   {    src: `http://picsum.photos/300/200?r=${Math.random(1, 12)}`,
-    description: getRandomArrayMember(descriptions)},
+    description: getRandomArrayMember(DESCRIPTIONS)},
   {    src: `http://picsum.photos/300/200?r=${Math.random(1, 12)}`,
-    description: getRandomArrayMember(descriptions)},
+    description: getRandomArrayMember(DESCRIPTIONS)},
   {    src: `http://picsum.photos/300/200?r=${Math.random(1, 12)}`,
-    description: getRandomArrayMember(descriptions)},
+    description: getRandomArrayMember(DESCRIPTIONS)},
   {    src: `http://picsum.photos/300/200?r=${Math.random(1, 12)}`,
-    description: getRandomArrayMember(descriptions)},
+    description: getRandomArrayMember(DESCRIPTIONS)},
   {    src: `http://picsum.photos/300/200?r=${Math.random(1, 12)}`,
-    description: getRandomArrayMember(descriptions)},
+    description: getRandomArrayMember(DESCRIPTIONS)},
   {    src: `http://picsum.photos/300/200?r=${Math.random(1, 12)}`,
-    description: getRandomArrayMember(descriptions)},
+    description: getRandomArrayMember(DESCRIPTIONS)},
   {    src: `http://picsum.photos/300/200?r=${Math.random(1, 12)}`,
-    description: getRandomArrayMember(descriptions),
+    description: getRandomArrayMember(DESCRIPTIONS),
   },
 ];
 
@@ -227,9 +227,9 @@ const getRandomArrayLength = (min, arr) => {
 };
 
 const generateDestination = () => ({
-  description: getRandomArrayLengthByNumber(0, descriptions, 5),
-  name: getRandomArrayMember(cities),
-  pictures: getRandomArrayLength(1, pictures),
+  description: getRandomArrayLengthByNumber(0, DESCRIPTIONS, 5),
+  name: getRandomArrayMember(CITIES),
+  pictures: getRandomArrayLength(1, PICTURES),
 });
 
 
@@ -245,7 +245,7 @@ const getOffersByType = (arr, tip) => {
 };
 
 const generatePoint = () => {
-  const randomType = getRandomArrayMember(types);
+  const randomType = getRandomArrayMember(TYPES);
   return {
     basePrice: getRandomInteger(1, 2309),
     dateFrom: generateDate(),
@@ -254,7 +254,7 @@ const generatePoint = () => {
     id: getRandomInteger(0, 15),
     isFavorite: Boolean(getRandomInteger(0, 1)),
     type: randomType,
-    offers: getOffersByType(options, randomType),
+    offers: getOffersByType(OPTIONS, randomType),
   };};
 
-export { generatePoint, types, cities };
+export { generatePoint, TYPES, CITIES };

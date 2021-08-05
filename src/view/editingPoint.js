@@ -1,4 +1,4 @@
-import { types, cities } from '../mock/createData.js';
+import { TYPES, CITIES } from '../mock/createData.js';
 import { humanizeDate, currentTime } from '../utils/utils.js';
 
 export const editPoint = (points = {}) => {
@@ -25,12 +25,12 @@ export const editPoint = (points = {}) => {
   </div>`)).join('');
   const descriptionOfDestination = destination.description.join('');
 
-  const createTypes = types.map((it, index) => (`<div class="event__type-item">
+  const createTypes = TYPES.map((it, index) => (`<div class="event__type-item">
           <input id="event-type-${it}-${index}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${it}">
           <label class="event__type-label  event__type-label--${it}" for="event-type-${it}-${index}">${it}</label>
         </div>`)).join('');
 
-  const createCities = cities.map((it) => (`<option value="${it}"></option>`)).join('');
+  const createCities = CITIES.map((it) => (`<option value="${it}"></option>`)).join('');
 
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">

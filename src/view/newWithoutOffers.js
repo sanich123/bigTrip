@@ -1,5 +1,5 @@
 import { humanizeDate, currentTime } from '../utils/utils.js';
-import {types, cities } from '../mock/createData.js';
+import {TYPES, CITIES } from '../mock/createData.js';
 
 export const addNewPointWithoutOffers = (points = {}) => {
   const {
@@ -15,12 +15,12 @@ export const addNewPointWithoutOffers = (points = {}) => {
 
   const addPhotos = destination.pictures.map(({src}) => (`<img class="event__photo" src="${src}" alt="Event photo">`)).join('');
 
-  const createTypes = types.map((it, index) => (`<div class="event__type-item">
+  const createTypes = TYPES.map((it, index) => (`<div class="event__type-item">
           <input id="event-type-${it}-${index}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${it}">
           <label class="event__type-label  event__type-label--${it}" for="event-type-${it}-${index}">${it}</label>
         </div>`)).join('');
 
-  const createCities = cities.map((it) => (`<option value="${it}"></option>`)).join('');
+  const createCities = CITIES.map((it) => (`<option value="${it}"></option>`)).join('');
 
   return `
   <form class="event event--edit" action="#" method="post">
