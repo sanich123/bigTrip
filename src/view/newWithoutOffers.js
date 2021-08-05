@@ -1,14 +1,13 @@
-import { humanizeDate } from '../utils/utils.js';
+import { humanizeDate, currentTime } from '../utils/utils.js';
 import {types, cities } from '../mock/createData.js';
 
 export const addNewPointWithoutOffers = (points = {}) => {
   const {
-    basePrice = '',
-    dateFrom = '31/12/1999 23:59',
-    dateTo = '01/01/2000 00:00',
-    type = 'taxi',
-    destination,
-  } = points;
+    basePrice = 0,
+    dateFrom = currentTime,
+    dateTo = currentTime,
+    destination = 'Undefined',
+    type = 'taxi' } = points;
 
   const descriptionOfDestination = destination.description.join('');
   const fromDate = humanizeDate(dateFrom, 'DD/MM/YY HH:mm');
@@ -69,6 +68,7 @@ export const addNewPointWithoutOffers = (points = {}) => {
 
                   <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
                   <button class="event__reset-btn" type="reset">Cancel</button>
+                  <button class="event__rollup-btn" type="button">
                 </header>
 
                 <section class="event__details">

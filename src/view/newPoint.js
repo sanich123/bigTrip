@@ -1,15 +1,14 @@
-import { humanizeDate} from '../utils/utils.js';
+import { humanizeDate, currentTime} from '../utils/utils.js';
 import {cities, types } from '../mock/createData.js';
 
 export const addNewPoint = (points = {}) => {
   const {
-    basePrice = '',
-    dateFrom = '31/12/1999 23:59',
-    dateTo = '01/01/2000 00:00',
-    offers = '',
-    type = 'taxi',
-    destination,
-  } = points;
+    basePrice = 0,
+    dateFrom = currentTime,
+    dateTo = currentTime,
+    destination = 'Undefined',
+    offers,
+    type = 'taxi' } = points;
 
   const addOffers = offers.map(({title, price}) => (
     `<div class="event__offer-selector">
@@ -80,6 +79,7 @@ export const addNewPoint = (points = {}) => {
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
     <button class="event__reset-btn" type="reset">Cancel</button>
+    <button class="event__rollup-btn" type="button">
   </header>
   <section class="event__details">
     <section class="event__section  event__section--offers">

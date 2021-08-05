@@ -1,7 +1,13 @@
-import { differenceTime, humanizeDate } from '../utils/utils.js';
+import { differenceTime, humanizeDate, currentTime } from '../utils/utils.js';
 
-const eventsList = (points) => {
-  const { basePrice, dateFrom, dateTo, destination, offers, type, isFavorite } = points;
+const eventsList = (points = {}) => {
+  const {
+    basePrice = 0,
+    dateFrom = currentTime,
+    dateTo = currentTime,
+    destination = 'Undefined',
+    offers,
+    type = 'taxi', isFavorite } = points;
   const titlePrice = offers.map(({ title, price }) => (
     `<li class="event__offer">
   <span class="event__offer-title">${title}</span>

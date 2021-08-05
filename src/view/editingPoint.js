@@ -1,18 +1,18 @@
-import dayjs from 'dayjs';
 import { types, cities } from '../mock/createData.js';
+import { humanizeDate, currentTime } from '../utils/utils.js';
 
 export const editPoint = (points = {}) => {
 
   const {
-    basePrice = '',
-    dateFrom = '31/12/1999 23:59',
-    dateTo = '01/01/2000 00:00',
-    destination = '',
-    offers = '',
+    basePrice = 0,
+    dateFrom = currentTime,
+    dateTo = currentTime,
+    destination = 'Undefined',
+    offers,
     type = 'taxi' } = points;
 
-  const fromDate = dayjs(dateFrom).format('DD/MM/YY HH:mm');
-  const toDate = dayjs(dateTo).format('DD/MM/YY HH:mm');
+  const fromDate = humanizeDate(dateFrom, 'DD/MM/YY HH:mm');
+  const toDate = humanizeDate(dateTo, 'DD/MM/YY HH:mm');
   const addOffers = offers.map(({title, price}) => (
     `<div class="event__offer-selector">
     <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked=""

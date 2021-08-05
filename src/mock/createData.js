@@ -19,11 +19,16 @@ const options = [
     offers: [
       {
         title: 'Upgrade to a business class',
-        price: 120}, {
+        price: 120,
+      },
+      {
         title: 'Choose the radio station',
-        price: 60}, {
+        price: 60,
+      },
+      {
         title: 'Choose meal',
-        price: 180},
+        price: 180,
+      },
     ],
   },
   {
