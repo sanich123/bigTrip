@@ -42,6 +42,7 @@ export const editPoint = (points = {}) => {
     <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
         <div class="event__type-list">
       <fieldset class="event__type-group">
+      <legend class="visually-hidden">Event type</legend>
     ${createTypes}
       </fieldset>
     </div>
@@ -53,7 +54,7 @@ export const editPoint = (points = {}) => {
     </label>
     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
     <datalist id="destination-list-1">
-${createCities}
+    ${createCities}
     </datalist>
   </div>
 

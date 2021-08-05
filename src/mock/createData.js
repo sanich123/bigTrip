@@ -1,7 +1,8 @@
 import { getRandomInteger } from '../utils/utils.js';
 import { generateDate } from '../utils/utils.js';
 
-const types = ['taxi',
+const types = [
+  'taxi',
   'bus',
   'train',
   'ship',
