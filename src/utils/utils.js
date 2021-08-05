@@ -7,16 +7,9 @@ export const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-export const humanizeDate = (date, format) => {
-  const humanizedDate = dayjs(date).format(format);
-  return humanizedDate;
-};
+export const humanizeDate = (date, format) => dayjs(date).format(format);
 
-export const differenceTime = (date1, date2) => {
-  const millisecs = Math.abs(dayjs(date1).diff(dayjs(date2)));
-  return millisecs;
-};
-
+export const differenceTime = (date1, date2) => Math.abs(dayjs(date1).diff(dayjs(date2)));
 
 export const generateDate = () => {
   const maxDaysGap = 7000;

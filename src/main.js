@@ -9,9 +9,9 @@ import { addNewPoint } from './view/newPoint.js';
 import { loading, empty } from './view/loading.js';
 import { generatePoint } from './mock/createData.js';
 
-const NUMBER_OF_POINTS = 15;
+const COUNT_OF_POINTS = 15;
 
-const points = new Array(NUMBER_OF_POINTS).fill().map(generatePoint);
+const points = new Array(COUNT_OF_POINTS).fill().map(generatePoint);
 points.sort((a,b) => a.dateFrom - b.dateFrom);
 
 const priceAndTripSection = document.querySelector('.trip-main');
@@ -36,9 +36,8 @@ render(toSort, tripListUl(), renderPosition.BEFOREEND);
 
 const tripList = document.querySelector('.trip-events__list');
 
-for (const point of points) {
-  render(tripList, eventsList(point), renderPosition.BEFOREEND);
-}
+points.forEach((it) => render(tripList, eventsList(it), renderPosition.BEFOREEND));
+
 
 render(toSort, loading(), renderPosition.BEFOREEND);
 render(toSort, empty(), renderPosition.BEFOREEND);

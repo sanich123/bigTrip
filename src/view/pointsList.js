@@ -16,19 +16,22 @@ const eventsList = (points) => {
   const fromDateMinutes = humanizeDate(dateFrom, 'HH:mm');
   const toDateMinutes = humanizeDate(dateTo, 'HH:mm');
 
-  const duration = () => {
-    const millisecs = differenceTime(dateFrom, dateTo);
-    if (millisecs < 3600000) {
+  const ONE_HOUR = 3600000;
+  const ONE_DAY = 86400000;
+
+  const duration = (begin, end) => {
+    const millisecs = differenceTime(begin, end);
+    if (millisecs < ONE_HOUR) {
       const string = humanizeDate(millisecs, 'mm').toString();
       const finalDate = `${`${string[0] + string[1]  }M`}`;
       return finalDate;
     }
-    if (millisecs >= 3600000 && millisecs < 86400000) {
+    if (millisecs >= ONE_HOUR && millisecs < ONE_DAY) {
       const string = humanizeDate(millisecs, 'HH mm').toString();
       const finalDate = `${`${string[0] + string[1]  }H ${  string[3] + string [4] }M`}`;
       return finalDate;
     }
-    if (millisecs >= 86400000) {
+    if (millisecs >= ONE_DAY) {
       const string = humanizeDate(millisecs, 'DD HH mm').toString();
       const finalDate = `${`${string[0] + string[1]  }D ${  string[3] + string [4] }H ${  string[6]  }${string[7]  }M`}`;
       return finalDate;
@@ -49,7 +52,7 @@ const eventsList = (points) => {
           —
           <time class="event__end-time" datetime="${dateTo}">${toDateMinutes}</time>
         </p>
-        <p class="event__duration">${duration()}</p>
+        <p class="event__duration">${duration(dateFrom, dateTo)}</p>
       </div>
       <p class="event__price">
         €&nbsp;<span class="event__price-value">${basePrice}</span>

@@ -14,7 +14,7 @@ export const editPoint = (points = {}) => {
   const fromDate = dayjs(dateFrom).format('DD/MM/YY HH:mm');
   const toDate = dayjs(dateTo).format('DD/MM/YY HH:mm');
   const addOffers = offers.map(({title, price}) => (
-    `      <div class="event__offer-selector">
+    `<div class="event__offer-selector">
     <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked=""
     >
     <label class="event__offer-label" for="event-offer-luggage-1">
