@@ -23,13 +23,12 @@ export const editPoint = (points = {}) => {
       <span class="event__offer-price">${price}</span>
     </label>
   </div>`)).join('');
+  const descriptionOfDestination = destination.description.join('');
 
   const createTypes = types.map((it, index) => (`<div class="event__type-item">
           <input id="event-type-${it}-${index}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${it}">
           <label class="event__type-label  event__type-label--${it}" for="event-type-${it}-${index}">${it}</label>
         </div>`)).join('');
-
-  const descriptionOfDestination = destination.description.join('');
 
   const createCities = cities.map((it) => (`<option value="${it}"></option>`)).join('');
 
