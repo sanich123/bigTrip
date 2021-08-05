@@ -7,7 +7,7 @@ export const priceAndTrip = (points) => {
   const threeCities = Array.from(cities);
   const firstCity = threeCities[0];
   const thirdCity = threeCities[threeCities.length - 1];
-  const secondCity = threeCities.length === 3 ? threeCities[threeCities.length / 2] : '...';
+  const secondCity = threeCities.length === 3 ? threeCities[1] : '...';
   const fromDate = humanizeDate(points[0].dateFrom, 'MMMM DD');
   const toDate = humanizeDate(points[points.length - 1].dateTo, 'MMMM DD');
 

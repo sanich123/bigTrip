@@ -174,7 +174,7 @@ const cities = [
   'Amsterdam',
   'Geneva',
   'Berlin',
-  'Praga',
+  'Praga' ,
   'Brussel',
   'London',
   'Bratislava'];
@@ -227,7 +227,7 @@ const getRandomArrayLength = (min, arr) => {
 };
 
 const generateDestination = () => ({
-  description: getRandomArrayLengthByNumber(0, descriptions, 8),
+  description: getRandomArrayLengthByNumber(0, descriptions, 5),
   name: getRandomArrayMember(cities),
   pictures: getRandomArrayLength(1, pictures),
 });
