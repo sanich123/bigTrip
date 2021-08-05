@@ -17,8 +17,15 @@
     "node": "12"
   },
   "dependencies": {
-    "webpack": "^4.44.2",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0"
+    "chart.js": "2.9.4",
+    "chartjs-plugin-datalabels": "0.7.0",
+    "css-loader": "5.2.7",
+    "dayjs": "1.9.5",
+    "flatpickr": "4.6.9",
+    "he": "1.2.0",
+    "style-loader": "2.0.0",
+    "webpack": "4.44.2",
+    "webpack-cli": "3.3.12",
+    "webpack-dev-server": "3.11.0"
   }
 }
