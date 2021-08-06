@@ -1,27 +1,35 @@
-import { humanizeDate} from '../utils/utils.js';
+import { createElement } from '../utils/utils.js';
+import { getCities, totalPrice } from '../utils/renderingUtils.js';
 
-export const priceAndTrip = (points) => {
-
-  const totalPrice = points.slice().reduce((accumulator, it) => accumulator + it.basePrice, 0);
-  const cities = new Set(points.slice().map((it) => it.destination.name));
-  const threeCities = Array.from(cities);
-  const firstCity = threeCities[0];
-  const thirdCity = threeCities[threeCities.length - 1];
-  const secondCity = threeCities.length === 3 ? threeCities[1] : '...';
-  const fromDate = humanizeDate(points[0].dateFrom, 'MMMM DD');
-  const toDate = humanizeDate(points[points.length - 1].dateTo, 'MMMM DD');
-
-  //Не забыть, что points отсортированы в main по дате, это может измениться
-
-  return `<section class="trip-main__trip-info  trip-info">
+const priceAndTrip = (points) => `<section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
-    <h1 class="trip-info__title">${firstCity} — ${secondCity} — ${thirdCity}</h1>
+    <h1 class="trip-info__title">${getCities(points)['firstCity']} — ${getCities(points)['secondCity']} — ${getCities(points)['thirdCity']}</h1>
 
-    <p class="trip-info__dates">${fromDate}&nbsp;—&nbsp;${toDate}</p>
+    <p class="trip-info__dates">${getCities(points)['fromDate']}&nbsp;—&nbsp;${getCities(points)['toDate']}</p>
   </div>
 
   <p class="trip-info__cost">
-    Total: €&nbsp;<span class="trip-info__cost-value">${totalPrice}</span>
+    Total: €&nbsp;<span class="trip-info__cost-value">${totalPrice(points)}</span>
   </p>
 </section>`;
-};
+export default class PriceTripView {
+  constructor(points) {
+    this._points = points;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return priceAndTrip(this._points);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

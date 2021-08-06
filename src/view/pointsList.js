@@ -1,5 +1,5 @@
 import { humanizeDate, currentTime } from '../utils/utils.js';
-import {duration} from '../utils/renderingUtils.js';
+import { duration, titlePrice } from '../utils/renderingUtils.js';
 
 const eventsList = (points = {}) => {
   const {
@@ -9,13 +9,6 @@ const eventsList = (points = {}) => {
     destination = 'Undefined',
     offers,
     type = 'taxi', isFavorite } = points;
-  const titlePrice = offers.map(({ title, price }) => (
-    `<li class="event__offer">
-  <span class="event__offer-title">${title}</span>
-  +€&nbsp;
-  <span class="event__offer-price">${price}</span>
-</li>`
-  )).join('');
 
   const favoritePoint = isFavorite ? 'event__favorite-btn--active' : '';
 
@@ -44,7 +37,7 @@ const eventsList = (points = {}) => {
       </p>
       <h4 class="visually-hidden">Offers:</h4>
       <ul class="event__selected-offers">
-      ${titlePrice}
+      ${titlePrice(offers)}
       </ul>
       <button class="event__favorite-btn ${favoritePoint}" type="button">
         <span class="visually-hidden">Add to favorite</span>
@@ -62,4 +55,4 @@ const eventsList = (points = {}) => {
 
 const tripListUl = () => ('<ul class="trip-events__list"></ul>');
 
-export {tripListUl, eventsList};
+export { tripListUl, eventsList };
