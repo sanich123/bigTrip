@@ -1,4 +1,4 @@
-import { differenceTime, humanizeDate, currentTime } from '../utils/utils.js';
+import { humanizeDate, currentTime } from '../utils/utils.js';
 import {duration} from '../utils/renderingUtils.js';
 
 const eventsList = (points = {}) => {
@@ -22,28 +22,6 @@ const eventsList = (points = {}) => {
   const fromDate = humanizeDate(dateFrom, 'MMM D');
   const fromDateMinutes = humanizeDate(dateFrom, 'HH:mm');
   const toDateMinutes = humanizeDate(dateTo, 'HH:mm');
-
-  const ONE_HOUR = 3600000;
-  const ONE_DAY = 86400000;
-
-  // const duration = (begin, end) => {
-  //   const millisecs = differenceTime(begin, end);
-  //   if (millisecs < ONE_HOUR) {
-  //     const string = humanizeDate(millisecs, 'mm').toString();
-  //     const finalDate = `${`${string[0] + string[1]  }M`}`;
-  //     return finalDate;
-  //   }
-  //   if (millisecs >= ONE_HOUR && millisecs < ONE_DAY) {
-  //     const string = humanizeDate(millisecs, 'HH mm').toString();
-  //     const finalDate = `${`${string[0] + string[1]  }H ${  string[3] + string [4] }M`}`;
-  //     return finalDate;
-  //   }
-  //   if (millisecs >= ONE_DAY) {
-  //     const string = humanizeDate(millisecs, 'DD HH mm').toString();
-  //     const finalDate = `${`${string[0] + string[1]  }D ${  string[3] + string [4] }H ${  string[6]  }${string[7]  }M`}`;
-  //     return finalDate;
-  //   }
-  // };
 
   return `
   <li class="trip-events__item">
