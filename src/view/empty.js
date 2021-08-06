@@ -1,14 +1,16 @@
 import { createElement } from '../utils/utils.js';
-const loading = () => (
-  '<p class="trip-events__msg">Loading...</p>'
+
+const empty = () => (
+  '<p class="trip-events__msg">Click New Event to create your first point</p>'
 );
-export default class Loading {
+
+export default class Empty {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return loading();
+    return empty();
   }
 
   getElement() {
@@ -22,4 +24,3 @@ export default class Loading {
     this._element = null;
   }
 }
-

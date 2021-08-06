@@ -3,13 +3,14 @@ import FiltersView from './view/filters.js';
 import NavigationView from './view/navigation.js';
 import SortMenuView from './view/sort.js';
 import TripListUl from './view/tripListUl.js';
+import Loading from './view/loading.js';
+import Empty from './view/empty.js';
 // import PointsList from './view/pointsList.js';
 import { eventsList } from './view/pointsList.js';
 import { editPoint } from './view/editingPoint.js';
 import { addNewPointWithoutDestination } from './view/newWithoutDestination.js';
 import { addNewPointWithoutOffers } from './view/newWithoutOffers.js';
 import { addNewPoint } from './view/newPoint.js';
-import { loading, empty } from './view/loading.js';
 import { generatePoint } from './mock/createData.js';
 import { renderPosition, renderTemplate, renderElement } from './utils/utils.js';
 
@@ -24,7 +25,6 @@ const toFilters = document.querySelector('.trip-controls__filters');
 const toSort = document.querySelector('.trip-events');
 
 renderElement(priceAndTripSection, new PriceTripView(points).getElement(), renderPosition.AFTERBEGIN);
-
 renderElement(toNavigation, new NavigationView().getElement(), renderPosition.AFTERBEGIN);
 renderElement(toFilters, new FiltersView().getElement(), renderPosition.AFTERBEGIN);
 renderElement(toSort, new SortMenuView().getElement(), renderPosition.AFTERBEGIN);
@@ -36,8 +36,8 @@ const tripList = document.querySelector('.trip-events__list');
 points.forEach((it) => renderTemplate(tripList, eventsList(it), renderPosition.BEFOREEND));
 
 
-renderTemplate(toSort, loading(), renderPosition.BEFOREEND);
-renderTemplate(toSort, empty(), renderPosition.BEFOREEND);
+renderElement(toSort, new Loading().getElement(), renderPosition.BEFOREEND);
+renderElement(toSort, new Empty().getElement(), renderPosition.BEFOREEND);
 
 const eventItem = document.querySelector('.trip-events__item');
 
