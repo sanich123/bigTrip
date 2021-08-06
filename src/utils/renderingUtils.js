@@ -59,3 +59,10 @@ export const getCities = (arr) => {
   const toDate = humanizeDate(arr[arr.length - 1].dateTo, 'MMMM DD');
   return { firstCity, secondCity, thirdCity, fromDate, toDate };
 };
+
+export const getFormatTime = (dateFrom, dateTo) => {
+  const fromDate = humanizeDate(dateFrom, 'MMM D');
+  const fromDateMinutes = humanizeDate(dateFrom, 'HH:mm');
+  const toDateMinutes = humanizeDate(dateTo, 'HH:mm');
+  return { fromDate, fromDateMinutes, toDateMinutes };
+};

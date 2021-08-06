@@ -1,34 +1,31 @@
-import { humanizeDate, currentTime } from '../utils/utils.js';
-import { duration, titlePrice } from '../utils/renderingUtils.js';
+import { currentTime, createElement } from '../utils/utils.js';
+import { duration, titlePrice, getFormatTime } from '../utils/renderingUtils.js';
 
-const eventsList = (points = {}) => {
+const eventsList = (it = {}) => {
+
   const {
     basePrice = 0,
     dateFrom = currentTime,
     dateTo = currentTime,
     destination = 'Undefined',
     offers,
-    type = 'taxi', isFavorite } = points;
+    type = 'taxi', isFavorite } = it;
 
   const favoritePoint = isFavorite ? 'event__favorite-btn--active' : '';
-
-  const fromDate = humanizeDate(dateFrom, 'MMM D');
-  const fromDateMinutes = humanizeDate(dateFrom, 'HH:mm');
-  const toDateMinutes = humanizeDate(dateTo, 'HH:mm');
 
   return `
   <li class="trip-events__item">
     <div class="event">
-      <time class="event__date" datetime="${fromDate}">${fromDate}</time>
+      <time class="event__date" datetime="${getFormatTime(dateFrom, dateTo)['fromDate']}">${getFormatTime(dateFrom, dateTo)['fromDate']}</time>
       <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
       </div>
       <h3 class="event__title">${type} ${destination.name}</h3>
       <div class="event__schedule">
         <p class="event__time">
-          <time class="event__start-time" datetime="${dateFrom}">${fromDateMinutes}</time>
+          <time class="event__start-time" datetime="${getFormatTime(dateFrom, dateTo)['fromDate']}">${getFormatTime(dateFrom, dateTo)['fromDateMinutes']}</time>
           —
-          <time class="event__end-time" datetime="${dateTo}">${toDateMinutes}</time>
+          <time class="event__end-time" datetime="${getFormatTime(dateFrom, dateTo)['toDate']}">${getFormatTime(dateFrom, dateTo)['toDateMinutes']}</time>
         </p>
         <p class="event__duration">${duration(dateFrom, dateTo)}</p>
       </div>
@@ -53,6 +50,26 @@ const eventsList = (points = {}) => {
 `;
 };
 
-const tripListUl = () => ('<ul class="trip-events__list"></ul>');
+export default class PointsList {
+  constructor(it) {
+    this._it = it;
+    this._element = null;
+  }
 
-export { tripListUl, eventsList };
+  getTemplate() {
+    return eventsList(this._it);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
+export { eventsList };

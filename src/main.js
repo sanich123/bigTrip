@@ -1,7 +1,10 @@
 import PriceTripView from './view/priceTrip.js';
-import { navigationMenu, filters } from './view/navigation&filters.js';
+import FiltersView from './view/filters.js';
+import NavigationView from './view/navigation.js';
 import SortMenuView from './view/sort.js';
-import { eventsList, tripListUl } from './view/pointsList.js';
+import TripListUl from './view/tripListUl.js';
+// import PointsList from './view/pointsList.js';
+import { eventsList } from './view/pointsList.js';
 import { editPoint } from './view/editingPoint.js';
 import { addNewPointWithoutDestination } from './view/newWithoutDestination.js';
 import { addNewPointWithoutOffers } from './view/newWithoutOffers.js';
@@ -21,13 +24,15 @@ const toFilters = document.querySelector('.trip-controls__filters');
 const toSort = document.querySelector('.trip-events');
 
 renderElement(priceAndTripSection, new PriceTripView(points).getElement(), renderPosition.AFTERBEGIN);
-renderTemplate(toNavigation, navigationMenu(), renderPosition.AFTERBEGIN);
-renderTemplate(toFilters, filters(), renderPosition.AFTERBEGIN);
+
+renderElement(toNavigation, new NavigationView().getElement(), renderPosition.AFTERBEGIN);
+renderElement(toFilters, new FiltersView().getElement(), renderPosition.AFTERBEGIN);
 renderElement(toSort, new SortMenuView().getElement(), renderPosition.AFTERBEGIN);
-renderTemplate(toSort, tripListUl(), renderPosition.BEFOREEND);
+renderElement(toSort, new TripListUl().getElement(), renderPosition.BEFOREEND);
 
 const tripList = document.querySelector('.trip-events__list');
 
+// points.forEach((it) => renderElement(tripList, new PointsList(it).getElement(), renderPosition.BEFOREEND));
 points.forEach((it) => renderTemplate(tripList, eventsList(it), renderPosition.BEFOREEND));
 
 

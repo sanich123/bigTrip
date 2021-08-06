@@ -18,6 +18,7 @@ export const generateDate = () => {
   const daysGap = getRandomInteger(-maxDaysGap, maxDaysGap);
   return dayjs().add(daysGap, 'm').toDate();
 };
+
 export const renderPosition = {
   AFTERBEGIN: 'afterbegin',
   BEFOREEND: 'beforeend',
