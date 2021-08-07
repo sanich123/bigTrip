@@ -4,13 +4,13 @@ import NavigationView from './view/navigation.js';
 import SortMenuView from './view/sort.js';
 import TripListUl from './view/tripListUl.js';
 // import TripListLi from './view/tripListLi.js';
-import Loading from './view/loading.js';
-import Empty from './view/empty.js';
+// import Loading from './view/loading.js';
+// import Empty from './view/empty.js';
 import PointsList from './view/pointsList.js';
 import EditingPoint from './view/editingPoint.js';
-import NewWithoutDestination from './view/newWithoutDestination.js';
-import NewWithoutOffers from './view/newWithoutOffers.js';
-import NewPoint from './view/newPoint.js';
+// import NewWithoutDestination from './view/newWithoutDestination.js';
+// import NewWithoutOffers from './view/newWithoutOffers.js';
+// import NewPoint from './view/newPoint.js';
 import { generatePoint } from './mock/createData.js';
 import { renderPosition, renderElement } from './utils/utils.js';
 
@@ -53,12 +53,13 @@ const renderPoint = (place, point) => {
     replaceCardToForm();
   });
 
-  editPoint.getElement().querySelector('.event__rollup-btn').addEventListener('submit', (evt) => {
+  editPoint.getElement().querySelector('.event__rollup-btn').addEventListener('click', (evt) => {
     evt.preventDefault();
     replaceFormToCard();
   });
   renderElement(place, pointEvent.getElement(), renderPosition.BEFOREEND);
 };
+
 for (let i = 0; i < points.length; i++) {
   renderPoint(createUl.getElement(), points[i]);
 }
