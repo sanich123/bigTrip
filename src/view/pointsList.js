@@ -1,17 +1,14 @@
 import { currentTime, createElement } from '../utils/utils.js';
-import { duration, titlePrice, getFormatTime } from '../utils/renderingUtils.js';
+import { duration, titlePrice, getFormatTime, favoritePoint } from '../utils/renderingUtils.js';
 
-const eventsList = (it = {}) => {
-
+export const eventsList = (points = {}) => {
   const {
     basePrice = 0,
     dateFrom = currentTime,
     dateTo = currentTime,
     destination = 'Undefined',
     offers,
-    type = 'taxi', isFavorite } = it;
-
-  const favoritePoint = isFavorite ? 'event__favorite-btn--active' : '';
+    type = 'taxi', isFavorite } = points;
 
   return `
   <li class="trip-events__item">
@@ -36,7 +33,7 @@ const eventsList = (it = {}) => {
       <ul class="event__selected-offers">
       ${titlePrice(offers)}
       </ul>
-      <button class="event__favorite-btn ${favoritePoint}" type="button">
+      <button class="event__favorite-btn ${favoritePoint(isFavorite)}" type="button">
         <span class="visually-hidden">Add to favorite</span>
         <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
           <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"></path>
@@ -51,19 +48,23 @@ const eventsList = (it = {}) => {
 };
 
 export default class PointsList {
-  constructor(it) {
-    this._it = it;
+  constructor(points) {
+    this._points = points;
     this._element = null;
   }
 
   getTemplate() {
-    return eventsList(this._it);
+    // console.log(eventsList(this._points));
+    return eventsList(this._points);
   }
 
   getElement() {
     if (!this._element) {
+      // console.log(this._element);
       this._element = createElement(this.getTemplate());
+      // console.log(this._element);
     }
+    // console.log(this._element)
     return this._element;
   }
 
@@ -72,4 +73,4 @@ export default class PointsList {
   }
 }
 
-export { eventsList };
+

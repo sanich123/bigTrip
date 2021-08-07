@@ -66,3 +66,5 @@ export const getFormatTime = (dateFrom, dateTo) => {
   const toDateMinutes = humanizeDate(dateTo, 'HH:mm');
   return { fromDate, fromDateMinutes, toDateMinutes };
 };
+
+export const favoritePoint = (isFavorite) => isFavorite ? 'event__favorite-btn--active' : '';
