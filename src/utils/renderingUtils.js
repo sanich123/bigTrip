@@ -69,6 +69,6 @@ export const getFormatTime = (dateFrom, dateTo) => {
   return { fromDate, fromDateMinutes, toDateMinutes, fullDateFrom, fullDateTo };
 };
 
-export const getPhotos = (arr) => arr.map(({src}) => (`<img class="event__photo" src="${src}" alt="Event photo">`)).join('');
+export const getPhotos = (arr) => arr.map(({ src }) => (`<img class="event__photo" src="${src}" alt="Event photo">`)).join('');
 
 export const favoritePoint = (isFavorite) => isFavorite ? 'event__favorite-btn--active' : '';

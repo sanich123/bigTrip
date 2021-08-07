@@ -3,7 +3,6 @@ import FiltersView from './view/filters.js';
 import NavigationView from './view/navigation.js';
 import SortMenuView from './view/sort.js';
 import TripListUl from './view/tripListUl.js';
-// import TripListLi from './view/tripListLi.js';
 // import Loading from './view/loading.js';
 // import Empty from './view/empty.js';
 import PointsList from './view/pointsList.js';
@@ -12,7 +11,7 @@ import EditingPoint from './view/editingPoint.js';
 // import NewWithoutOffers from './view/newWithoutOffers.js';
 // import NewPoint from './view/newPoint.js';
 import { generatePoint } from './mock/createData.js';
-import { renderPosition, renderElement } from './utils/utils.js';
+import { renderPosition, render } from './utils/utils.js';
 
 const COUNT_OF_POINTS = 15;
 
@@ -24,22 +23,17 @@ const toNavigation = document.querySelector('.trip-controls__navigation');
 const toFilters = document.querySelector('.trip-controls__filters');
 const toSort = document.querySelector('.trip-events');
 
-renderElement(priceAndTripSection, new PriceTripView(points).getElement(), renderPosition.AFTERBEGIN);
-renderElement(toNavigation, new NavigationView().getElement(), renderPosition.AFTERBEGIN);
-renderElement(toFilters, new FiltersView().getElement(), renderPosition.AFTERBEGIN);
-renderElement(toSort, new SortMenuView().getElement(), renderPosition.AFTERBEGIN);
+render(priceAndTripSection, new PriceTripView(points).getElement(), renderPosition.AFTERBEGIN);
+render(toNavigation, new NavigationView().getElement(), renderPosition.AFTERBEGIN);
+render(toFilters, new FiltersView().getElement(), renderPosition.AFTERBEGIN);
+render(toSort, new SortMenuView().getElement(), renderPosition.AFTERBEGIN);
 
 const createUl = new TripListUl();
-renderElement(toSort, createUl.getElement(), renderPosition.BEFOREEND);
-// const createLi = new TripListLi().getElement();
-// points.forEach((it) => renderElement(createUl.getElement(it), createLi, renderPosition.BEFOREEND));
-
-// points.forEach((it) => renderElement(createUl.getElement(), new PointsList(it).getElement(), renderPosition.BEFOREEND));
-
+render(toSort, createUl.getElement(), renderPosition.BEFOREEND);
 
 const renderPoint = (place, point) => {
-  const pointEvent = new PointsList(point);//Одна карточка
-  const editPoint = new EditingPoint(point); //Форма редактирования
+  const pointEvent = new PointsList(point);
+  const editPoint = new EditingPoint(point);
 
   const replaceCardToForm = () => {
     place.replaceChild(editPoint.getElement(), pointEvent.getElement());
@@ -57,16 +51,15 @@ const renderPoint = (place, point) => {
     evt.preventDefault();
     replaceFormToCard();
   });
-  renderElement(place, pointEvent.getElement(), renderPosition.BEFOREEND);
+  render(place, pointEvent.getElement(), renderPosition.BEFOREEND);
 };
 
-for (let i = 0; i < points.length; i++) {
-  renderPoint(createUl.getElement(), points[i]);
+for (const point of points) {
+  renderPoint(createUl.getElement(), point);
 }
 
-
-// renderElement(toSort, new Loading().getElement(), renderPosition.BEFOREEND);
-// renderElement(toSort, new Empty().getElement(), renderPosition.BEFOREEND);
+// render(toSort, new Loading().getElement(), renderPosition.BEFOREEND);
+// render(toSort, new Empty().getElement(), renderPosition.BEFOREEND);
 
 // const eventItem = document.querySelector('.trip-events__item');
 
@@ -82,7 +75,6 @@ for (let i = 0; i < points.length; i++) {
 // const eventItem2 = document.querySelector('.trip-events__item:nth-child(4)');
 // const eventItem3 = document.querySelector('.trip-events__item:nth-child(5)');
 
-// renderElement(eventItem1, new NewWithoutDestination(points[1]).getElement(), renderPosition.AFTERBEGIN);
-// renderElement(eventItem2, new NewWithoutOffers(points[2]).getElement(), renderPosition.AFTERBEGIN);
-// renderElement(eventItem3, new NewPoint(points[3]).getElement(), renderPosition.AFTERBEGIN);
-
+// render(eventItem1, new NewWithoutDestination(points[1]).getElement(), renderPosition.AFTERBEGIN);
+// render(eventItem2, new NewWithoutOffers(points[2]).getElement(), renderPosition.AFTERBEGIN);
+// render(eventItem3, new NewPoint(points[3]).getElement(), renderPosition.AFTERBEGIN);
