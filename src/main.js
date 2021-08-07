@@ -6,12 +6,12 @@ import TripListUl from './view/tripListUl.js';
 import Loading from './view/loading.js';
 import Empty from './view/empty.js';
 import PointsList from './view/pointsList.js';
-import { editPoint } from './view/editingPoint.js';
-import { addNewPointWithoutDestination } from './view/newWithoutDestination.js';
-import { addNewPointWithoutOffers } from './view/newWithoutOffers.js';
-import { addNewPoint } from './view/newPoint.js';
+import EditingPoint from './view/editingPoint.js';
+import NewWithoutDestination from './view/newWithoutDestination.js';
+import NewWithoutOffers from './view/newWithoutOffers.js';
+import NewPoint from './view/newPoint.js';
 import { generatePoint } from './mock/createData.js';
-import { renderPosition, renderTemplate, renderElement } from './utils/utils.js';
+import { renderPosition, renderElement } from './utils/utils.js';
 
 const COUNT_OF_POINTS = 15;
 
@@ -43,13 +43,13 @@ document.querySelector('.trip-events__item:nth-child(2) .event').remove();
 document.querySelector('.trip-events__item:nth-child(3) .event').remove();
 document.querySelector('.trip-events__item:nth-child(4) .event').remove();
 
-renderTemplate(eventItem, editPoint(points[0]), renderPosition.BEFOREEND);
+renderElement(eventItem, new EditingPoint(points[1]).getElement(), renderPosition.BEFOREEND);
 
 const eventItem1 = document.querySelector('.trip-events__item:nth-child(3)');
 const eventItem2 = document.querySelector('.trip-events__item:nth-child(4)');
 const eventItem3 = document.querySelector('.trip-events__item:nth-child(5)');
 
-renderTemplate(eventItem1, addNewPointWithoutDestination(points[1]), renderPosition.AFTERBEGIN);
-renderTemplate(eventItem2, addNewPointWithoutOffers(points[2]), renderPosition.AFTERBEGIN);
-renderTemplate(eventItem3, addNewPoint(points[3]), renderPosition.AFTERBEGIN);
+renderElement(eventItem1, new NewWithoutDestination(points[1]).getElement(), renderPosition.AFTERBEGIN);
+renderElement(eventItem2, new NewWithoutOffers(points[2]).getElement(), renderPosition.AFTERBEGIN);
+renderElement(eventItem3, new NewPoint(points[3]).getElement(), renderPosition.AFTERBEGIN);
 

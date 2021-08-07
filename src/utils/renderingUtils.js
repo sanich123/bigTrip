@@ -64,7 +64,11 @@ export const getFormatTime = (dateFrom, dateTo) => {
   const fromDate = humanizeDate(dateFrom, 'MMM D');
   const fromDateMinutes = humanizeDate(dateFrom, 'HH:mm');
   const toDateMinutes = humanizeDate(dateTo, 'HH:mm');
-  return { fromDate, fromDateMinutes, toDateMinutes };
+  const fullDateFrom = humanizeDate(dateFrom, 'DD/MM/YY HH:mm');
+  const fullDateTo = humanizeDate(dateTo, 'DD/MM/YY HH:mm');
+  return { fromDate, fromDateMinutes, toDateMinutes, fullDateFrom, fullDateTo };
 };
+
+export const getPhotos = (arr) => arr.map(({src}) => (`<img class="event__photo" src="${src}" alt="Event photo">`)).join('');
 
 export const favoritePoint = (isFavorite) => isFavorite ? 'event__favorite-btn--active' : '';

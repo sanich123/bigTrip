@@ -1,7 +1,6 @@
 import { createElement } from '../utils/utils.js';
 
 const tripListUl = () => '<ul class="trip-events__list"></ul>';
-
 export default class TripListUl {
   constructor() {
     this._element = null;

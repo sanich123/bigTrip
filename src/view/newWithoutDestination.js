@@ -1,7 +1,8 @@
-import { humanizeDate, currentTime} from '../utils/utils.js';
+import { currentTime, createElement } from '../utils/utils.js';
 import { TYPES, CITIES } from '../mock/createData.js';
-import { addOffers, createTypes, createCities } from '../utils/renderingUtils.js';
-export const addNewPointWithoutDestination = (points = {}) => {
+import { addOffers, createTypes, createCities, getFormatTime } from '../utils/renderingUtils.js';
+
+const addNewPointWithoutDestination = (points = {}) => {
   const {
     basePrice = 0,
     dateFrom = currentTime,
@@ -9,9 +10,6 @@ export const addNewPointWithoutDestination = (points = {}) => {
     destination = 'Undefined',
     offers,
     type = 'taxi' } = points;
-
-  const fromDate = humanizeDate(dateFrom, 'DD/MM/YY HH:mm');
-  const toDate = humanizeDate(dateTo, 'DD/MM/YY HH:mm');
 
   return `<form class="event event--edit" action="#" method="post">
 <header class="event__header">
@@ -42,10 +40,10 @@ ${createCities(CITIES)}
 
   <div class="event__field-group  event__field-group--time">
     <label class="visually-hidden" for="event-start-time-1">From</label>
-    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${fromDate}">
+    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFormatTime(dateFrom)['fullDateFrom']}">
     —
     <label class="visually-hidden" for="event-end-time-1">To</label>
-    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${toDate}">
+    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getFormatTime(dateTo)['fullDateTo']}">
   </div>
 
   <div class="event__field-group  event__field-group--price">
@@ -70,3 +68,25 @@ ${createCities(CITIES)}
 </section>
 </form>`;
 };
+
+export default class NewWithoutDestination {
+  constructor(points) {
+    this._points = points;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return addNewPointWithoutDestination(this._points);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
