@@ -6,7 +6,6 @@ import TripListUl from './view/tripListUl.js';
 import Loading from './view/loading.js';
 import Empty from './view/empty.js';
 import PointsList from './view/pointsList.js';
-import { eventsList } from './view/pointsList.js';
 import { editPoint } from './view/editingPoint.js';
 import { addNewPointWithoutDestination } from './view/newWithoutDestination.js';
 import { addNewPointWithoutOffers } from './view/newWithoutOffers.js';
@@ -18,9 +17,6 @@ const COUNT_OF_POINTS = 15;
 
 const points = new Array(COUNT_OF_POINTS).fill().map(generatePoint);
 points.sort((a,b) => a.dateFrom - b.dateFrom);
-
-// console.log(new PointsList(points[2]).getElement());
-// console.log(new PriceTripView(points).getElement());
 
 const priceAndTripSection = document.querySelector('.trip-main');
 const toNavigation = document.querySelector('.trip-controls__navigation');
@@ -34,8 +30,7 @@ renderElement(toSort, new SortMenuView().getElement(), renderPosition.AFTERBEGIN
 const createUl = new TripListUl();
 renderElement(toSort, createUl.getElement(), renderPosition.BEFOREEND);
 
-// points.forEach((it) => renderElement(createUl.getElement(), new PointsList(it).getElement(), renderPosition.BEFOREEND));
-points.forEach((it) => renderTemplate(createUl.getElement(), eventsList(it), renderPosition.BEFOREEND));
+points.forEach((it) => renderElement(createUl.getElement(), new PointsList(it).getElement(), renderPosition.BEFOREEND));
 
 renderElement(toSort, new Loading().getElement(), renderPosition.BEFOREEND);
 renderElement(toSort, new Empty().getElement(), renderPosition.BEFOREEND);

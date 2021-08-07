@@ -1,7 +1,7 @@
 import { currentTime, createElement } from '../utils/utils.js';
 import { duration, titlePrice, getFormatTime, favoritePoint } from '../utils/renderingUtils.js';
 
-export const eventsList = (points = {}) => {
+const eventsList = (points = {}) => {
   const {
     basePrice = 0,
     dateFrom = currentTime,
@@ -10,8 +10,7 @@ export const eventsList = (points = {}) => {
     offers,
     type = 'taxi', isFavorite } = points;
 
-  return `
-  <li class="trip-events__item">
+  return `<li class="trip-events__item">
     <div class="event">
       <time class="event__date" datetime="${getFormatTime(dateFrom, dateTo)['fromDate']}">${getFormatTime(dateFrom, dateTo)['fromDate']}</time>
       <div class="event__type">
@@ -43,8 +42,7 @@ export const eventsList = (points = {}) => {
         <span class="visually-hidden">Open event</span>
       </button>
     </div>
-  </li>
-`;
+  </li>`;
 };
 
 export default class PointsList {
@@ -54,17 +52,13 @@ export default class PointsList {
   }
 
   getTemplate() {
-    // console.log(eventsList(this._points));
     return eventsList(this._points);
   }
 
   getElement() {
     if (!this._element) {
-      // console.log(this._element);
       this._element = createElement(this.getTemplate());
-      // console.log(this._element);
     }
-    // console.log(this._element)
     return this._element;
   }
 
@@ -72,5 +66,3 @@ export default class PointsList {
     this._element = null;
   }
 }
-
-
