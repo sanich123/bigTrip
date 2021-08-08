@@ -1,5 +1,6 @@
-import { currentTime, createElement } from '../utils/utils.js';
+import { currentTime} from '../utils/utils.js';
 import { duration, titlePrice, getFormatTime, favoritePoint } from '../utils/renderingUtils.js';
+import { createElement } from '../view/renderingUtils.js';
 
 const eventsList = (points = {}) => {
   const {

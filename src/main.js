@@ -11,7 +11,7 @@ import EditingPoint from './view/editingPoint.js';
 // import NewWithoutOffers from './view/newWithoutOffers.js';
 // import NewPoint from './view/newPoint.js';
 import { generatePoint } from './mock/createData.js';
-import { renderPosition, render } from './utils/utils.js';
+import { renderPosition, render } from './view/renderingUtils.js';
 
 const COUNT_OF_POINTS = 15;
 

@@ -1,4 +1,4 @@
-import { createElement } from '../utils/utils.js';
+import { createElement } from '../view/renderingUtils.js';
 
 const tripListUl = () => '<ul class="trip-events__list"></ul>';
 export default class TripListUl {

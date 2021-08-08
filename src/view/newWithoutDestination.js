@@ -1,6 +1,7 @@
-import { currentTime, createElement } from '../utils/utils.js';
+import { currentTime } from '../utils/utils.js';
 import { TYPES, CITIES } from '../mock/createData.js';
 import { addOffers, createTypes, createCities, getFormatTime } from '../utils/renderingUtils.js';
+import { createElement } from '../view/renderingUtils.js';
 
 const addNewPointWithoutDestination = (points = {}) => {
   const {

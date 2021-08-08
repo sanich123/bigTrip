@@ -1,4 +1,4 @@
-import { createElement } from '../utils/utils.js';
+import { createElement } from '../view/renderingUtils.js';
 const loading = () => (
   '<p class="trip-events__msg">Loading...</p>'
 );
