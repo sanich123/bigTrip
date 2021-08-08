@@ -34,7 +34,6 @@ render(toSort, createUl.getElement(), renderPosition.BEFOREEND);
 const renderPoint = (place, point) => {
   const pointEvent = new PointsList(point);
   const editPoint = new EditingPoint(point);
-
   const replaceCardToForm = () => {
     place.replaceChild(editPoint.getElement(), pointEvent.getElement());
   };
@@ -47,8 +46,12 @@ const renderPoint = (place, point) => {
     replaceCardToForm();
   });
 
-  editPoint.getElement().querySelector('.event__rollup-btn').addEventListener('click', (evt) => {
+  editPoint.getElement().querySelector('.event--edit').addEventListener('submit', (evt) => {
     evt.preventDefault();
+    replaceFormToCard();
+  });
+
+  editPoint.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
     replaceFormToCard();
   });
   render(place, pointEvent.getElement(), renderPosition.BEFOREEND);

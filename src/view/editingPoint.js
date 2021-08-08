@@ -13,7 +13,7 @@ const editPoint = (points = {}) => {
 
   const descriptionOfDestination = destination.description.join('');
 
-  return `<form class="event event--edit" action="#" method="post">
+  return `<div><form class="event event--edit" action="#" method="post">
   <header class="event__header">
   <div class="event__type-wrapper">
     <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -75,7 +75,7 @@ const editPoint = (points = {}) => {
     <p class="event__destination-description">${descriptionOfDestination}</p>
   </section>
 </section>
-</form>`;
+</form></div>`;
 };
 
 export default class EditingPoint {
