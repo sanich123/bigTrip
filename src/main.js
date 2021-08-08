@@ -4,7 +4,7 @@ import NavigationView from './view/navigation.js';
 import SortMenuView from './view/sort.js';
 import TripListUl from './view/tripListUl.js';
 // import Loading from './view/loading.js';
-// import Empty from './view/empty.js';
+import Empty from './view/empty.js';
 import PointsList from './view/pointsList.js';
 import EditingPoint from './view/editingPoint.js';
 // import NewWithoutDestination from './view/newWithoutDestination.js';
@@ -26,7 +26,11 @@ const toSort = document.querySelector('.trip-events');
 render(priceAndTripSection, new PriceTripView(points).getElement(), renderPosition.AFTERBEGIN);
 render(toNavigation, new NavigationView().getElement(), renderPosition.AFTERBEGIN);
 render(toFilters, new FiltersView().getElement(), renderPosition.AFTERBEGIN);
-render(toSort, new SortMenuView().getElement(), renderPosition.AFTERBEGIN);
+if (points.length === 0) {
+  render(toSort, new Empty().getElement(), renderPosition.BEFOREEND);
+} else {
+  render(toSort, new SortMenuView().getElement(), renderPosition.AFTERBEGIN);
+}
 
 const createUl = new TripListUl();
 render(toSort, createUl.getElement(), renderPosition.BEFOREEND);
@@ -41,9 +45,16 @@ const renderPoint = (place, point) => {
   const replaceFormToCard = () => {
     place.replaceChild(pointEvent.getElement(), editPoint.getElement());
   };
-
+  const onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      replaceFormToCard();
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
   pointEvent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
     replaceCardToForm();
+    document.addEventListener('keydown', onEscKeyDown);
   });
 
   editPoint.getElement().querySelector('.event--edit').addEventListener('submit', (evt) => {
@@ -53,6 +64,7 @@ const renderPoint = (place, point) => {
 
   editPoint.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
     replaceFormToCard();
+    document.removeEventListener('keydown', onEscKeyDown);
   });
   render(place, pointEvent.getElement(), renderPosition.BEFOREEND);
 };

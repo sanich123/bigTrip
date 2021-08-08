@@ -1,7 +1,10 @@
 import { createElement } from '../utils/utils.js';
 import { getCities, totalPrice } from '../utils/renderingUtils.js';
 
-const priceAndTrip = (points) => `<section class="trip-main__trip-info  trip-info">
+const priceAndTrip = (points) => {
+  if (points.length === 0) {
+    return ' ';
+  } else {`<section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
     <h1 class="trip-info__title">${getCities(points)['firstCity']} — ${getCities(points)['secondCity']} — ${getCities(points)['thirdCity']}</h1>
 
@@ -11,7 +14,8 @@ const priceAndTrip = (points) => `<section class="trip-main__trip-info  trip-inf
   <p class="trip-info__cost">
     Total: €&nbsp;<span class="trip-info__cost-value">${totalPrice(points)}</span>
   </p>
-</section>`;
+</section>`;}
+};
 export default class PriceTripView {
   constructor(points) {
     this._points = points;
