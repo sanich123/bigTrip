@@ -1,13 +1,17 @@
-import { priceAndTrip } from './view/priceTrip.js';
-import { navigationMenu, filters } from './view/navigation&filters.js';
-import { sort } from './view/sort.js';
-import { eventsList, tripListUl } from './view/pointsList.js';
-import { editPoint } from './view/editingPoint.js';
-import { addNewPointWithoutDestination } from './view/newWithoutDestination.js';
-import { addNewPointWithoutOffers } from './view/newWithoutOffers.js';
-import { addNewPoint } from './view/newPoint.js';
-import { loading, empty } from './view/loading.js';
+import PriceTripView from './view/priceTrip.js';
+import FiltersView from './view/filters.js';
+import NavigationView from './view/navigation.js';
+import SortMenuView from './view/sort.js';
+import TripListUl from './view/tripListUl.js';
+// import Loading from './view/loading.js';
+// import Empty from './view/empty.js';
+import PointsList from './view/pointsList.js';
+import EditingPoint from './view/editingPoint.js';
+// import NewWithoutDestination from './view/newWithoutDestination.js';
+// import NewWithoutOffers from './view/newWithoutOffers.js';
+// import NewPoint from './view/newPoint.js';
 import { generatePoint } from './mock/createData.js';
+import { renderPosition, render } from './utils/utils.js';
 
 const COUNT_OF_POINTS = 15;
 
@@ -19,44 +23,61 @@ const toNavigation = document.querySelector('.trip-controls__navigation');
 const toFilters = document.querySelector('.trip-controls__filters');
 const toSort = document.querySelector('.trip-events');
 
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
+render(priceAndTripSection, new PriceTripView(points).getElement(), renderPosition.AFTERBEGIN);
+render(toNavigation, new NavigationView().getElement(), renderPosition.AFTERBEGIN);
+render(toFilters, new FiltersView().getElement(), renderPosition.AFTERBEGIN);
+render(toSort, new SortMenuView().getElement(), renderPosition.AFTERBEGIN);
+
+const createUl = new TripListUl();
+render(toSort, createUl.getElement(), renderPosition.BEFOREEND);
+
+const renderPoint = (place, point) => {
+  const pointEvent = new PointsList(point);
+  const editPoint = new EditingPoint(point);
+  const replaceCardToForm = () => {
+    place.replaceChild(editPoint.getElement(), pointEvent.getElement());
+  };
+
+  const replaceFormToCard = () => {
+    place.replaceChild(pointEvent.getElement(), editPoint.getElement());
+  };
+
+  pointEvent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replaceCardToForm();
+  });
+
+  editPoint.getElement().querySelector('.event--edit').addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    replaceFormToCard();
+  });
+
+  editPoint.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replaceFormToCard();
+  });
+  render(place, pointEvent.getElement(), renderPosition.BEFOREEND);
 };
 
-const renderPosition = {
-  AFTERBEGIN: 'afterbegin',
-  BEFOREEND: 'beforeend',
-};
+for (const point of points) {
+  renderPoint(createUl.getElement(), point);
+}
 
-render(priceAndTripSection, priceAndTrip(points), renderPosition.AFTERBEGIN);
-render(toNavigation, navigationMenu(), renderPosition.AFTERBEGIN);
-render(toFilters, filters(), renderPosition.AFTERBEGIN);
-render(toSort, sort(), renderPosition.AFTERBEGIN);
-render(toSort, tripListUl(), renderPosition.BEFOREEND);
+// render(toSort, new Loading().getElement(), renderPosition.BEFOREEND);
+// render(toSort, new Empty().getElement(), renderPosition.BEFOREEND);
 
-const tripList = document.querySelector('.trip-events__list');
-
-points.forEach((it) => render(tripList, eventsList(it), renderPosition.BEFOREEND));
-
-
-render(toSort, loading(), renderPosition.BEFOREEND);
-render(toSort, empty(), renderPosition.BEFOREEND);
-
-const eventItem = document.querySelector('.trip-events__item');
+// const eventItem = document.querySelector('.trip-events__item');
 
 //Удаление div временное, чтобы просто вывести данные в надлежащем виде
-document.querySelector('.event:nth-child(1)').remove();
-document.querySelector('.trip-events__item:nth-child(2) .event').remove();
-document.querySelector('.trip-events__item:nth-child(3) .event').remove();
-document.querySelector('.trip-events__item:nth-child(4) .event').remove();
+// document.querySelector('.event:nth-child(1)').remove();
+// document.querySelector('.trip-events__item:nth-child(2) .event').remove();
+// document.querySelector('.trip-events__item:nth-child(3) .event').remove();
+// document.querySelector('.trip-events__item:nth-child(4) .event').remove();
 
-render(eventItem, editPoint(points[0]), renderPosition.BEFOREEND);
+// renderElement(eventItem, new EditingPoint(points[1]).getElement(), renderPosition.BEFOREEND);
 
-const eventItem1 = document.querySelector('.trip-events__item:nth-child(3)');
-const eventItem2 = document.querySelector('.trip-events__item:nth-child(4)');
-const eventItem3 = document.querySelector('.trip-events__item:nth-child(5)');
+// const eventItem1 = document.querySelector('.trip-events__item:nth-child(3)');
+// const eventItem2 = document.querySelector('.trip-events__item:nth-child(4)');
+// const eventItem3 = document.querySelector('.trip-events__item:nth-child(5)');
 
-render(eventItem1, addNewPointWithoutDestination(points[1]), renderPosition.AFTERBEGIN);
-render(eventItem2, addNewPointWithoutOffers(points[2]), renderPosition.AFTERBEGIN);
-render(eventItem3, addNewPoint(points[3]), renderPosition.AFTERBEGIN);
-
+// render(eventItem1, new NewWithoutDestination(points[1]).getElement(), renderPosition.AFTERBEGIN);
+// render(eventItem2, new NewWithoutOffers(points[2]).getElement(), renderPosition.AFTERBEGIN);
+// render(eventItem3, new NewPoint(points[3]).getElement(), renderPosition.AFTERBEGIN);

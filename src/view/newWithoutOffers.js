@@ -1,7 +1,8 @@
-import { humanizeDate, currentTime } from '../utils/utils.js';
+import { currentTime, createElement } from '../utils/utils.js';
 import {TYPES, CITIES } from '../mock/createData.js';
+import { createTypes, createCities, getFormatTime, getPhotos } from '../utils/renderingUtils.js';
 
-export const addNewPointWithoutOffers = (points = {}) => {
+const addNewPointWithoutOffers = (points = {}) => {
   const {
     basePrice = 0,
     dateFrom = currentTime,
@@ -10,20 +11,8 @@ export const addNewPointWithoutOffers = (points = {}) => {
     type = 'taxi' } = points;
 
   const descriptionOfDestination = destination.description.join('');
-  const fromDate = humanizeDate(dateFrom, 'DD/MM/YY HH:mm');
-  const toDate = humanizeDate(dateTo, 'DD/MM/YY HH:mm');
 
-  const addPhotos = destination.pictures.map(({src}) => (`<img class="event__photo" src="${src}" alt="Event photo">`)).join('');
-
-  const createTypes = TYPES.map((it, index) => (`<div class="event__type-item">
-          <input id="event-type-${it}-${index}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${it}">
-          <label class="event__type-label  event__type-label--${it}" for="event-type-${it}-${index}">${it}</label>
-        </div>`)).join('');
-
-  const createCities = CITIES.map((it) => (`<option value="${it}"></option>`)).join('');
-
-  return `
-  <form class="event event--edit" action="#" method="post">
+  return `<form class="event event--edit" action="#" method="post">
                 <header class="event__header">
                   <div class="event__type-wrapper">
                     <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -35,7 +24,7 @@ export const addNewPointWithoutOffers = (points = {}) => {
                     <div class="event__type-list">
                       <fieldset class="event__type-group">
                         <legend class="visually-hidden">Event type</legend>
-                        ${createTypes}
+                        ${createTypes(TYPES)}
                       </fieldset>
                     </div>
                   </div>
@@ -46,16 +35,16 @@ export const addNewPointWithoutOffers = (points = {}) => {
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
                     <datalist id="destination-list-1">
-                     ${createCities}
+                     ${createCities(CITIES)}
                     </datalist>
                   </div>
 
                   <div class="event__field-group  event__field-group--time">
                     <label class="visually-hidden" for="event-start-time-1">From</label>
-                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${fromDate}">
+                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFormatTime(dateFrom)['fullDateFrom']}">
                     —
                     <label class="visually-hidden" for="event-end-time-1">To</label>
-                    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${toDate}">
+                    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getFormatTime(dateTo)['fullDateTo']}">
                   </div>
 
                   <div class="event__field-group  event__field-group--price">
@@ -78,11 +67,31 @@ export const addNewPointWithoutOffers = (points = {}) => {
 
                     <div class="event__photos-container">
                       <div class="event__photos-tape">
-                      ${addPhotos}
+                      ${getPhotos(destination.pictures)}
                       </div>
                     </div>
                   </section>
                 </section>
-              </form>
-`;
+              </form>`;
 };
+export default class NewWithoutOffers {
+  constructor(points) {
+    this._points = points;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return addNewPointWithoutOffers(this._points);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

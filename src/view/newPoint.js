@@ -1,7 +1,8 @@
-import { humanizeDate, currentTime} from '../utils/utils.js';
+import { currentTime, createElement } from '../utils/utils.js';
 import {CITIES, TYPES } from '../mock/createData.js';
+import { addOffers, createTypes, createCities, getFormatTime, getPhotos } from '../utils/renderingUtils.js';
 
-export const addNewPoint = (points = {}) => {
+const addNewPoint = (points = {}) => {
   const {
     basePrice = 0,
     dateFrom = currentTime,
@@ -10,29 +11,7 @@ export const addNewPoint = (points = {}) => {
     offers,
     type = 'taxi' } = points;
 
-  const addOffers = offers.map(({title, price}) => (
-    `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked=""
-    >
-    <label class="event__offer-label" for="event-offer-luggage-1">
-      <span class="event__offer-title">${title}</span>
-      +€&nbsp;
-      <span class="event__offer-price">${price}</span>
-    </label>
-  </div>`)).join('');
-
   const descriptionOfDestination = destination.description.join('');
-  const fromDate = humanizeDate(dateFrom, 'DD/MM/YY HH:mm');
-  const toDate = humanizeDate(dateTo, 'DD/MM/YY HH:mm');
-
-  const createTypes = TYPES.map((it, index) => (`<div class="event__type-item">
-      <input id="event-type-${it}-${index}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${it}">
-        <label class="event__type-label  event__type-label--${it}" for="event-type-${it}-${index}">${it}</label>
-      </div>`)).join('');
-
-  const createCities = CITIES.map((it) => (`<option value="${it}"></option>`)).join('');
-
-  const addPhotos = destination.pictures.map(({src}) => (`<img class="event__photo" src="${src}" alt="Event photo">`)).join('');
 
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
@@ -46,7 +25,7 @@ export const addNewPoint = (points = {}) => {
       <div class="event__type-list">
         <fieldset class="event__type-group">
           <legend class="visually-hidden">Event type</legend>
-        ${createTypes}
+        ${createTypes(TYPES)}
           </fieldset>
       </div>
     </div>
@@ -57,16 +36,16 @@ export const addNewPoint = (points = {}) => {
       </label>
       <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
       <datalist id="destination-list-1">
-      ${createCities}
+      ${createCities(CITIES)}
       </datalist>
     </div>
 
     <div class="event__field-group  event__field-group--time">
       <label class="visually-hidden" for="event-start-time-1">From</label>
-      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${fromDate}">
+      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFormatTime(dateFrom)['fullDateFrom']}">
       —
       <label class="visually-hidden" for="event-end-time-1">To</label>
-      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${toDate}">
+      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getFormatTime(dateTo)['fullDateTo']}">
     </div>
 
     <div class="event__field-group  event__field-group--price">
@@ -86,7 +65,7 @@ export const addNewPoint = (points = {}) => {
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
       <div class="event__available-offers">
-      ${addOffers}
+      ${addOffers(offers)}
       </div>
     </section>
 
@@ -95,7 +74,7 @@ export const addNewPoint = (points = {}) => {
       <p class="event__destination-description">${descriptionOfDestination}</p>
       <div class="event__photos-container">
         <div class="event__photos-tape">
-        ${addPhotos}
+        ${getPhotos(destination.pictures)}
         </div>
       </div>
     </section>
@@ -103,48 +82,24 @@ export const addNewPoint = (points = {}) => {
 </form>`;
 };
 
-/* <div class="event__offer-selector">
-<input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked="">
-<label class="event__offer-label" for="event-offer-luggage-1">
-  <span class="event__offer-title">Add luggage</span>
-  +€&nbsp;
-  <span class="event__offer-price">30</span>
-</label>
-</div>
+export default class NewPoint {
+  constructor(points) {
+    this._points = points;
+    this._element = null;
+  }
 
-<div class="event__offer-selector">
-<input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked="">
-<label class="event__offer-label" for="event-offer-comfort-1">
-  <span class="event__offer-title">Switch to comfort class</span>
-  +€&nbsp;
-  <span class="event__offer-price">100</span>
-</label>
-</div>
+  getTemplate() {
+    return addNewPoint(this._points);
+  }
 
-<div class="event__offer-selector">
-<input class="event__offer-checkbox  visually-hidden" id="event-offer-meal-1" type="checkbox" name="event-offer-meal">
-<label class="event__offer-label" for="event-offer-meal-1">
-  <span class="event__offer-title">Add meal</span>
-  +€&nbsp;
-  <span class="event__offer-price">15</span>
-</label>
-</div>
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
 
-<div class="event__offer-selector">
-<input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-1" type="checkbox" name="event-offer-seats">
-<label class="event__offer-label" for="event-offer-seats-1">
-  <span class="event__offer-title">Choose seats</span>
-  +€&nbsp;
-  <span class="event__offer-price">5</span>
-</label>
-</div>
-
-<div class="event__offer-selector">
-<input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train">
-<label class="event__offer-label" for="event-offer-train-1">
-  <span class="event__offer-title">Travel by train</span>
-  +€&nbsp;
-  <span class="event__offer-price">40</span>
-</label>
-</div>
-</div> */
+  removeElement() {
+    this._element = null;
+  }
+}

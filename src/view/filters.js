@@ -1,10 +1,4 @@
-export const navigationMenu = () => (
-  `<nav class="trip-controls__trip-tabs  trip-tabs">
-  <a class="trip-tabs__btn  trip-tabs__btn--active" href="#">Table</a>
-  <a class="trip-tabs__btn" href="#">Stats</a>
-</nav>`
-);
-
+import { createElement } from '../utils/utils.js';
 export const filters = () => (
   `<form class="trip-filters" action="#" method="get">
 <div class="trip-filters__filter">
@@ -25,3 +19,24 @@ export const filters = () => (
 <button class="visually-hidden" type="submit">Accept filter</button>
 </form>`
 );
+
+export default class FiltersView {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return filters();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

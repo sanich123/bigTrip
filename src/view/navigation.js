@@ -1,14 +1,19 @@
 import { createElement } from '../utils/utils.js';
-const loading = () => (
-  '<p class="trip-events__msg">Loading...</p>'
+
+const navigationMenu = () => (
+  `<nav class="trip-controls__trip-tabs  trip-tabs">
+  <a class="trip-tabs__btn  trip-tabs__btn--active" href="#">Table</a>
+  <a class="trip-tabs__btn" href="#">Stats</a>
+</nav>`
 );
-export default class Loading {
+
+export default class NavigationView {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return loading();
+    return navigationMenu();
   }
 
   getElement() {
@@ -22,4 +27,3 @@ export default class Loading {
     this._element = null;
   }
 }
-

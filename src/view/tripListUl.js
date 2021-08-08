@@ -1,14 +1,13 @@
 import { createElement } from '../utils/utils.js';
-const loading = () => (
-  '<p class="trip-events__msg">Loading...</p>'
-);
-export default class Loading {
+
+const tripListUl = () => '<ul class="trip-events__list"></ul>';
+export default class TripListUl {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return loading();
+    return tripListUl();
   }
 
   getElement() {
@@ -22,4 +21,3 @@ export default class Loading {
     this._element = null;
   }
 }
-
