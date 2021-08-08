@@ -26,6 +26,7 @@ const toSort = document.querySelector('.trip-events');
 render(priceAndTripSection, new PriceTripView(points).getElement(), renderPosition.AFTERBEGIN);
 render(toNavigation, new NavigationView().getElement(), renderPosition.AFTERBEGIN);
 render(toFilters, new FiltersView().getElement(), renderPosition.AFTERBEGIN);
+
 if (points.length === 0) {
   render(toSort, new Empty().getElement(), renderPosition.BEFOREEND);
 } else {
