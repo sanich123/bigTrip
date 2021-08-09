@@ -14,7 +14,7 @@ export const currentTime = dayjs().format('DD/MM/YY HH:mm');
 export const differenceTime = (date1, date2) => Math.abs(dayjs(date1).diff(dayjs(date2), 'm'));
 
 export const generateDate = () => {
-  const maxDaysGap = 7;
+  const maxDaysGap = 7000;
   const daysGap = getRandomInteger(-maxDaysGap, maxDaysGap);
-  return dayjs().add(daysGap, 'd').toDate();
+  return dayjs().add(daysGap, 'm').toDate();
 };

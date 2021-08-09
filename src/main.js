@@ -12,17 +12,10 @@ import EditingPoint from './view/editingPoint.js';
 // import NewPoint from './view/newPoint.js';
 import { generatePoint } from './mock/createData.js';
 import { renderPosition, render } from './view/renderingUtils.js';
-import { differenceTime } from './utils/utils.js';
-import {duration} from './utils/renderingUtils.js';
-import dayjs from 'dayjs';
 const COUNT_OF_POINTS = 15;
 
 const points = new Array(COUNT_OF_POINTS).fill().map(generatePoint);
 points.sort((a,b) => a.dateFrom - b.dateFrom);
-console.log(points[1].dateFrom, points[1].dateTo);
-console.log(differenceTime(points[1].dateFrom, points[1].dateTo));
-console.log(duration(points[1].dateFrom, points[1].dateTo));
-console.log(dayjs(points[1].dateFrom).diff(points[1].dateTo, 'm'));
 
 const priceAndTripSection = document.querySelector('.trip-main');
 const toNavigation = document.querySelector('.trip-controls__navigation');

@@ -1,4 +1,4 @@
-import { differenceTime, humanizeDate  } from './utils.js';
+import { humanizeDate  } from './utils.js';
 
 export const addOffers = (arr) => arr.map(({title, price}) => (
   `<div class="event__offer-selector">
@@ -26,24 +26,52 @@ export const titlePrice = (arr) => arr.map(({ title, price }) => (
 </li>`
 )).join('');
 
+// export const duration = (begin, end) => {
+//   const ONE_HOUR = 60;
+//   const ONE_DAY = 1440;
+//   const millisecs = differenceTime(begin, end);
+//   if (millisecs < ONE_HOUR) {
+//     const string = humanizeDate(millisecs, 'mm').toString();
+//     const finalDate = `${`${string[0] + string[1]  }M`}`;
+//     return finalDate;
+//   }
+//   if (millisecs >= ONE_HOUR && millisecs < ONE_DAY) {
+//     const string = humanizeDate(millisecs, 'HH mm').toString();
+//     const finalDate = `${`${string[0] + string[1]  }H ${  string[3] + string [4] }M`}`;
+//     return finalDate;
+//   }
+//   if (millisecs >= ONE_DAY) {
+//     const string = humanizeDate(millisecs, 'DD HH mm').toString();
+//     const finalDate = `${`${string[0] + string[1] }D ${  string[3] + string [4] }H ${  string[6]  }${string[7]  }M`}`;
+//     return finalDate;
+//   }
+// };
 export const duration = (begin, end) => {
-  const ONE_HOUR = 3600000;
-  const ONE_DAY = 86400000;
-  const millisecs = differenceTime(begin, end);
-  if (millisecs < ONE_HOUR) {
-    const string = humanizeDate(millisecs, 'mm').toString();
-    const finalDate = `${`${string[0] + string[1]  }M`}`;
-    return finalDate;
+  const time1 = new Date(begin);
+  const time2 = new Date(end);
+  const time1ms = time1.getTime(time1);
+  const time2ms = time2.getTime(time2);
+  const difference = new Date (time2ms - time1ms);
+  if (difference <= 3600000) {
+    if (difference.getUTCMinutes() < 10){
+      return `0${difference.getUTCMinutes()}M`;
+    } else {
+      return `${difference.getUTCMinutes()}M`;
+    }
   }
-  if (millisecs >= ONE_HOUR && millisecs < ONE_DAY) {
-    const string = humanizeDate(millisecs, 'HH mm').toString();
-    const finalDate = `${`${string[0] + string[1]  }H ${  string[3] + string [4] }M`}`;
-    return finalDate;
+  if (difference > 3600000 && difference <= 86400000) {
+    if (difference.getUTCHours < 10) {
+      return `0${difference.getUTCHours()}H ${difference.getUTCMinutes()}M`;
+    } else {
+      return `${difference.getUTCHours()}H ${difference.getUTCMinutes()}M`;
+    }
   }
-  if (millisecs >= ONE_DAY) {
-    const string = humanizeDate(millisecs, 'DD HH mm').toString();
-    const finalDate = `${`${string[0] + string[1]  }D ${  string[3] + string [4] }H ${  string[6]  }${string[7]  }M`}`;
-    return finalDate;
+  if (difference > 86400000) {
+    if ((difference.getUTCDate() - 1) < 10) {
+      return `0${(difference.getUTCDate() - 1)}D ${difference.getUTCHours()}H ${difference.getUTCMinutes()}M`;
+    } else {
+      return `${(difference.getUTCDate() - 1)}D ${difference.getUTCHours()}H ${difference.getUTCMinutes()}M`;
+    }
   }
 };
 
