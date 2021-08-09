@@ -8,7 +8,7 @@ import Empty from './view/empty.js';
 import PointsList from './view/pointsList.js';
 import EditingPoint from './view/editingPoint.js';
 // import NewWithoutDestination from './view/newWithoutDestination.js';
-// import NewWithoutOffers from './view/newWithoutOffers.js';
+import NewWithoutOffers from './view/newWithoutOffers.js';
 // import NewPoint from './view/newPoint.js';
 import { generatePoint } from './mock/createData.js';
 import { renderPosition, render } from './view/renderingUtils.js';
@@ -38,6 +38,8 @@ render(toSort, createUl.getElement(), renderPosition.BEFOREEND);
 const renderPoint = (place, point) => {
   const pointEvent = new PointsList(point);
   const editPoint = new EditingPoint(point);
+  const withoutOffers = new NewWithoutOffers(point);
+
   const replaceCardToForm = () => {
     place.replaceChild(editPoint.getElement(), pointEvent.getElement());
   };
@@ -45,6 +47,15 @@ const renderPoint = (place, point) => {
   const replaceFormToCard = () => {
     place.replaceChild(pointEvent.getElement(), editPoint.getElement());
   };
+
+  const replaceForm2ToCard = () => {
+    place.replaceChild(withoutOffers.getElement(), pointEvent.getElement());
+  };
+
+  const replaceCard2ToForm = () => {
+    place.replaceChild(pointEvent.getElement(), withoutOffers.getElement());
+  };
+
   const onEscKeyDown = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
@@ -53,10 +64,18 @@ const renderPoint = (place, point) => {
     }
   };
   pointEvent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
-    replaceCardToForm();
+    if (point.type === 'taxi') {
+      replaceForm2ToCard();
+    } else {
+      replaceCardToForm();
+    }
     document.addEventListener('keydown', onEscKeyDown);
   });
 
+  withoutOffers.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replaceCard2ToForm();
+    document.removeEventListener('keydown', onEscKeyDown);
+  });
   editPoint.getElement().querySelector('.event--edit').addEventListener('submit', (evt) => {
     evt.preventDefault();
     replaceFormToCard();
