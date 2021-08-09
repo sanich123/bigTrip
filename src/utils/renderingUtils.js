@@ -51,27 +51,16 @@ export const duration = (begin, end) => {
   const time2 = new Date(end);
   const time1ms = time1.getTime(time1);
   const time2ms = time2.getTime(time2);
-  const difference = new Date (time2ms - time1ms);
-  if (difference <= 3600000) {
-    if (difference.getUTCMinutes() < 10){
-      return `0${difference.getUTCMinutes()}M`;
-    } else {
-      return `${difference.getUTCMinutes()}M`;
-    }
+  const difference = new Date (Math.max(time2ms, time1ms) - Math.min(time2ms, time1ms));
+
+  if (difference < 3600000) {
+    return `${difference.getUTCMinutes()}M`;
   }
-  if (difference > 3600000 && difference <= 86400000) {
-    if (difference.getUTCHours < 10) {
-      return `0${difference.getUTCHours()}H ${difference.getUTCMinutes()}M`;
-    } else {
-      return `${difference.getUTCHours()}H ${difference.getUTCMinutes()}M`;
-    }
+  if (difference >= 3600000 && difference < 86400000) {
+    return `${difference.getUTCHours()}H ${difference.getUTCMinutes()}M`;
   }
   if (difference > 86400000) {
-    if ((difference.getUTCDate() - 1) < 10) {
-      return `0${(difference.getUTCDate() - 1)}D ${difference.getUTCHours()}H ${difference.getUTCMinutes()}M`;
-    } else {
-      return `${(difference.getUTCDate() - 1)}D ${difference.getUTCHours()}H ${difference.getUTCMinutes()}M`;
-    }
+    return `${(difference.getUTCDate() - 1)}D ${difference.getUTCHours()}H ${difference.getUTCMinutes()}M`;
   }
 };
 
