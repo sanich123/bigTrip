@@ -12,7 +12,7 @@ import EditingPoint from './view/editingPoint.js';
 // import NewPoint from './view/newPoint.js';
 import { generatePoint } from './mock/createData.js';
 import { renderPosition, render } from './view/renderingUtils.js';
-const COUNT_OF_POINTS = 15;
+const COUNT_OF_POINTS = 12;
 
 const points = new Array(COUNT_OF_POINTS).fill().map(generatePoint);
 points.sort((a,b) => a.dateFrom - b.dateFrom);
