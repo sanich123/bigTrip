@@ -2,9 +2,11 @@ import { getCities, totalPrice } from '../utils/renderingUtils.js';
 import { createElement } from '../view/renderingUtils.js';
 
 const priceAndTrip = (points) => {
+
   if (points.length === 0) {
     return ' ';
-  } else {`<section class="trip-main__trip-info  trip-info">
+  } else {
+    return `<section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
     <h1 class="trip-info__title">${getCities(points)['firstCity']} — ${getCities(points)['secondCity']} — ${getCities(points)['thirdCity']}</h1>
 
