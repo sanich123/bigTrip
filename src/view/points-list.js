@@ -1,15 +1,9 @@
-import { currentTime} from '../utils/utils.js';
 import { duration, titlePrice, getFormatTime, favoritePoint } from '../utils/rendering-utils.js';
 import { createElement } from './rendering-utils.js';
 
-const eventsList = (points = {}) => {
-  const {
-    basePrice = 0,
-    dateFrom = currentTime,
-    dateTo = currentTime,
-    destination = 'Undefined',
-    offers,
-    type = 'taxi', isFavorite } = points;
+const eventsList = (points) => {
+
+  const { basePrice, dateFrom, dateTo, destination, offers, type, isFavorite } = points;
 
   return `<div class="event">
       <time class="event__date" datetime="${getFormatTime(dateFrom, dateTo)['fromDate']}">${getFormatTime(dateFrom, dateTo)['fromDate']}</time>

@@ -1,15 +1,11 @@
-import { currentTime } from '../utils/utils.js';
+
 import {TYPES, CITIES } from '../mock/create-data.js';
 import { createTypes, createCities, getFormatTime, getPhotos } from '../utils/rendering-utils.js';
 import { createElement } from './rendering-utils.js';
 
-const addNewPointWithoutOffers = (points = {}) => {
-  const {
-    basePrice = 0,
-    dateFrom = currentTime,
-    dateTo = currentTime,
-    destination = 'Undefined',
-    type = 'taxi' } = points;
+const addNewPointWithoutOffers = (points) => {
+
+  const { basePrice, dateFrom, dateTo, destination, type } = points;
 
   const descriptionOfDestination = destination.description.join('');
 

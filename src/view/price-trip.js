@@ -5,8 +5,8 @@ const priceAndTrip = (points) => {
 
   if (points.length === 0) {
     return ' ';
-  } else {
-    return `<section class="trip-main__trip-info  trip-info">
+  }
+  return `<section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
     <h1 class="trip-info__title">${getCities(points)['firstCity']} — ${getCities(points)['secondCity']} — ${getCities(points)['thirdCity']}</h1>
 
@@ -16,7 +16,7 @@ const priceAndTrip = (points) => {
   <p class="trip-info__cost">
     Total: €&nbsp;<span class="trip-info__cost-value">${totalPrice(points)}</span>
   </p>
-</section>`;}
+</section>`;
 };
 export default class PriceTripView {
   constructor(points) {

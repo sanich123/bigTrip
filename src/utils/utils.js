@@ -9,8 +9,6 @@ export const getRandomInteger = (a = 0, b = 1) => {
 
 export const humanizeDate = (date, format) => dayjs(date).format(format);
 
-export const currentTime = dayjs().format('DD/MM/YY HH:mm');
-
 export const differenceTime = (date1, date2) => Math.abs(dayjs(date1).diff(dayjs(date2), 'm'));
 
 export const generateDate = () => {
