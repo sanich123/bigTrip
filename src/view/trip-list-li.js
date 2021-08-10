@@ -1,23 +1,9 @@
-import { createElement } from './rendering-utils.js';
+import Abstract from '../view/abstract.js';
 
 const tripListLi = () => '<li class="trip-events__item"></li>';
-export default class TripListLi {
-  constructor() {
-    this._element = null;
-  }
+export default class TripListLi extends Abstract{
 
   getTemplate() {
     return tripListLi();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

@@ -1,25 +1,12 @@
-import { createElement } from '../view/renderingUtils.js';
+import Abstract from '../view/abstract.js';
+
 const loading = () => (
   '<p class="trip-events__msg">Loading...</p>'
 );
-export default class Loading {
-  constructor() {
-    this._element = null;
-  }
+export default class Loading extends Abstract {
 
   getTemplate() {
     return loading();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 
