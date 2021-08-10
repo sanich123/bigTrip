@@ -1,6 +1,7 @@
 import { TYPES, CITIES } from '../mock/create-data.js';
 import { addOffers, createTypes, createCities, getFormatTime } from '../utils/rendering-utils.js';
-import { createElement } from './rendering-utils.js';
+import Abstract from '../view/abstract.js';
+
 const editPoint = (points) => {
   const {
     basePrice,
@@ -77,24 +78,13 @@ const editPoint = (points) => {
 </form>`;
 };
 
-export default class EditingPoint {
+export default class EditingPoint extends Abstract {
   constructor(points) {
+    super();
     this._points = points;
-    this._element = null;
   }
 
   getTemplate() {
     return editPoint(this._points);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

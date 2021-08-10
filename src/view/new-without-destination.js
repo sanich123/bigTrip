@@ -1,6 +1,6 @@
 import { TYPES, CITIES } from '../mock/create-data.js';
 import { addOffers, createTypes, createCities, getFormatTime } from '../utils/rendering-utils.js';
-import { createElement } from './rendering-utils.js';
+import Abstract from '../view/abstract.js';
 
 const addNewPointWithoutDestination = (points) => {
   const {
@@ -69,24 +69,13 @@ ${createCities(CITIES)}
 </form>`;
 };
 
-export default class NewWithoutDestination {
+export default class NewWithoutDestination extends Abstract {
   constructor(points) {
+    super();
     this._points = points;
-    this._element = null;
   }
 
   getTemplate() {
     return addNewPointWithoutDestination(this._points);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

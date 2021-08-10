@@ -9,7 +9,7 @@ import Empty from './view/empty.js';
 import PointsList from './view/points-list.js';
 import EditingPoint from './view/editing-point.js';
 // import NewWithoutDestination from './view/newWithoutDestination.js';
-// import NewWithoutOffers from './view/newWithoutOffers.js';
+// import NewWithoutOffers from './view/new-without-offers.js';
 // import NewPoint from './view/newPoint.js';
 import { generatePoint } from './mock/create-data.js';
 import { renderPosition, render } from './view/rendering-utils.js';

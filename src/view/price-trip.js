@@ -1,5 +1,5 @@
 import { getCities, totalPrice } from '../utils/rendering-utils.js';
-import { createElement } from './rendering-utils.js';
+import Abstract from '../view/abstract.js';
 
 const priceAndTrip = (points) => {
 
@@ -18,24 +18,13 @@ const priceAndTrip = (points) => {
   </p>
 </section>`;
 };
-export default class PriceTripView {
+export default class PriceTripView extends Abstract {
   constructor(points) {
+    super();
     this._points = points;
-    this._element = null;
   }
 
   getTemplate() {
     return priceAndTrip(this._points);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

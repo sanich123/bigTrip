@@ -1,7 +1,7 @@
 
 import {TYPES, CITIES } from '../mock/create-data.js';
 import { createTypes, createCities, getFormatTime, getPhotos } from '../utils/rendering-utils.js';
-import { createElement } from './rendering-utils.js';
+import Abstract from '../view/abstract.js';
 
 const addNewPointWithoutOffers = (points) => {
 
@@ -71,24 +71,13 @@ const addNewPointWithoutOffers = (points) => {
                 </section>
               </form>`;
 };
-export default class NewWithoutOffers {
+export default class NewWithoutOffers extends Abstract {
   constructor(points) {
+    super();
     this._points = points;
-    this._element = null;
   }
 
   getTemplate() {
     return addNewPointWithoutOffers(this._points);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
