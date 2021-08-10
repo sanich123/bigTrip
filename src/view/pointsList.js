@@ -1,5 +1,6 @@
-import { currentTime, createElement } from '../utils/utils.js';
+import { currentTime} from '../utils/utils.js';
 import { duration, titlePrice, getFormatTime, favoritePoint } from '../utils/renderingUtils.js';
+import { createElement } from '../view/renderingUtils.js';
 
 const eventsList = (points = {}) => {
   const {
@@ -10,8 +11,7 @@ const eventsList = (points = {}) => {
     offers,
     type = 'taxi', isFavorite } = points;
 
-  return `<li class="trip-events__item">
-  <div class="event">
+  return `<div class="event">
       <time class="event__date" datetime="${getFormatTime(dateFrom, dateTo)['fromDate']}">${getFormatTime(dateFrom, dateTo)['fromDate']}</time>
       <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
@@ -41,8 +41,7 @@ const eventsList = (points = {}) => {
       <button class="event__rollup-btn" type="button">
         <span class="visually-hidden">Open event</span>
       </button>
-    </div>
-    </li>`;
+    </div>`;
 };
 
 export default class PointsList {

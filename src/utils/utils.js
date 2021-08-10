@@ -11,34 +11,10 @@ export const humanizeDate = (date, format) => dayjs(date).format(format);
 
 export const currentTime = dayjs().format('DD/MM/YY HH:mm');
 
-export const differenceTime = (date1, date2) => Math.abs(dayjs(date1).diff(dayjs(date2)));
+export const differenceTime = (date1, date2) => Math.abs(dayjs(date1).diff(dayjs(date2), 'm'));
 
 export const generateDate = () => {
   const maxDaysGap = 7000;
   const daysGap = getRandomInteger(-maxDaysGap, maxDaysGap);
   return dayjs().add(daysGap, 'm').toDate();
 };
-
-export const renderPosition = {
-  AFTERBEGIN: 'afterbegin',
-  BEFOREEND: 'beforeend',
-};
-
-export const render = (container, element, place) => {
-  switch (place) {
-    case renderPosition.AFTERBEGIN:
-      container.prepend(element);
-      break;
-    case renderPosition.BEFOREEND:
-      container.append(element);
-      break;
-  }
-};
-
-export const createElement = (template) => {
-  const newElement = document.createElement('div');
-  newElement.innerHTML = template;
-
-  return newElement.firstChild;
-};
-

@@ -1,14 +1,13 @@
 import { createElement } from '../view/renderingUtils.js';
-const loading = () => (
-  '<p class="trip-events__msg">Loading...</p>'
-);
-export default class Loading {
+
+const tripListLi = () => '<li class="trip-events__item"></li>';
+export default class TripListLi {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return loading();
+    return tripListLi();
   }
 
   getElement() {
@@ -22,4 +21,3 @@ export default class Loading {
     this._element = null;
   }
 }
-

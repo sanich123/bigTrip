@@ -1,4 +1,4 @@
-import { createElement } from '../utils/utils.js';
+import { createElement } from '../view/renderingUtils.js';
 export const filters = () => (
   `<form class="trip-filters" action="#" method="get">
 <div class="trip-filters__filter">

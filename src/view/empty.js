@@ -1,4 +1,4 @@
-import { createElement } from '../utils/utils.js';
+import { createElement } from '../view/renderingUtils.js';
 
 const empty = () => (
   '<p class="trip-events__msg">Click New Event to create your first point</p>'

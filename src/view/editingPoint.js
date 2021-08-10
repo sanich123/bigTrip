@@ -1,7 +1,7 @@
 import { TYPES, CITIES } from '../mock/createData.js';
-import { currentTime, createElement } from '../utils/utils.js';
+import { currentTime } from '../utils/utils.js';
 import { addOffers, createTypes, createCities, getFormatTime } from '../utils/renderingUtils.js';
-
+import { createElement } from '../view/renderingUtils.js';
 const editPoint = (points = {}) => {
   const {
     basePrice = 0,
@@ -41,10 +41,10 @@ const editPoint = (points = {}) => {
 
   <div class="event__field-group  event__field-group--time">
     <label class="visually-hidden" for="event-start-time-1">From</label>
-    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFormatTime(dateFrom)['fullDateFrom']}">
+    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFormatTime(dateFrom, dateTo)['fullDateFrom']}">
     —
     <label class="visually-hidden" for="event-end-time-1">To</label>
-    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getFormatTime(dateTo)['fullDateTo']}">
+    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getFormatTime(dateTo, dateTo)['fullDateTo']}">
   </div>
 
   <div class="event__field-group  event__field-group--price">

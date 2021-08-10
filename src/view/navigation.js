@@ -1,4 +1,4 @@
-import { createElement } from '../utils/utils.js';
+import { createElement } from '../view/renderingUtils.js';
 
 const navigationMenu = () => (
   `<nav class="trip-controls__trip-tabs  trip-tabs">
