@@ -3,12 +3,13 @@ import FiltersView from './view/filters.js';
 import NavigationView from './view/navigation.js';
 import SortMenuView from './view/sort.js';
 import TripListUl from './view/tripListUl.js';
+import TripListLi from './view/tripListLi.js';
 // import Loading from './view/loading.js';
 import Empty from './view/empty.js';
 import PointsList from './view/pointsList.js';
 import EditingPoint from './view/editingPoint.js';
 // import NewWithoutDestination from './view/newWithoutDestination.js';
-import NewWithoutOffers from './view/newWithoutOffers.js';
+// import NewWithoutOffers from './view/newWithoutOffers.js';
 // import NewPoint from './view/newPoint.js';
 import { generatePoint } from './mock/createData.js';
 import { renderPosition, render } from './view/renderingUtils.js';
@@ -35,25 +36,18 @@ if (points.length === 0) {
 const createUl = new TripListUl();
 render(toSort, createUl.getElement(), renderPosition.BEFOREEND);
 
-const renderPoint = (place, point) => {
+const renderPoint = (point) => {
   const pointEvent = new PointsList(point);
   const editPoint = new EditingPoint(point);
-  const withoutOffers = new NewWithoutOffers(point);
+  const tripListLi = new TripListLi();
+  render(createUl.getElement(), tripListLi.getElement(), renderPosition.BEFOREEND);
 
   const replaceCardToForm = () => {
-    place.replaceChild(editPoint.getElement(), pointEvent.getElement());
+    tripListLi.getElement().replaceChild(editPoint.getElement(), pointEvent.getElement());
   };
 
   const replaceFormToCard = () => {
-    place.replaceChild(pointEvent.getElement(), editPoint.getElement());
-  };
-
-  const replaceForm2ToCard = () => {
-    place.replaceChild(withoutOffers.getElement(), pointEvent.getElement());
-  };
-
-  const replaceCard2ToForm = () => {
-    place.replaceChild(pointEvent.getElement(), withoutOffers.getElement());
+    tripListLi.getElement().replaceChild(pointEvent.getElement(), editPoint.getElement());
   };
 
   const onEscKeyDown = (evt) => {
@@ -63,19 +57,12 @@ const renderPoint = (place, point) => {
       document.removeEventListener('keydown', onEscKeyDown);
     }
   };
+
   pointEvent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
-    if (point.type === 'taxi') {
-      replaceForm2ToCard();
-    } else {
-      replaceCardToForm();
-    }
+    replaceCardToForm();
     document.addEventListener('keydown', onEscKeyDown);
   });
 
-  withoutOffers.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
-    replaceCard2ToForm();
-    document.removeEventListener('keydown', onEscKeyDown);
-  });
   editPoint.getElement().querySelector('.event--edit').addEventListener('submit', (evt) => {
     evt.preventDefault();
     replaceFormToCard();
@@ -85,11 +72,11 @@ const renderPoint = (place, point) => {
     replaceFormToCard();
     document.removeEventListener('keydown', onEscKeyDown);
   });
-  render(place, pointEvent.getElement(), renderPosition.BEFOREEND);
+  render(tripListLi.getElement(), pointEvent.getElement(), renderPosition.BEFOREEND);
 };
 
 for (const point of points) {
-  renderPoint(createUl.getElement(), point);
+  renderPoint(point);
 }
 
 // render(toSort, new Loading().getElement(), renderPosition.BEFOREEND);
