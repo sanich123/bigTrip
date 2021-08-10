@@ -1,7 +1,7 @@
-import { TYPES, CITIES } from '../mock/createData.js';
+import { TYPES, CITIES } from '../mock/create-data.js';
 import { currentTime } from '../utils/utils.js';
-import { addOffers, createTypes, createCities, getFormatTime } from '../utils/renderingUtils.js';
-import { createElement } from '../view/renderingUtils.js';
+import { addOffers, createTypes, createCities, getFormatTime } from '../utils/rendering-utils.js';
+import { createElement } from './rendering-utils.js';
 const editPoint = (points = {}) => {
   const {
     basePrice = 0,
@@ -13,7 +13,7 @@ const editPoint = (points = {}) => {
 
   const descriptionOfDestination = destination.description.join('');
 
-  return `<div><form class="event event--edit" action="#" method="post">
+  return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
   <div class="event__type-wrapper">
     <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -75,7 +75,7 @@ const editPoint = (points = {}) => {
     <p class="event__destination-description">${descriptionOfDestination}</p>
   </section>
 </section>
-</form></div>`;
+</form>`;
 };
 
 export default class EditingPoint {

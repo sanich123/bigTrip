@@ -1,7 +1,7 @@
 import { currentTime } from '../utils/utils.js';
-import {CITIES, TYPES } from '../mock/createData.js';
-import { addOffers, createTypes, createCities, getFormatTime, getPhotos } from '../utils/renderingUtils.js';
-import { createElement } from '../view/renderingUtils.js';
+import {CITIES, TYPES } from '../mock/create-data.js';
+import { addOffers, createTypes, createCities, getFormatTime, getPhotos } from '../utils/rendering-utils.js';
+import { createElement } from './rendering-utils.js';
 
 const addNewPoint = (points = {}) => {
   const {

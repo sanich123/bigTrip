@@ -1,13 +1,13 @@
-import { createElement } from '../view/renderingUtils.js';
+import { createElement } from './rendering-utils.js';
 
-const tripListUl = () => '<ul class="trip-events__list"></ul>';
-export default class TripListUl {
+const tripListLi = () => '<li class="trip-events__item"></li>';
+export default class TripListLi {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return tripListUl();
+    return tripListLi();
   }
 
   getElement() {

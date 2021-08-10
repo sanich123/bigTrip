@@ -1,5 +1,5 @@
-import { getCities, totalPrice } from '../utils/renderingUtils.js';
-import { createElement } from '../view/renderingUtils.js';
+import { getCities, totalPrice } from '../utils/rendering-utils.js';
+import { createElement } from './rendering-utils.js';
 
 const priceAndTrip = (points) => {
 

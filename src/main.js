@@ -1,18 +1,18 @@
-import PriceTripView from './view/priceTrip.js';
+import PriceTripView from './view/price-trip.js';
 import FiltersView from './view/filters.js';
 import NavigationView from './view/navigation.js';
 import SortMenuView from './view/sort.js';
-import TripListUl from './view/tripListUl.js';
-import TripListLi from './view/tripListLi.js';
+import TripListUl from './view/trip-list-ul.js';
+import TripListLi from './view/trip-list-li.js';
 // import Loading from './view/loading.js';
 import Empty from './view/empty.js';
-import PointsList from './view/pointsList.js';
-import EditingPoint from './view/editingPoint.js';
+import PointsList from './view/points-list.js';
+import EditingPoint from './view/editing-point.js';
 // import NewWithoutDestination from './view/newWithoutDestination.js';
 // import NewWithoutOffers from './view/newWithoutOffers.js';
 // import NewPoint from './view/newPoint.js';
-import { generatePoint } from './mock/createData.js';
-import { renderPosition, render } from './view/renderingUtils.js';
+import { generatePoint } from './mock/create-data.js';
+import { renderPosition, render } from './view/rendering-utils.js';
 const COUNT_OF_POINTS = 12;
 
 const points = new Array(COUNT_OF_POINTS).fill().map(generatePoint);
@@ -63,7 +63,7 @@ const renderPoint = (point) => {
     document.addEventListener('keydown', onEscKeyDown);
   });
 
-  editPoint.getElement().querySelector('.event--edit').addEventListener('submit', (evt) => {
+  editPoint.getElement().addEventListener('submit', (evt) => {
     evt.preventDefault();
     replaceFormToCard();
   });

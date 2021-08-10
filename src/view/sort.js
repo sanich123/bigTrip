@@ -1,4 +1,4 @@
-import { createElement } from '../view/renderingUtils.js';
+import { createElement } from './rendering-utils.js';
 
 const sort = () =>
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
