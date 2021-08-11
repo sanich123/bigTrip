@@ -84,7 +84,7 @@ export const duration = (begin, end) => {
 export const totalPrice = (arr) => arr.slice().reduce((accumulator, it) => accumulator + it.basePrice, 0);
 
 export const getCities = (arr) => {
-  const cities = new Set(arr.slice().map((it) => it.destination.name));
+  const cities = new Set(arr.slice().sort((a,b) => a.dateFrom - b.dateFrom).map((it) => it.destination.name));
   const threeCities = Array.from(cities);
   const firstCity = threeCities[0];
   const thirdCity = threeCities[threeCities.length - 1];

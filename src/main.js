@@ -59,20 +59,21 @@ const renderPoint = (point) => {
     }
   };
 
-  pointEvent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+  pointEvent.setEditClickHandler(() => {
     replaceCardToForm();
     document.addEventListener('keydown', onEscKeyDown);
   });
 
-  editPoint.getElement().addEventListener('submit', (evt) => {
-    evt.preventDefault();
-    replaceFormToCard();
-  });
-
-  editPoint.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+  editPoint.setFormSubmitHandler(() => {
     replaceFormToCard();
     document.removeEventListener('keydown', onEscKeyDown);
   });
+
+  editPoint.setEditClickHandler(() => {
+    replaceFormToCard();
+    document.removeEventListener('keydown', onEscKeyDown);
+  });
+
   render(tripListLi.getElement(), pointEvent.getElement(), renderPosition.BEFOREEND);
 };
 

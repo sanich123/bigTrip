@@ -42,9 +42,20 @@ export default class PointsList extends Abstract {
   constructor(points) {
     super();
     this._points = points;
+    this._editClickHandler = this._editClickHandler.bind(this);
   }
 
   getTemplate() {
     return eventsList(this._points);
+  }
+
+  _editClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editClick();
+  }
+
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
   }
 }
