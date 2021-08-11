@@ -1,4 +1,4 @@
-import { getCities, totalPrice } from '../utils/rendering-utils.js';
+import { getCities, totalPrice } from '../utils/rendering-data-utils.js';
 import Abstract from '../view/abstract.js';
 
 const priceAndTrip = (points) => {

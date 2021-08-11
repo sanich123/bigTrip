@@ -1,4 +1,4 @@
-import { duration, titlePrice, getFormatTime, favoritePoint } from '../utils/rendering-utils.js';
+import { duration, titlePrice, getFormatTime, favoritePoint } from '../utils/rendering-data-utils.js';
 import Abstract from '../view/abstract.js';
 
 const eventsList = (points) => {

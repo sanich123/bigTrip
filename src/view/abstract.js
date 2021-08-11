@@ -1,4 +1,4 @@
-import { createElement } from './rendering-utils.js';
+import { createElement } from '../utils/rendering-utils.js';
 export default class Abstract {
   constructor() {
     if (new.target === Abstract) {

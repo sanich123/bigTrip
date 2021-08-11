@@ -1,5 +1,5 @@
-import { getRandomInteger } from '../utils/utils.js';
-import { generateDate } from '../utils/utils.js';
+import { getRandomInteger } from '../utils/common.js';
+import { generateDate } from '../utils/common.js';
 
 const TYPES = [
   'taxi',
