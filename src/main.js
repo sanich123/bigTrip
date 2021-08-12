@@ -1,53 +1,55 @@
-import PriceTripView from './view/priceTrip.js';
+import PriceTripView from './view/price-trip.js';
 import FiltersView from './view/filters.js';
 import NavigationView from './view/navigation.js';
 import SortMenuView from './view/sort.js';
-import TripListUl from './view/tripListUl.js';
-import TripListLi from './view/tripListLi.js';
+import TripListUl from './view/trip-list-ul.js';
+import TripListLi from './view/trip-list-li.js';
 // import Loading from './view/loading.js';
 import Empty from './view/empty.js';
-import PointsList from './view/pointsList.js';
-import EditingPoint from './view/editingPoint.js';
+import PointsList from './view/points-list.js';
+import EditingPoint from './view/editing-point.js';
 // import NewWithoutDestination from './view/newWithoutDestination.js';
-// import NewWithoutOffers from './view/newWithoutOffers.js';
+// import NewWithoutOffers from './view/new-without-offers.js';
 // import NewPoint from './view/newPoint.js';
-import { generatePoint } from './mock/createData.js';
-import { renderPosition, render } from './view/renderingUtils.js';
-const COUNT_OF_POINTS = 12;
+import { generatePoint } from './mock/create-data.js';
+import { renderPosition, render, replace } from './utils/rendering-utils.js';
+
+const COUNT_OF_POINTS = 15;
 
 const points = new Array(COUNT_OF_POINTS).fill().map(generatePoint);
 points.sort((a,b) => a.dateFrom - b.dateFrom);
+
 
 const priceAndTripSection = document.querySelector('.trip-main');
 const toNavigation = document.querySelector('.trip-controls__navigation');
 const toFilters = document.querySelector('.trip-controls__filters');
 const toSort = document.querySelector('.trip-events');
 
-render(priceAndTripSection, new PriceTripView(points).getElement(), renderPosition.AFTERBEGIN);
-render(toNavigation, new NavigationView().getElement(), renderPosition.AFTERBEGIN);
-render(toFilters, new FiltersView().getElement(), renderPosition.AFTERBEGIN);
+render(priceAndTripSection, new PriceTripView(points), renderPosition.AFTERBEGIN);
+render(toNavigation, new NavigationView(), renderPosition.AFTERBEGIN);
+render(toFilters, new FiltersView(), renderPosition.AFTERBEGIN);
 
 if (points.length === 0) {
-  render(toSort, new Empty().getElement(), renderPosition.BEFOREEND);
+  render(toSort, new Empty(), renderPosition.BEFOREEND);
 } else {
-  render(toSort, new SortMenuView().getElement(), renderPosition.AFTERBEGIN);
+  render(toSort, new SortMenuView(), renderPosition.AFTERBEGIN);
 }
 
 const createUl = new TripListUl();
-render(toSort, createUl.getElement(), renderPosition.BEFOREEND);
+render(toSort, createUl, renderPosition.BEFOREEND);
 
 const renderPoint = (point) => {
   const pointEvent = new PointsList(point);
   const editPoint = new EditingPoint(point);
   const tripListLi = new TripListLi();
-  render(createUl.getElement(), tripListLi.getElement(), renderPosition.BEFOREEND);
+  render(createUl, tripListLi, renderPosition.BEFOREEND);
 
   const replaceCardToForm = () => {
-    tripListLi.getElement().replaceChild(editPoint.getElement(), pointEvent.getElement());
+    replace(editPoint, pointEvent);
   };
 
   const replaceFormToCard = () => {
-    tripListLi.getElement().replaceChild(pointEvent.getElement(), editPoint.getElement());
+    replace(pointEvent, editPoint);
   };
 
   const onEscKeyDown = (evt) => {
@@ -58,26 +60,25 @@ const renderPoint = (point) => {
     }
   };
 
-  pointEvent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+  pointEvent.setEditClickHandler(() => {
     replaceCardToForm();
     document.addEventListener('keydown', onEscKeyDown);
   });
 
-  editPoint.getElement().querySelector('.event--edit').addEventListener('submit', (evt) => {
-    evt.preventDefault();
-    replaceFormToCard();
-  });
-
-  editPoint.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+  editPoint.setFormSubmitHandler(() => {
     replaceFormToCard();
     document.removeEventListener('keydown', onEscKeyDown);
   });
-  render(tripListLi.getElement(), pointEvent.getElement(), renderPosition.BEFOREEND);
+
+  editPoint.setEditClickHandler(() => {
+    replaceFormToCard();
+    document.removeEventListener('keydown', onEscKeyDown);
+  });
+
+  render(tripListLi, pointEvent, renderPosition.BEFOREEND);
 };
 
-for (const point of points) {
-  renderPoint(point);
-}
+points.forEach((point) => renderPoint(point));
 
 // render(toSort, new Loading().getElement(), renderPosition.BEFOREEND);
 // render(toSort, new Empty().getElement(), renderPosition.BEFOREEND);

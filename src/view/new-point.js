@@ -1,16 +1,15 @@
-import { currentTime } from '../utils/utils.js';
-import {CITIES, TYPES } from '../mock/createData.js';
-import { addOffers, createTypes, createCities, getFormatTime, getPhotos } from '../utils/renderingUtils.js';
-import { createElement } from '../view/renderingUtils.js';
+import {CITIES, TYPES } from '../mock/create-data.js';
+import { addOffers, createTypes, createCities, getFormatTime, getPhotos } from '../utils/rendering-utils.js';
+import Abstract from '../view/abstract.js';
 
-const addNewPoint = (points = {}) => {
+const addNewPoint = (points) => {
   const {
-    basePrice = 0,
-    dateFrom = currentTime,
-    dateTo = currentTime,
-    destination = 'Undefined',
+    basePrice,
+    dateFrom,
+    dateTo,
+    destination,
     offers,
-    type = 'taxi' } = points;
+    type } = points;
 
   const descriptionOfDestination = destination.description.join('');
 
@@ -83,24 +82,13 @@ const addNewPoint = (points = {}) => {
 </form>`;
 };
 
-export default class NewPoint {
+export default class NewPoint extends Abstract {
   constructor(points) {
+    super();
     this._points = points;
-    this._element = null;
   }
 
   getTemplate() {
     return addNewPoint(this._points);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

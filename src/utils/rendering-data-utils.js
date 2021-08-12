@@ -1,4 +1,4 @@
-import { humanizeDate  } from './utils.js';
+import { humanizeDate  } from './common.js';
 
 export const addOffers = (arr) => arr.map(({title, price}) => (
   `<div class="event__offer-selector">
@@ -84,11 +84,10 @@ export const duration = (begin, end) => {
 export const totalPrice = (arr) => arr.slice().reduce((accumulator, it) => accumulator + it.basePrice, 0);
 
 export const getCities = (arr) => {
-  const cities = new Set(arr.slice().map((it) => it.destination.name));
-  const threeCities = Array.from(cities);
-  const firstCity = threeCities[0];
-  const thirdCity = threeCities[threeCities.length - 1];
-  const secondCity = threeCities.length === 3 ? threeCities[1] : '...';
+  const cities = arr.slice().map((it) => it.destination.name);
+  const firstCity = cities[0];
+  const thirdCity = cities[cities.length - 1];
+  const secondCity = cities.length === 3 ? cities[1] : '...';
   const fromDate = humanizeDate(arr[0].dateFrom, 'MMMM DD');
   const toDate = humanizeDate(arr[arr.length - 1].dateTo, 'MMMM DD');
   return { firstCity, secondCity, thirdCity, fromDate, toDate };

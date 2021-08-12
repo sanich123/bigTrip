@@ -1,15 +1,9 @@
-import { currentTime} from '../utils/utils.js';
-import { duration, titlePrice, getFormatTime, favoritePoint } from '../utils/renderingUtils.js';
-import { createElement } from '../view/renderingUtils.js';
+import { duration, titlePrice, getFormatTime, favoritePoint } from '../utils/rendering-data-utils.js';
+import Abstract from '../view/abstract.js';
 
-const eventsList = (points = {}) => {
-  const {
-    basePrice = 0,
-    dateFrom = currentTime,
-    dateTo = currentTime,
-    destination = 'Undefined',
-    offers,
-    type = 'taxi', isFavorite } = points;
+const eventsList = (points) => {
+
+  const { basePrice, dateFrom, dateTo, destination, offers, type, isFavorite } = points;
 
   return `<div class="event">
       <time class="event__date" datetime="${getFormatTime(dateFrom, dateTo)['fromDate']}">${getFormatTime(dateFrom, dateTo)['fromDate']}</time>
@@ -44,24 +38,24 @@ const eventsList = (points = {}) => {
     </div>`;
 };
 
-export default class PointsList {
+export default class PointsList extends Abstract {
   constructor(points) {
+    super();
     this._points = points;
-    this._element = null;
+    this._editClickHandler = this._editClickHandler.bind(this);
   }
 
   getTemplate() {
     return eventsList(this._points);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
+  _editClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editClick();
   }
 
-  removeElement() {
-    this._element = null;
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
   }
 }

@@ -1,19 +1,19 @@
-import { TYPES, CITIES } from '../mock/createData.js';
-import { currentTime } from '../utils/utils.js';
-import { addOffers, createTypes, createCities, getFormatTime } from '../utils/renderingUtils.js';
-import { createElement } from '../view/renderingUtils.js';
-const editPoint = (points = {}) => {
+import { TYPES, CITIES } from '../mock/create-data.js';
+import { addOffers, createTypes, createCities, getFormatTime } from '../utils/rendering-data-utils.js';
+import Abstract from '../view/abstract.js';
+
+const editPoint = (points) => {
   const {
-    basePrice = 0,
-    dateFrom = currentTime,
-    dateTo = currentTime,
-    destination = 'Undefined',
+    basePrice,
+    dateFrom,
+    dateTo,
+    destination,
     offers,
-    type = 'taxi' } = points;
+    type } = points;
 
   const descriptionOfDestination = destination.description.join('');
 
-  return `<div><form class="event event--edit" action="#" method="post">
+  return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
   <div class="event__type-wrapper">
     <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -75,27 +75,39 @@ const editPoint = (points = {}) => {
     <p class="event__destination-description">${descriptionOfDestination}</p>
   </section>
 </section>
-</form></div>`;
+</form>`;
 };
 
-export default class EditingPoint {
+export default class EditingPoint extends Abstract {
   constructor(points) {
+    super();
     this._points = points;
-    this._element = null;
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._editClickHandler = this._editClickHandler.bind(this);
   }
+
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.formSubmit();
+  }
+
+  _editClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editClick();
+  }
+
 
   getTemplate() {
     return editPoint(this._points);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().addEventListener('submit', this._formSubmitHandler);
   }
 
-  removeElement() {
-    this._element = null;
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
   }
 }
