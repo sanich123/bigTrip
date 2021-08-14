@@ -101,7 +101,7 @@ export default class TripPoint {
     this._replaceCardToForm();
   }
 
-  _handleFormSubmit(point) {
+  _handleFormSubmit() {
     // this._changeData(point);
     this._replaceFormToCard();
   }
