@@ -4,7 +4,8 @@ import TripListLi from '../view/trip-list-li.js';
 import Empty from '../view/empty.js';
 import PointsList from '../view/points-list.js';
 import EditingPoint from '../view/editing-point.js';
-import { renderPosition, render, replace } from '../utils/rendering-utils.js';
+import { renderPosition, render } from '../utils/rendering-utils.js';
+import TripPoint from '../presenter/trip-point.js';
 
 export default class Points {
   constructor(container) {
@@ -34,44 +35,46 @@ export default class Points {
   }
 
   _renderPoint(point) {
-    const pointEvent = new PointsList(point);
-    const editPoint = new EditingPoint(point);
-    const tripListLi = new TripListLi();
+    // const pointEvent = new PointsList(point);
+    // const editPoint = new EditingPoint(point);
+    // const tripListLi = new TripListLi();
 
-    render(this._tripListUl, tripListLi, renderPosition.BEFOREEND);
+    // render(this._tripListUl, tripListLi, renderPosition.BEFOREEND);
 
-    const replaceCardToForm = () => {
-      replace(editPoint, pointEvent);
-    };
+    // const replaceCardToForm = () => {
+    //   replace(editPoint, pointEvent);
+    // };
 
-    const replaceFormToCard = () => {
-      replace(pointEvent, editPoint);
-    };
+    // const replaceFormToCard = () => {
+    //   replace(pointEvent, editPoint);
+    // };
 
-    const onEscKeyDown = (evt) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        evt.preventDefault();
-        replaceFormToCard();
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
+    // const onEscKeyDown = (evt) => {
+    //   if (evt.key === 'Escape' || evt.key === 'Esc') {
+    //     evt.preventDefault();
+    //     replaceFormToCard();
+    //     document.removeEventListener('keydown', onEscKeyDown);
+    //   }
+    // };
 
-    pointEvent.setEditClickHandler(() => {
-      replaceCardToForm();
-      document.addEventListener('keydown', onEscKeyDown);
-    });
+    // pointEvent.setEditClickHandler(() => {
+    //   replaceCardToForm();
+    //   document.addEventListener('keydown', onEscKeyDown);
+    // });
 
-    editPoint.setFormSubmitHandler(() => {
-      replaceFormToCard();
-      document.removeEventListener('keydown', onEscKeyDown);
-    });
+    // editPoint.setFormSubmitHandler(() => {
+    //   replaceFormToCard();
+    //   document.removeEventListener('keydown', onEscKeyDown);
+    // });
 
-    editPoint.setEditClickHandler(() => {
-      replaceFormToCard();
-      document.removeEventListener('keydown', onEscKeyDown);
-    });
-    render(tripListLi, pointEvent, renderPosition.BEFOREEND);
-    // Рендерим в лишку точку путешествия
+    // editPoint.setEditClickHandler(() => {
+    //   replaceFormToCard();
+    //   document.removeEventListener('keydown', onEscKeyDown);
+    // });
+    // render(tripListLi, pointEvent, renderPosition.BEFOREEND);
+    const tripPoint = new
+    TripPoint(this._tripListUl);
+    tripPoint.init(point);
   }
 
   _renderPointsList() {
