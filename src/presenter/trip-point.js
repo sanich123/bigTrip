@@ -1,16 +1,18 @@
 import EditingPoint from '../view/editing-point.js';
 import TripListLi from '../view/trip-list-li.js';
 import PointsList from '../view/points-list.js';
-import { renderPosition, render, replace } from '../utils/rendering-utils.js';
+import { renderPosition, render, replace, remove } from '../utils/rendering-utils.js';
 
 export default class TripPoint {
-  constructor(pointContainer) {
+  constructor(pointContainer, changeData) {
     this._pointContainer = pointContainer;
+    this._changeData = changeData;
 
     this._pointEvent = null;
     this._editPoint = null;
 
     this._handleEditClick = this._handleEditClick.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
     this._handleEditClickBack = this._handleEditClickBack.bind(this);
@@ -19,15 +21,35 @@ export default class TripPoint {
   init(point) {
     this._point = point;
 
+    const prevPointEvent = this._pointEvent;
+    const prevEditPoint = this._editPoint;
+
     this._tripListLi = new TripListLi();
     this._pointEvent = new PointsList(point);
     this._editPoint = new EditingPoint(point);
-
+    this._pointEvent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._pointEvent.setEditClickHandler(this._handleEditClick);
     this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
     this._editPoint.setEditClickHandler(this._handleEditClickBack);
 
-    render(this._pointContainer, this._pointEvent, renderPosition.BEFOREEND);
+    if (prevPointEvent === null || prevEditPoint === null) {
+      render(this._pointContainer, this._pointEvent, renderPosition.BEFOREEND);
+      return;
+    }
+    if (this._pointContainer.getElement().contains(prevPointEvent.getElement())) {
+      replace(this._pointEvent, prevPointEvent);
+    }
+    if (this._pointContainer.getElement().contains(prevEditPoint.getElement())) {
+      replace(this._editPoint, prevEditPoint);
+    }
+
+    remove(prevPointEvent);
+    remove(prevEditPoint);
+  }
+
+  destroy() {
+    remove(this._pointEvent);
+    remove(this._editPoint);
   }
 
   _replaceCardToForm() {
@@ -47,11 +69,24 @@ export default class TripPoint {
     }
   }
 
+  _handleFavoriteClick() {
+    this._changeData(
+      Object.assign(
+        {},
+        this._point,
+        {
+          isFavorite: !this._point.isFavorite,
+        },
+      ),
+    );
+  }
+
   _handleEditClick() {
     this._replaceCardToForm();
   }
 
-  _handleFormSubmit() {
+  _handleFormSubmit(point) {
+    // this._changeData(point);
     this._replaceFormToCard();
   }
 
