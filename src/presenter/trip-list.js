@@ -20,6 +20,7 @@ export default class Points {
     this._pointsList = new PointsList();
 
     this._handlePointChange = this._handlePointChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
   }
 
   init(points) {
@@ -30,6 +31,10 @@ export default class Points {
   _handlePointChange(updatedPoint) {
     this._points = updateItem(this._points, updatedPoint);
     this._tripPoint.get(updatedPoint.id).init(updatedPoint);
+  }
+
+  _handleModeChange() {
+    this._tripPoint.forEach((presenter) => presenter.resetView());
   }
 
   _renderSort() {
@@ -43,8 +48,7 @@ export default class Points {
   }
 
   _renderPoint(point) {
-    const tripPoint = new
-    TripPoint(this._tripListUl, this._handlePointChange);
+    const tripPoint = new TripPoint(this._tripListUl, this._handlePointChange, this._handleModeChange);
     tripPoint.init(point);
     this._tripPoint.set(point.id, tripPoint);
   }
