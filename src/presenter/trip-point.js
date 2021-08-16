@@ -1,5 +1,6 @@
 import EditingPoint from '../view/editing-point.js';
 import TripListLi from '../view/trip-list-li.js';
+import TripListUl from '../view/trip-list-ul.js';
 import PointsList from '../view/points-list.js';
 import { renderPosition, render, replace, remove } from '../utils/rendering-utils.js';
 
@@ -31,6 +32,8 @@ export default class TripPoint {
     const prevPointEvent = this._pointEvent;
     const prevEditPoint = this._editPoint;
 
+    this._tripListUl = new TripListUl();
+
     this._tripListLi = new TripListLi();
     this._pointEvent = new PointsList(point);
     this._editPoint = new EditingPoint(point);
@@ -39,8 +42,10 @@ export default class TripPoint {
     this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
     this._editPoint.setEditClickHandler(this._handleEditClickBack);
 
+    render(this._pointContainer, this._tripListLi, renderPosition.BEFOREEND);
+
     if (prevPointEvent === null || prevEditPoint === null) {
-      render(this._pointContainer, this._pointEvent, renderPosition.BEFOREEND);
+      render(this._tripListLi, this._pointEvent, renderPosition.BEFOREEND);
       return;
     }
     if (this._mode === Mode.DEFAULT) {
@@ -53,6 +58,7 @@ export default class TripPoint {
     remove(prevPointEvent);
     remove(prevEditPoint);
   }
+
 
   destroy() {
     remove(this._pointEvent);
