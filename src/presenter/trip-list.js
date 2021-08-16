@@ -6,7 +6,7 @@ import PointsList from '../view/points-list.js';
 import EditingPoint from '../view/editing-point.js';
 import { renderPosition, render } from '../utils/rendering-utils.js';
 import TripPoint from '../presenter/trip-point.js';
-import { updateItem } from '../utils/common.js';
+// import { updateItem } from '../utils/common.js';
 
 export default class Points {
   constructor(container) {
@@ -29,7 +29,8 @@ export default class Points {
   }
 
   _handlePointChange(updatedPoint) {
-    this._points = updateItem(this._points, updatedPoint);
+    this._points.splice(this._points.indexOf(updatedPoint), 1, updatedPoint);
+    // this._points = updateItem(this._points, updatedPoint);
     this._tripPoint.get(updatedPoint.id).init(updatedPoint);
   }
 
