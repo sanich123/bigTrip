@@ -30,8 +30,28 @@ const sort = () =>
 </form>`;
 
 export default class SortMenu extends Abstract {
+  constructor() {
+    super();
+    this._sortTypeChangeHandler =  this._sortTypeChangeHandler.bind(this);
+  }
+
   getTemplate() {
     return sort();
+  }
+
+  _sortTypeChangeHandler(evt) {
+    if (evt.target.tagName !== 'LABEL') {
+      return;
+    }
+
+    evt.preventDefault();
+console.log(evt.target.dataset.sortType);
+    console.log(this._callback.sortTypeChange(evt.target.dataset.sortType));
+  }
+
+  setSortTypeChangeHandler(callback) {
+    this._callback.sortTypeChange = callback;
+    this.getElement().addEventListener('click', this._sortTypeChangeHandler);
   }
 }
 
