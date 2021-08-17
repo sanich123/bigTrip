@@ -43,10 +43,8 @@ export default class SortMenu extends Abstract {
     if (evt.target.tagName !== 'LABEL') {
       return;
     }
-
     evt.preventDefault();
-console.log(evt.target.dataset.sortType);
-    console.log(this._callback.sortTypeChange(evt.target.dataset.sortType));
+    this._callback.sortTypeChange(evt.target.dataset.sortType);
   }
 
   setSortTypeChangeHandler(callback) {

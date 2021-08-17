@@ -42,7 +42,7 @@ export default class TripPoint {
     this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
     this._editPoint.setEditClickHandler(this._handleEditClickBack);
 
-    render(this._pointContainer, this._tripListLi, renderPosition.BEFOREEND);
+    render(this._pointContainer, this._tripListLi, renderPosition.AFTERBEGIN);
 
     if (prevPointEvent === null || prevEditPoint === null) {
       render(this._tripListLi, this._pointEvent, renderPosition.BEFOREEND);

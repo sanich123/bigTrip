@@ -8,7 +8,7 @@ import { renderPosition, render } from '../utils/rendering-utils.js';
 import TripPoint from '../presenter/trip-point.js';
 import { updateItem } from '../utils/common.js';
 import { SortType } from '../utils/common.js';
-
+import dayjs from 'dayjs';
 export default class Points {
   constructor(container) {
     this._container = container;
@@ -33,8 +33,8 @@ export default class Points {
   }
 
   _handlePointChange(updatedPoint) {
-    this._points.splice(this._points.indexOf(updatedPoint), 1, updatedPoint);
-    // this._points = updateItem(this._points, updatedPoint);
+    // this._points.splice(this._points.indexOf(updatedPoint), 1, updatedPoint);
+    this._points = updateItem(this._points, updatedPoint);
     this._sourcedPoints = updateItem(this._sourcedPoints, updatedPoint);
     this._tripPoint.get(updatedPoint.id).init(updatedPoint);
   }
@@ -42,12 +42,12 @@ export default class Points {
   _sortPoints(sortType) {
     switch (sortType) {
       case SortType.TIME:
-        this._points.sort((a, b) => a.dateFrom - b.dateFrom);
+        this._points.sort((a, b) => Math.abs(dayjs(a.dateFrom).diff(dayjs(a.dateTo))) - Math.abs(dayjs(b.dateFrom).diff(dayjs(b.dateTo))));
         break;
       case SortType.PRICE:
         this._points.sort((a, b) => a.basePrice - b.basePrice);
         break;
-      case SortType.DEFAULT:
+      default:
         this._points = this._sourcedPoints.slice();
     }
     this._currentSortType = sortType;
@@ -64,8 +64,8 @@ export default class Points {
 
   _renderSort() {
     render(this._container, this._sortMenu, renderPosition.AFTERBEGIN);
-    this._renderTripListUl();
     this._sortMenu.setSortTypeChangeHandler(this._handleSortTypeChange);
+    this._renderTripListUl();
   }
 
   _handleModeChange() {
