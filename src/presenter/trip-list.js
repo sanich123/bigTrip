@@ -9,6 +9,7 @@ import TripPoint from '../presenter/trip-point.js';
 import { updateItem } from '../utils/common.js';
 import { SortType } from '../utils/common.js';
 import dayjs from 'dayjs';
+
 export default class Points {
   constructor(container) {
     this._container = container;

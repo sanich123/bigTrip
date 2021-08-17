@@ -2,7 +2,6 @@ import { getCities, totalPrice } from '../utils/rendering-data-utils.js';
 import Abstract from '../view/abstract.js';
 
 const priceAndTrip = (points) => {
-
   if (points.length === 0) {
     return ' ';
   }
@@ -18,6 +17,7 @@ const priceAndTrip = (points) => {
   </p>
 </section>`;
 };
+
 export default class PriceTripView extends Abstract {
   constructor(points) {
     super();
