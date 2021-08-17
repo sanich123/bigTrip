@@ -85,13 +85,12 @@ export const totalPrice = (arr) => arr.slice().reduce((accumulator, it) => accum
 
 export const getCities = (arr) => {
   const cities = arr.slice().map((it) => it.destination.name);
-  const firstCity = cities[0];
-  const thirdCity = cities[cities.length - 1];
+  const firstCity = cities[cities.length - 1];
+  const thirdCity = cities[0];
   const secondCity = cities.length === 3 ? cities[1] : '...';
-  const fromDate = humanizeDate(arr[0].dateFrom, 'MMMM DD');
-  const toDate = humanizeDate(arr[arr.length - 1].dateTo, 'MMMM DD');
+  const fromDate = humanizeDate(arr[arr.length - 1].dateFrom, 'MMMM DD');
+  const toDate = humanizeDate(arr[0].dateFrom, 'MMMM DD');
   return { firstCity, secondCity, thirdCity, fromDate, toDate };
-
 };
 
 

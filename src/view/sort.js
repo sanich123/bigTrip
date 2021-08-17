@@ -1,11 +1,10 @@
 import Abstract from '../view/abstract.js';
 import { SortType } from '../utils/common.js';
 
-const sort = () =>
-  `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
+const sort = (currentSortType) => `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
 <div class="trip-sort__item  trip-sort__item--day">
-  <input id="sort-day" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-day" checked="">
-  <label class="trip-sort__btn" for="sort-day" data-sort-type="${SortType.DEFAULT}">Day</label>
+  <input id="sort-day" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-day" checked data-sort-type="${SortType.DEFAULT}"${currentSortType === SortType.DEFAULT ? 'checked' : ''}>
+  <label class="trip-sort__btn" for="sort-day" >Day</label>
 </div>
 
 <div class="trip-sort__item  trip-sort__item--event">
@@ -14,13 +13,13 @@ const sort = () =>
 </div>
 
 <div class="trip-sort__item  trip-sort__item--time">
-  <input id="sort-time" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-time">
-  <label class="trip-sort__btn" for="sort-time" data-sort-type="${SortType.TIME}">Time</label>
+  <input id="sort-time" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-time" data-sort-type="${SortType.TIME}"${currentSortType === SortType.TIME ? 'checked' : ''}>
+  <label class="trip-sort__btn" for="sort-time"  >Time</label>
 </div>
 
 <div class="trip-sort__item  trip-sort__item--price">
-  <input id="sort-price" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-price">
-  <label class="trip-sort__btn" for="sort-price" data-sort-type="${SortType.PRICE}">Price</label>
+  <input id="sort-price" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-price" data-sort-type="${SortType.PRICE}"${currentSortType === SortType.PRICE ? 'checked' : ''}>
+  <label class="trip-sort__btn" for="sort-price" >Price</label>
 </div>
 
 <div class="trip-sort__item  trip-sort__item--offer">
@@ -30,17 +29,18 @@ const sort = () =>
 </form>`;
 
 export default class SortMenu extends Abstract {
-  constructor() {
+  constructor(currentSortType) {
     super();
+    this._currentSortType = currentSortType;
     this._sortTypeChangeHandler =  this._sortTypeChangeHandler.bind(this);
   }
 
   getTemplate() {
-    return sort();
+    return sort(this._currentSortType);
   }
 
   _sortTypeChangeHandler(evt) {
-    if (evt.target.tagName !== 'LABEL') {
+    if (evt.target.tagName !== 'INPUT') {
       return;
     }
     evt.preventDefault();
