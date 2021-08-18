@@ -14,8 +14,7 @@ import SortMenu from '../view/sort.js';
 export default class Points {
   constructor(container) {
     this._container = container;
-    this._tripPoint = new Map();
-
+    this._tripPresenter = new Map();
     this._currentSortType = SortType.DEFAULT;
     this._sortMenu = new SortMenu();
     this._empty = new Empty();
@@ -61,13 +60,14 @@ export default class Points {
   _renderPoint(point) {
     const tripPoint = new TripPoint(this._tripListUl, this._handlePointChange, this._handleModeChange);
     tripPoint.init(point);
-    this._tripPoint.set(point.id, tripPoint);
+    // this._tripPoint.set(point.id, tripPoint);
+    this._tripPresenter.set(point.id, tripPoint);
   }
 
   _handlePointChange(updatedPoint) {
     this._points = updateItem(this._points, updatedPoint);
     this._sourcedPoints = updateItem(this._sourcedPoints, updatedPoint);
-    this._tripPoint.get(updatedPoint.id).init(updatedPoint);
+    this._tripPresenter.get(updatedPoint.id).init(updatedPoint);
   }
 
   _handleSortTypeChange(sortType) {
@@ -100,14 +100,11 @@ export default class Points {
   }
 
   _handleModeChange() {
-    this._tripPoint.forEach((presenter) => presenter.resetView());
+    this._tripPresenter.forEach((presenter) => presenter.resetView());
   }
-
 
   _clearPointsList() {
-    this._tripPoint.forEach((presenter) => presenter.destroy());
-    this._tripPoint.clear();
+    this._tripPresenter.forEach((presenter) => presenter.destroy());
+    this._tripPresenter.clear();
   }
-
-
 }

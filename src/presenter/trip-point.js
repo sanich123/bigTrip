@@ -61,6 +61,7 @@ export default class TripPoint {
   }
 
   destroy() {
+    remove(this._tripListLi);
     remove(this._pointEvent);
     remove(this._editPoint);
   }
