@@ -1,4 +1,4 @@
-import SortMenuView from '../view/sort.js';
+// import SortMenuView from '../view/sort.js';
 import TripListUl from '../view/trip-list-ul.js';
 import TripListLi from '../view/trip-list-li.js';
 import Empty from '../view/empty.js';
@@ -17,7 +17,7 @@ export default class Points {
     this._tripPoint = new Map();
 
     // this._currentSortType = SortType.DEFAULT;
-    this._sortMenu = new SortMenuView();
+    this._sortMenu = new SortMenu();
     this._empty = new Empty();
     this._tripListUl = new TripListUl();
     this._tripListLi = new TripListLi();
@@ -66,9 +66,9 @@ export default class Points {
   }
 
   _renderSort() {
-    this._sortMenu.setSortTypeChangeHandler(this._handleSortTypeChange);
-    this._sortMenu = new SortMenu(this._currentSortType);
+    // this._sortMenu = new SortMenu(this._currentSortType);
     render(this._container, this._sortMenu, renderPosition.AFTERBEGIN);
+    this._sortMenu.setSortTypeChangeHandler(this._handleSortTypeChange);
     this._renderTripListUl();
   }
 
