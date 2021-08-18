@@ -55,7 +55,7 @@ export default class TripPoint {
     if (this._mode === Mode.EDITING) {
       replace(this._editPoint, prevEditPoint);
     }
-
+    remove(this._tripListLi);
     remove(prevPointEvent);
     remove(prevEditPoint);
   }
@@ -109,7 +109,7 @@ export default class TripPoint {
   }
 
   _handleFormSubmit() {
-    // this._changeData(point);
+    this._changeData();
     this._replaceFormToCard();
   }
 
