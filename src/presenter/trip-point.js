@@ -37,6 +37,7 @@ export default class TripPoint {
     this._tripListLi = new TripListLi();
     this._pointEvent = new PointsList(point);
     this._editPoint = new EditingPoint(point);
+
     this._pointEvent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._pointEvent.setEditClickHandler(this._handleEditClick);
     this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
@@ -58,7 +59,6 @@ export default class TripPoint {
     remove(prevPointEvent);
     remove(prevEditPoint);
   }
-
 
   destroy() {
     remove(this._pointEvent);

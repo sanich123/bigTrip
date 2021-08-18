@@ -35,24 +35,39 @@ export default class Points {
     this._renderEmpty(points);
   }
 
+  _renderEmpty() {
+    if (this._points.length === 0) {
+      render(this._container, this._empty, renderPosition.BEFOREEND);
+    } else {
+      this._renderSort();
+    }
+  }
+
+  _renderSort() {
+    render(this._container, this._sortMenu, renderPosition.AFTERBEGIN);
+    this._sortMenu.setSortTypeChangeHandler(this._handleSortTypeChange);
+    this._renderTripListUl();
+  }
+
+  _renderTripListUl() {
+    render(this._container, this._tripListUl, renderPosition.BEFOREEND);
+    this._renderPointsList();
+  }
+
+  _renderPointsList() {
+    this._points.forEach((point) => this._renderPoint(point));
+  }
+
+  _renderPoint(point) {
+    const tripPoint = new TripPoint(this._tripListUl, this._handlePointChange, this._handleModeChange);
+    tripPoint.init(point);
+    this._tripPoint.set(point.id, tripPoint);
+  }
+
   _handlePointChange(updatedPoint) {
     this._points = updateItem(this._points, updatedPoint);
     this._sourcedPoints = updateItem(this._sourcedPoints, updatedPoint);
     this._tripPoint.get(updatedPoint.id).init(updatedPoint);
-  }
-
-  _sortPoints(sortType) {
-    switch (sortType) {
-      case SortType.TIME:
-        this._points.sort((a, b) => Math.abs(dayjs(a.dateFrom).diff(dayjs(a.dateTo))) - Math.abs(dayjs(b.dateFrom).diff(dayjs(b.dateTo))));
-        break;
-      case SortType.PRICE:
-        this._points.sort((a, b) => a.basePrice - b.basePrice);
-        break;
-      default:
-        this._points = this._sourcedPoints.slice();
-    }
-    this._currentSortType = sortType;
   }
 
   _handleSortTypeChange(sortType) {
@@ -70,41 +85,29 @@ export default class Points {
     this._renderPointsList();
   }
 
-  _renderSort() {
-    render(this._container, this._sortMenu, renderPosition.AFTERBEGIN);
-    this._sortMenu.setSortTypeChangeHandler(this._handleSortTypeChange);
-    this._renderTripListUl();
+  _sortPoints(sortType) {
+    switch (sortType) {
+      case SortType.TIME:
+        this._points.sort((a, b) => Math.abs(dayjs(a.dateFrom).diff(dayjs(a.dateTo))) - Math.abs(dayjs(b.dateFrom).diff(dayjs(b.dateTo))));
+        break;
+      case SortType.PRICE:
+        this._points.sort((a, b) => a.basePrice - b.basePrice);
+        break;
+      default:
+        this._points = this._sourcedPoints.slice();
+    }
+    this._currentSortType = sortType;
   }
 
   _handleModeChange() {
     this._tripPoint.forEach((presenter) => presenter.resetView());
   }
 
-  _renderTripListUl() {
-    render(this._container, this._tripListUl, renderPosition.BEFOREEND);
-    this._renderPointsList();
-  }
-
-  _renderPoint(point) {
-    const tripPoint = new TripPoint(this._tripListUl, this._handlePointChange, this._handleModeChange);
-    tripPoint.init(point);
-    this._tripPoint.set(point.id, tripPoint);
-  }
 
   _clearPointsList() {
     this._tripPoint.forEach((presenter) => presenter.destroy());
     this._tripPoint.clear();
   }
 
-  _renderPointsList() {
-    this._points.forEach((point) => this._renderPoint(point));
-  }
 
-  _renderEmpty() {
-    if (this._points.length === 0) {
-      render(this._container, this._empty, renderPosition.BEFOREEND);
-    } else {
-      this._renderSort();
-    }
-  }
 }
