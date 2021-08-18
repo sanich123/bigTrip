@@ -66,6 +66,7 @@ export default class Points {
     remove(this._sortMenu);
     this._sortMenu = new SortMenu(this._currentSortType);
     render(this._container, this._sortMenu, renderPosition.AFTERBEGIN);
+    this._sortMenu.setSortTypeChangeHandler(this._handleSortTypeChange);
     this._renderPointsList();
   }
 
