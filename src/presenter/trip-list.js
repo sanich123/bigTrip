@@ -15,7 +15,7 @@ export default class Points {
   constructor(container) {
     this._container = container;
     this._tripPresenter = new Map();
-    this._currentSortType = SortType.DEFAULT;
+    this._currentSortType = SortType.day;
     this._sortMenu = new SortMenu();
     this._empty = new Empty();
     this._tripListUl = new TripListUl();
@@ -31,7 +31,7 @@ export default class Points {
   init(points) {
     this._points = points.slice();
     this._sourcedPoints = points.slice();
-    this._renderEmpty(points);
+    this._renderEmpty();
   }
 
   _renderEmpty() {
@@ -87,10 +87,10 @@ export default class Points {
 
   _sortPoints(sortType) {
     switch (sortType) {
-      case SortType.TIME:
+      case SortType.time:
         this._points.sort((a, b) => Math.abs(dayjs(a.dateFrom).diff(dayjs(a.dateTo))) - Math.abs(dayjs(b.dateFrom).diff(dayjs(b.dateTo))));
         break;
-      case SortType.PRICE:
+      case SortType.price:
         this._points.sort((a, b) => a.basePrice - b.basePrice);
         break;
       default:

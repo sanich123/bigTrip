@@ -26,6 +26,10 @@ export const titlePrice = (arr) => arr.map(({ title, price }) => (
 </li>`
 )).join('');
 
+// const sortList = (arr) => arr.map((it) => `<div class="trip-sort__item  trip-sort__item--${it}">
+//   <input id="sort-${it}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${it}" checked data-sort-type=${SortType.date} ${currentSortType === SortType.date ? 'checked' : ''}><label class="trip-sort__btn" for="sort-day" >Day</label></div>`);
+// console.log(sortList(sort));
+
 export const duration = (begin, end) => {
   const time1 = new Date(begin);
   const time2 = new Date(end);
