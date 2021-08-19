@@ -33,7 +33,9 @@ export const updateItem = (items, update) => {
 
 export const SortType = {
   day: 'day',
+  event: 'event',
   time: 'time',
   price: 'price',
+  offers: 'offers',
 };
 

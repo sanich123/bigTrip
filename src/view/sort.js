@@ -2,13 +2,18 @@ import Abstract from '../view/abstract.js';
 import { SortType } from '../utils/common.js';
 
 const sort = (currentSortType) => {
-
   const sortWords = ['day', 'event', 'time', 'price', 'offers'];
-
-  const sortList = (arr) => arr.map((it) => `<div class="trip-sort__item  trip-sort__item--${it}">
-  <input id="sort-${it}" class="trip-sort__input visually-hidden" type="radio" name="trip-sort" value="sort-${it}" data-sort-type="${it === 'offers' || it === 'event' ? '' : SortType[it]}" ${it === 'offers' || it === 'event' ? 'disabled' : ''} ${currentSortType === SortType[it] ? 'checked' : ''}>
+  const sortList = (arr) => arr.map((it) => {
+    if (SortType[it] === 'day') {
+      return `<div class="trip-sort__item  trip-sort__item--${it}">
+  <input id="sort-${it}" class="trip-sort__input visually-hidden" type="radio" checked name="trip-sort" value="sort-${it}" data-sort-type="${it === 'offers' || it === 'event' ? '' : SortType[it]}" ${SortType[it] === currentSortType  ? 'checked' : ''} ${it === 'offers' || it === 'event' ? 'disabled' : ''}>
   <label class="trip-sort__btn"  for="sort-${it}">${it}</label>
-  </div>`);
+  </div>`;
+    }
+    return `<div class="trip-sort__item  trip-sort__item--${it}">
+  <input id="sort-${it}" class="trip-sort__input visually-hidden" type="radio" name="trip-sort" value="sort-${it}" data-sort-type="${it === 'offers' || it === 'event' ? '' : SortType[it]}" ${SortType[it] === currentSortType  ? 'checked' : ''} ${it === 'offers' || it === 'event' ? 'disabled' : ''}>
+  <label class="trip-sort__btn"  for="sort-${it}">${it}</label>
+  </div>`;});
 
   return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
   ${sortList(sortWords).join('')}
