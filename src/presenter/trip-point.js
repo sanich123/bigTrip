@@ -110,7 +110,7 @@ export default class TripPoint {
 
   _handleFormSubmit() {
     this._replaceFormToCard();
-    this._changeData();
+    // this._changeData();
   }
 
   _handleEditClickBack() {
