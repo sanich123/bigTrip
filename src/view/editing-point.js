@@ -42,10 +42,10 @@ const editPoint = (points, index) => {
 
   <div class="event__field-group  event__field-group--time">
     <label class="visually-hidden" for="event-start-time-${index}">From</label>
-    <input class="event__input  event__input--time" id="event-start-time-${index}" type="text" name="event-start-time" value="${getFormatTime(dateFrom, dateTo)['fullDateFrom']}">
+    <input class="event__input  event__input--time" id="event-start-time-${index}" type="text" name="event-start-time" value="${getFormatTime(dateFrom, dateTo).fullDateFrom}">
     —
     <label class="visually-hidden" for="event-end-time-${index}">To</label>
-    <input class="event__input  event__input--time" id="event-end-time-${index}" type="text" name="event-end-time" value="${getFormatTime(dateTo, dateTo)['fullDateTo']}">
+    <input class="event__input  event__input--time" id="event-end-time-${index}" type="text" name="event-end-time" value="${getFormatTime(dateFrom, dateTo).fullDateTo}">
   </div>
 
   <div class="event__field-group  event__field-group--price">

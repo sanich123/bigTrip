@@ -1,4 +1,3 @@
-// import SortMenuView from '../view/sort.js';
 import TripListUl from '../view/trip-list-ul.js';
 import TripListLi from '../view/trip-list-li.js';
 import Empty from '../view/empty.js';

@@ -1,7 +1,7 @@
 import { humanizeDate  } from './common.js';
 import { SortType } from './common.js';
 
-export const addOffers = (arr) => arr.map(({title, price}) => (
+export const addOffers = (offers) => offers.map(({title, price}) => (
   `<div class="event__offer-selector">
     <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked=""
     >
@@ -12,30 +12,26 @@ export const addOffers = (arr) => arr.map(({title, price}) => (
     </label>
   </div>`)).join('');
 
-export const createTypes = (arr) => arr.map((it, index) => (`<div class="event__type-item">
-          <input id="event-type-${it}-${index}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${it}">
-          <label class="event__type-label  event__type-label--${it}" for="event-type-${it}-${index}">${it}</label>
+export const createTypes = (types) => types.map((type, index) => (`<div class="event__type-item">
+          <input id="event-type-${type}-${index}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
+          <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-${index}">${type}</label>
         </div>`)).join('');
 
-export const createIndex = (arr) => arr.map((currentValue, index) => index);
+export const createCities = (cities) => cities.map((it) => (`<option value="${it}"></option>`)).join('');
 
-export const createCities = (arr) => arr.map((it) => (`<option value="${it}"></option>`)).join('');
-
-export const titlePrice = (arr) => arr.map(({ title, price }) => (
-  `<li class="event__offer">
+export const titlePrice = (offers) => offers.map(({ title, price }) => (`<li class="event__offer">
   <span class="event__offer-title">${title}</span>
   +€&nbsp;
   <span class="event__offer-price">${price}</span>
-</li>`
-)).join('');
+</li>`)).join('');
 
 export const sortWords = ['day', 'event', 'time', 'price', 'offers'];
 
-export const sortList = (arr, currentSortType) => arr.map((it) => `<div class="trip-sort__item  trip-sort__item--${it}">
-  <input id="sort-${it}" class="trip-sort__input visually-hidden" type="radio" name="trip-sort"
-  value="sort-${it}" data-sort-type="${it === 'offers' || it === 'event' ? '' : SortType[it]}"
-  ${SortType[it] === currentSortType  ? 'checked' : ''} ${it === 'offers' || it === 'event' ? 'disabled' : ''}>
-  <label class="trip-sort__btn"  for="sort-${it}">${it}</label>
+export const sortList = (sortTypes, currentSortType) => sortTypes.map((sortType) => `<div class="trip-sort__item  trip-sort__item--${sortType}">
+  <input id="sort-${sortType}" class="trip-sort__input visually-hidden" type="radio" name="trip-sort"
+  value="sort-${sortType}" data-sort-type="${sortType === 'offers' || sortType === 'event' ? '' : SortType[sortType]}"
+  ${SortType[sortType] === currentSortType  ? 'checked' : ''} ${sortType === 'offers' || sortType === 'event' ? 'disabled' : ''}>
+  <label class="trip-sort__btn"  for="sort-${sortType}">${sortType}</label>
   </div>`);
 
 export const duration = (begin, end) => {
@@ -93,18 +89,17 @@ export const duration = (begin, end) => {
   }
 };
 
-export const totalPrice = (arr) => arr.slice().reduce((accumulator, it) => accumulator + it.basePrice, 0);
+export const totalPrice = (points) => points.slice().reduce((accumulator, it) => accumulator + it.basePrice, 0);
 
-export const getCities = (arr) => {
-  const cities = arr.slice().map((it) => it.destination.name);
+export const getCities = (towns) => {
+  const cities = towns.slice().map((it) => it.destination.name);
   const firstCity = cities[cities.length - 1];
   const thirdCity = cities[0];
   const secondCity = cities.length === 3 ? cities[1] : '...';
-  const fromDate = humanizeDate(arr[arr.length - 1].dateFrom, 'MMMM DD');
-  const toDate = humanizeDate(arr[0].dateFrom, 'MMMM DD');
+  const fromDate = humanizeDate(towns[towns.length - 1].dateFrom, 'MMMM DD');
+  const toDate = humanizeDate(towns[0].dateFrom, 'MMMM DD');
   return { firstCity, secondCity, thirdCity, fromDate, toDate };
 };
-
 
 export const getFormatTime = (dateFrom, dateTo) => {
   const fromDate = humanizeDate(dateFrom, 'MMM D');
@@ -116,6 +111,7 @@ export const getFormatTime = (dateFrom, dateTo) => {
   return { fromDate, toDate, fromDateMinutes, toDateMinutes, fullDateFrom, fullDateTo };
 };
 
-export const getPhotos = (arr) => arr.map(({ src }) => (`<img class="event__photo" src="${src}" alt="Event photo">`)).join('');
+
+export const getPhotos = (pictures) => pictures.map(({ src }) => (`<img class="event__photo" src="${src}" alt="Event photo">`)).join('');
 
 export const favoritePoint = (isFavorite) => isFavorite ? 'event__favorite-btn--active' : '';
