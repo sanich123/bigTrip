@@ -54,13 +54,12 @@ export default class Points {
   }
 
   _renderPointsList() {
-    this._points.forEach((point) => this._renderPoint(point));
+    this._points.forEach((point, index) => this._renderPoint(point, index));
   }
 
-  _renderPoint(point) {
+  _renderPoint(point, index) {
     const tripPoint = new TripPoint(this._tripListUl, this._handlePointChange, this._handleModeChange);
-    tripPoint.init(point);
-    // this._tripPoint.set(point.id, tripPoint);
+    tripPoint.init(point, index);
     this._tripPresenter.set(point.id, tripPoint);
   }
 

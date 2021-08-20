@@ -1,4 +1,5 @@
 import { humanizeDate  } from './common.js';
+import { SortType } from './common.js';
 
 export const addOffers = (arr) => arr.map(({title, price}) => (
   `<div class="event__offer-selector">
@@ -16,6 +17,8 @@ export const createTypes = (arr) => arr.map((it, index) => (`<div class="event__
           <label class="event__type-label  event__type-label--${it}" for="event-type-${it}-${index}">${it}</label>
         </div>`)).join('');
 
+export const createIndex = (arr) => arr.map((currentValue, index) => index);
+
 export const createCities = (arr) => arr.map((it) => (`<option value="${it}"></option>`)).join('');
 
 export const titlePrice = (arr) => arr.map(({ title, price }) => (
@@ -26,9 +29,14 @@ export const titlePrice = (arr) => arr.map(({ title, price }) => (
 </li>`
 )).join('');
 
-// const sortList = (arr) => arr.map((it) => `<div class="trip-sort__item  trip-sort__item--${it}">
-//   <input id="sort-${it}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${it}" checked data-sort-type=${SortType.date} ${currentSortType === SortType.date ? 'checked' : ''}><label class="trip-sort__btn" for="sort-day" >Day</label></div>`);
-// console.log(sortList(sort));
+export const sortWords = ['day', 'event', 'time', 'price', 'offers'];
+
+export const sortList = (arr, currentSortType) => arr.map((it) => `<div class="trip-sort__item  trip-sort__item--${it}">
+  <input id="sort-${it}" class="trip-sort__input visually-hidden" type="radio" name="trip-sort"
+  value="sort-${it}" data-sort-type="${it === 'offers' || it === 'event' ? '' : SortType[it]}"
+  ${SortType[it] === currentSortType  ? 'checked' : ''} ${it === 'offers' || it === 'event' ? 'disabled' : ''}>
+  <label class="trip-sort__btn"  for="sort-${it}">${it}</label>
+  </div>`);
 
 export const duration = (begin, end) => {
   const time1 = new Date(begin);
