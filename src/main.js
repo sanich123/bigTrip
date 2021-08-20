@@ -12,7 +12,7 @@ import Points from './presenter/trip-list.js';
 const COUNT_OF_POINTS = 15;
 
 const points = new Array(COUNT_OF_POINTS).fill().map(generatePoint);
-points.sort((a,b) => a.dateFrom - b.dateFrom);
+points.sort((a, b) => b.dateFrom - a.dateFrom);
 
 const priceAndTripSection = document.querySelector('.trip-main');
 const toNavigation = document.querySelector('.trip-controls__navigation');

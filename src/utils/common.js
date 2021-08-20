@@ -32,7 +32,10 @@ export const updateItem = (items, update) => {
 };
 
 export const SortType = {
-  DEFAULT: 'default',
-  TIME: 'time',
-  PRICE: 'price',
+  day: 'day',
+  event: 'event',
+  time: 'time',
+  price: 'price',
+  offers: 'offers',
 };
+
