@@ -13,7 +13,7 @@ export default class TripPoint {
     this._pointContainer = pointContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;
-
+    this._tripListLi = null;
     this._pointEvent = null;
     this._editPoint = null;
     this._mode = Mode.DEFAULT;
@@ -30,16 +30,19 @@ export default class TripPoint {
     const prevPointEvent = this._pointEvent;
     const prevEditPoint = this._editPoint;
 
+    const prevTripListLi = this._tripListLi;
+
     this._tripListLi = new TripListLi();
     this._pointEvent = new PointsList(point);
     this._editPoint = new EditingPoint(point, index);
 
+    if (prevTripListLi === null) {
+      render(this._pointContainer, this._tripListLi, renderPosition.AFTERBEGIN);
+    }
     this._pointEvent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._pointEvent.setEditClickHandler(this._handleEditClick);
     this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
     this._editPoint.setEditClickHandler(this._handleEditClickBack);
-
-    render(this._pointContainer, this._tripListLi, renderPosition.AFTERBEGIN);
 
     if (prevPointEvent === null || prevEditPoint === null) {
       render(this._tripListLi, this._pointEvent, renderPosition.BEFOREEND);
@@ -51,7 +54,8 @@ export default class TripPoint {
     if (this._mode === Mode.EDITING) {
       replace(this._editPoint, prevEditPoint);
     }
-    remove(this._tripListLi);
+
+    this._tripListLi = prevTripListLi;
     remove(prevPointEvent);
     remove(prevEditPoint);
   }
