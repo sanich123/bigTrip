@@ -31,10 +31,7 @@ export default class Points {
   init(points) {
     this._points = points.slice();
     this._sourcedPoints = points.slice();
-    this._renderEmpty();
-  }
 
-  _renderEmpty() {
     if (this._points.length === 0) {
       render(this._container, this._empty, renderPosition.BEFOREEND);
     } else {

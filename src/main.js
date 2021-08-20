@@ -8,7 +8,6 @@ import NavigationView from './view/navigation.js';
 import { generatePoint } from './mock/create-data.js';
 import { renderPosition, render } from './utils/rendering-utils.js';
 import Points from './presenter/trip-list.js';
-import { createIndex } from './utils/rendering-data-utils.js';
 
 const COUNT_OF_POINTS = 15;
 
