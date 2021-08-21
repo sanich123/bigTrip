@@ -14,7 +14,7 @@ export default class Points {
   constructor(container) {
     this._container = container;
     this._tripPresenter = new Map();
-    this._currentSortType = SortType.day;
+    this._currentSortType = SortType.DAY;
     this._sortMenu = new SortMenu();
     this._empty = new Empty();
     this._tripListUl = new TripListUl();
@@ -82,10 +82,10 @@ export default class Points {
 
   _sortPoints(sortType) {
     switch (sortType) {
-      case SortType.time:
+      case SortType.TIME:
         this._points.sort((a, b) => Math.abs(dayjs(a.dateFrom).diff(dayjs(a.dateTo))) - Math.abs(dayjs(b.dateFrom).diff(dayjs(b.dateTo))));
         break;
-      case SortType.price:
+      case SortType.PRICE:
         this._points.sort((a, b) => a.basePrice - b.basePrice);
         break;
       default:
