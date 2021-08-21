@@ -1,4 +1,4 @@
-import EditingPoint from '../view/editing-point.js';
+import EditingPoint from '../view/point-edit.js';
 import TripListLi from '../view/trip-list-li.js';
 import PointsList from '../view/points-list.js';
 import { renderPosition, render, replace, remove } from '../utils/rendering-utils.js';

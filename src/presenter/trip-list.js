@@ -2,7 +2,7 @@ import TripListUl from '../view/trip-list-ul.js';
 import TripListLi from '../view/trip-list-li.js';
 import Empty from '../view/empty.js';
 import PointsList from '../view/points-list.js';
-import EditingPoint from '../view/editing-point.js';
+import EditingPoint from '../view/point-edit.js';
 import { renderPosition, render, remove } from '../utils/rendering-utils.js';
 import TripPoint from '../presenter/trip-point.js';
 import { updateItem } from '../utils/common.js';

@@ -9,18 +9,18 @@ const addNewPoint = (points) => {
     dateTo,
     destination,
     offers,
-    type } = points;
+    type, id } = points;
 
   const descriptionOfDestination = destination.description.join('');
 
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
     <div class="event__type-wrapper">
-      <label class="event__type  event__type-btn" for="event-type-toggle-1">
+      <label class="event__type  event__type-btn" for="event-type-toggle-${id}">
         <span class="visually-hidden">Choose event type</span>
-        <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
+        <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event ${type} icon">
       </label>
-      <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+      <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${id}" type="checkbox">
 
       <div class="event__type-list">
         <fieldset class="event__type-group">
@@ -31,29 +31,29 @@ const addNewPoint = (points) => {
     </div>
 
     <div class="event__field-group  event__field-group--destination">
-      <label class="event__label  event__type-output" for="event-destination-1">
+      <label class="event__label  event__type-output" for="event-destination-${id}">
         ${type}
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
-      <datalist id="destination-list-1">
+      <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${destination.name}" list="destination-list-${id}">
+      <datalist id="destination-list-${id}">
       ${createCities(CITIES)}
       </datalist>
     </div>
 
     <div class="event__field-group  event__field-group--time">
-      <label class="visually-hidden" for="event-start-time-1">From</label>
-      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getFormatTime(dateFrom).fullDateFrom}">
+      <label class="visually-hidden" for="event-start-time-${id}">From</label>
+      <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${getFormatTime(dateFrom).fullDateFrom}">
       —
-      <label class="visually-hidden" for="event-end-time-1">To</label>
-      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getFormatTime(dateTo).fullDateTo}">
+      <label class="visually-hidden" for="event-end-time-${id}">To</label>
+      <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${getFormatTime(dateTo).fullDateTo}">
     </div>
 
     <div class="event__field-group  event__field-group--price">
-      <label class="event__label" for="event-price-1">
+      <label class="event__label" for="event-price-${id}">
         <span class="visually-hidden">Price</span>
         €
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+      <input class="event__input  event__input--price" id="event-price-${id}" type="text" name="event-price" value="${basePrice}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>

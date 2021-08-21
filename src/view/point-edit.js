@@ -1,6 +1,6 @@
 import { TYPES, CITIES } from '../mock/create-data.js';
 import { addOffers, createTypes, createCities, getFormatTime } from '../utils/rendering-data-utils.js';
-import Abstract from '../view/abstract.js';
+import Abstract from './abstract.js';
 
 const editPoint = (points) => {
 
