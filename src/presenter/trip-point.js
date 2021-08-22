@@ -23,6 +23,8 @@ export default class TripPoint {
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
     this._handleEditClickBack = this._handleEditClickBack.bind(this);
+    //
+    // this._typeChangeHandler = this._typeChangeHandler.bind(this);
   }
 
   init(point) {
@@ -43,6 +45,8 @@ export default class TripPoint {
     this._pointEvent.setEditClickHandler(this._handleEditClick);
     this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
     this._editPoint.setEditClickHandler(this._handleEditClickBack);
+
+    this._editPoint.setTypeChangeHandler(this._typeChangeHandler);
 
     if (prevPointEvent === null || prevEditPoint === null) {
       render(this._tripListLi, this._pointEvent, renderPosition.BEFOREEND);

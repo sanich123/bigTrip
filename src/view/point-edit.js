@@ -1,8 +1,9 @@
 import { TYPES, CITIES } from '../mock/create-data.js';
 import { addOffers, createTypes, createCities, getFormatTime } from '../utils/rendering-data-utils.js';
 import Abstract from './abstract.js';
+// import Smart from '../view/smart.js';
 
-const editPoint = (points) => {
+const editPoint = (point) => {
 
   const {
     basePrice,
@@ -10,9 +11,7 @@ const editPoint = (points) => {
     dateTo,
     destination,
     offers,
-    type, id } = points;
-
-  const descriptionOfDestination = destination.description.join('');
+    type, id } = point;
 
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
@@ -25,7 +24,7 @@ const editPoint = (points) => {
         <div class="event__type-list">
       <fieldset class="event__type-group">
       <legend class="visually-hidden">Event type</legend>
-    ${createTypes(TYPES)}
+    ${createTypes(id, TYPES)}
       </fieldset>
     </div>
   </div>
@@ -73,23 +72,60 @@ const editPoint = (points) => {
 
   <section class="event__section  event__section--destination">
     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-    <p class="event__destination-description">${descriptionOfDestination}</p>
+    <p class="event__destination-description">${destination.description.join('')}</p>
   </section>
 </section>
 </form>`;
+//
 };
 
 export default class EditingPoint extends Abstract {
-  constructor(points) {
+  constructor(point) {
     super();
-    this._points = points;
+    this._data = EditingPoint.parseTaskToData(point);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
+    this._typeChangeHandler = this._typeChangeHandler.bind(this);
+    // this.getElement()
+    //   .querySelector('.event__type-group')
+    //   .addEventListener('change', this._typeChangeHandler);
+  }
+
+  updateData(update) {
+    if (!update) {
+      return;
+    }
+
+    this._data = Object.assign(
+      {},
+      this._data,
+      update,
+    );
+
+    this.updateElement();
+  }
+
+  updateElement() {
+    const prevElement = this.getElement();
+    const parent = prevElement.parentElement;
+    this.removeElement();
+
+    const newElement = this.getElement();
+
+    parent.replaceChild(newElement, prevElement);
+  }
+
+  _typeChangeHandler(evt) {
+    evt.preventDefault();
+    this.updateData(
+      {
+        type: evt.target.value,
+      });
   }
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit();
+    this._callback.formSubmit( );
   }
 
   _editClickHandler(evt) {
@@ -97,9 +133,13 @@ export default class EditingPoint extends Abstract {
     this._callback.editClick();
   }
 
-
   getTemplate() {
-    return editPoint(this._points, this._index);
+    return editPoint(this._data);
+  }
+
+  setTypeChangeHandler(callback) {
+    this._callback.typeChange = callback;
+    this.getElement().querySelector('.event__type-group').addEventListener('change', this._typeChangeHandler);
   }
 
   setFormSubmitHandler(callback) {
@@ -110,5 +150,21 @@ export default class EditingPoint extends Abstract {
   setEditClickHandler(callback) {
     this._callback.editClick = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
+  }
+
+  static parseTaskToData(point) {
+    return Object.assign(
+      {},
+      point,
+      {
+
+      },
+    );
+  }
+
+  static parseDataToTask(data) {
+    data = Object.assign({}, data);
+
+    return data;
   }
 }
