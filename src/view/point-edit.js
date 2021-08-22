@@ -142,7 +142,6 @@ export default class EditingPoint extends Abstract {
   }
 
   getTemplate() {
-    // console.log(this._data);
     return editPoint(this._data);
   }
 
@@ -158,7 +157,11 @@ export default class EditingPoint extends Abstract {
     evt.preventDefault();
     this.updateData(
       {
-        destination: generateDestination(),
+        destination: {
+          description: generateDestination().description,
+          name: evt.target.value,
+          pictures: generateDestination().pictures,
+        },
       });
   }
 
