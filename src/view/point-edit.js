@@ -1,7 +1,6 @@
 import { TYPES, CITIES, OPTIONS, getOffersByType, generateDestination } from '../mock/create-data.js';
 import { addOffers, createTypes, createCities, getFormatTime, getPhotos } from '../utils/rendering-data-utils.js';
-import Abstract from './abstract.js';
-// import Smart from '../view/smart.js';
+import Smart from '../view/smart.js';
 
 const editPoint = (point) => {
 
@@ -73,18 +72,18 @@ const editPoint = (point) => {
   <section class="event__section  event__section--destination">
     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
     <p class="event__destination-description">${destination.description.join('')}</p>
-                        <div class="event__photos-container">
-                      <div class="event__photos-tape">
-                      ${getPhotos(destination.pictures)}
-                      </div>
-                    </div>
+      <div class="event__photos-container">
+        <div class="event__photos-tape">
+          ${getPhotos(destination.pictures)}
+        </div>
+       </div>
   </section>
 </section>
 </form>`;
 //
 };
 
-export default class EditingPoint extends Abstract {
+export default class EditingPoint extends Smart {
   constructor(point) {
     super();
     this._data = EditingPoint.parseTaskToData(point);
@@ -189,7 +188,13 @@ export default class EditingPoint extends Abstract {
       {},
       point,
       {
-
+        // destination: {
+        //   description: generateDestination().description,
+        //   name: evt.target.value,
+        //   pictures: generateDestination().pictures,
+        // },
+        // type: evt.target.value,
+        // offers: getOffersByType(OPTIONS, evt.target.value),
       },
     );
   }
