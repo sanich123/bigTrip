@@ -14,7 +14,7 @@ const TYPES = [
   'restaurant',
 ];
 
-const OPTIONS = [
+export const OPTIONS = [
   {
     type: 'taxi',
     offers: [
@@ -234,7 +234,7 @@ const generateDestination = () => ({
 });
 
 
-const getOffersByType = (arr, tip) => {
+export const getOffersByType = (arr, tip) => {
   let result;
   arr.forEach((it) => {
     if (it.type === tip) {

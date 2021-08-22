@@ -12,10 +12,8 @@ export const addOffers = (offers) => offers.map(({title, price}) => (
     </label>
   </div>`)).join('');
 
-export const createTypes = (id, types, currentType) => types.map((type) => `<div class="event__type-item">
-          <input id="event-type-${type}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}"
-${currentType === type ? 'checked' : ''}
-          >
+export const createTypes = (id, types) => types.map((type) => `<div class="event__type-item">
+          <input id="event-type-${type}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
           <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-${id}">${type}</label>
         </div>`).join('');
 

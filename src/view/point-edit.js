@@ -1,4 +1,4 @@
-import { TYPES, CITIES } from '../mock/create-data.js';
+import { TYPES, CITIES, OPTIONS, getOffersByType } from '../mock/create-data.js';
 import { addOffers, createTypes, createCities, getFormatTime } from '../utils/rendering-data-utils.js';
 import Abstract from './abstract.js';
 // import Smart from '../view/smart.js';
@@ -129,6 +129,7 @@ export default class EditingPoint extends Abstract {
     this.updateData(
       {
         type: evt.target.value,
+        offers: getOffersByType(OPTIONS, evt.target.value),
       });
   }
 
@@ -143,6 +144,7 @@ export default class EditingPoint extends Abstract {
   }
 
   getTemplate() {
+    // console.log(this._data)
     return editPoint(this._data);
   }
 
