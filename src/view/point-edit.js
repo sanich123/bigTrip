@@ -1,4 +1,4 @@
-import { TYPES, CITIES, OPTIONS, getOffersByType } from '../mock/create-data.js';
+import { TYPES, CITIES, OPTIONS, getOffersByType, generateDestination } from '../mock/create-data.js';
 import { addOffers, createTypes, createCities, getFormatTime } from '../utils/rendering-data-utils.js';
 import Abstract from './abstract.js';
 // import Smart from '../view/smart.js';
@@ -86,13 +86,14 @@ export default class EditingPoint extends Abstract {
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
     this._typeChangeHandler = this._typeChangeHandler.bind(this);
-    // this.getElement()
-    //   .querySelector('.event__type-group')
-    //   .addEventListener('change', this._typeChangeHandler);
+    this._cityChangeHandler = this._cityChangeHandler.bind(this);
   }
 
   _setInnerHandlers() {
     this.getElement().querySelector('.event__type-group').addEventListener('change', this._typeChangeHandler);
+    this.getElement().addEventListener('submit', this._formSubmitHandler);
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
+    this.getElement().querySelector('.event__input--destination').addEventListener('change', this._cityChangeHandler);
   }
 
   restoreHandlers() {
@@ -124,14 +125,6 @@ export default class EditingPoint extends Abstract {
     this.restoreHandlers();
   }
 
-  _typeChangeHandler(evt) {
-    evt.preventDefault();
-    this.updateData(
-      {
-        type: evt.target.value,
-        offers: getOffersByType(OPTIONS, evt.target.value),
-      });
-  }
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
@@ -144,12 +137,33 @@ export default class EditingPoint extends Abstract {
   }
 
   getTemplate() {
-    // console.log(this._data)
+    // console.log(this._data);
     return editPoint(this._data);
+  }
+
+  setCityChangeHandler() {
+    this.getElement().querySelector('.event__input--destination').addEventListener('change', this._cityChangeHandler);
   }
 
   setTypeChangeHandler() {
     this.getElement().querySelector('.event__type-group').addEventListener('change', this._typeChangeHandler);
+  }
+
+  _cityChangeHandler(evt) {
+    evt.preventDefault();
+    this.updateData(
+      {
+        destination: generateDestination(),
+      });
+  }
+
+  _typeChangeHandler(evt) {
+    evt.preventDefault();
+    this.updateData(
+      {
+        type: evt.target.value,
+        offers: getOffersByType(OPTIONS, evt.target.value),
+      });
   }
 
   setFormSubmitHandler(callback) {

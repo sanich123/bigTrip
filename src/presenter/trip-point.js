@@ -45,6 +45,7 @@ export default class TripPoint {
     this._editPoint.setEditClickHandler(this._handleEditClickBack);
 
     this._editPoint.setTypeChangeHandler(this._typeChangeHandler);
+    this._editPoint.setCityChangeHandler(this._cityChangeHandler);
 
     if (prevPointEvent === null || prevEditPoint === null) {
       render(this._tripListLi, this._pointEvent, renderPosition.BEFOREEND);

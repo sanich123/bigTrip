@@ -227,7 +227,7 @@ const getRandomArrayLength = (min, arr) => {
   return arr.slice(newLength);
 };
 
-const generateDestination = () => ({
+export const generateDestination = () => ({
   description: getRandomArrayLengthByNumber(0, DESCRIPTIONS, 5),
   name: getRandomArrayMember(CITIES),
   pictures: getRandomArrayLength(1, PICTURES),
