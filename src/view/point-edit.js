@@ -91,6 +91,14 @@ export default class EditingPoint extends Abstract {
     //   .addEventListener('change', this._typeChangeHandler);
   }
 
+  _setInnerHandlers() {
+    this.getElement().querySelector('.event__type-group').addEventListener('change', this._typeChangeHandler);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+  }
+
   updateData(update) {
     if (!update) {
       return;
@@ -113,6 +121,7 @@ export default class EditingPoint extends Abstract {
     const newElement = this.getElement();
 
     parent.replaceChild(newElement, prevElement);
+    this.restoreHandlers();
   }
 
   _typeChangeHandler(evt) {
@@ -137,8 +146,7 @@ export default class EditingPoint extends Abstract {
     return editPoint(this._data);
   }
 
-  setTypeChangeHandler(callback) {
-    this._callback.typeChange = callback;
+  setTypeChangeHandler() {
     this.getElement().querySelector('.event__type-group').addEventListener('change', this._typeChangeHandler);
   }
 
