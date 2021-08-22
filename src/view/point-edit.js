@@ -1,5 +1,5 @@
 import { TYPES, CITIES, OPTIONS, getOffersByType, generateDestination } from '../mock/create-data.js';
-import { addOffers, createTypes, createCities, getFormatTime } from '../utils/rendering-data-utils.js';
+import { addOffers, createTypes, createCities, getFormatTime, getPhotos } from '../utils/rendering-data-utils.js';
 import Abstract from './abstract.js';
 // import Smart from '../view/smart.js';
 
@@ -73,6 +73,11 @@ const editPoint = (point) => {
   <section class="event__section  event__section--destination">
     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
     <p class="event__destination-description">${destination.description.join('')}</p>
+                        <div class="event__photos-container">
+                      <div class="event__photos-tape">
+                      ${getPhotos(destination.pictures)}
+                      </div>
+                    </div>
   </section>
 </section>
 </form>`;
