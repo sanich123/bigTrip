@@ -151,7 +151,7 @@ export default class EditingPoint extends Smart {
 
   _timeToHandler([userDate]) {
     this.updateData({
-      dateFrom: userDate,
+      dateTo: userDate,
     });
   }
 
@@ -182,7 +182,8 @@ export default class EditingPoint extends Smart {
       {
         dateFormat: 'd/m/y H:i',
         enableTime: true,
-        defaultDate: this._data.dateFrom,
+        'time_24hr': true,
+        // defaultDate: this._data.dateFrom,
         onChange: this._timeFromHandler,
       },
     );
@@ -194,8 +195,9 @@ export default class EditingPoint extends Smart {
       {
         dateFormat: 'd/m/y H:i',
         enableTime: true,
-        defaultDate: this._data.dateFrom,
-        onChange: this._timeFromHandler,
+        'time_24hr': true,
+        // defaultDate: this._data.dateTo,
+        onChange: this._timeToHandler,
       },
     );
   }
