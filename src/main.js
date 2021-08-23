@@ -9,7 +9,7 @@ import { generatePoint } from './mock/create-data.js';
 import { renderPosition, render } from './utils/rendering-utils.js';
 import Points from './presenter/trip-list.js';
 
-const COUNT_OF_POINTS = 15;
+const COUNT_OF_POINTS = 5;
 
 const points = new Array(COUNT_OF_POINTS).fill().map(generatePoint);
 points.sort((a, b) => b.dateFrom - a.dateFrom);
