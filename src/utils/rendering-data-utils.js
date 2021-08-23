@@ -12,10 +12,10 @@ export const addOffers = (offers) => offers.map(({title, price}) => (
     </label>
   </div>`)).join('');
 
-export const createTypes = (types) => types.map((type, index) => (`<div class="event__type-item">
-          <input id="event-type-${type}-${index}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
-          <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-${index}">${type}</label>
-        </div>`)).join('');
+export const createTypes = (id, types) => types.map((type) => `<div class="event__type-item">
+          <input id="event-type-${type}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
+          <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-${id}">${type}</label>
+        </div>`).join('');
 
 export const createCities = (cities) => cities.map((it) => (`<option value="${it}"></option>`)).join('');
 
@@ -25,13 +25,12 @@ export const titlePrice = (offers) => offers.map(({ title, price }) => (`<li cla
   <span class="event__offer-price">${price}</span>
 </li>`)).join('');
 
-export const sortWords = ['day', 'event', 'time', 'price', 'offers'];
-
-export const sortList = (sortTypes, currentSortType) => sortTypes.map((sortType) => `<div class="trip-sort__item  trip-sort__item--${sortType}">
-  <input id="sort-${sortType}" class="trip-sort__input visually-hidden" type="radio" name="trip-sort"
-  value="sort-${sortType}" data-sort-type="${sortType === 'offers' || sortType === 'event' ? '' : SortType[sortType]}"
-  ${SortType[sortType] === currentSortType  ? 'checked' : ''} ${sortType === 'offers' || sortType === 'event' ? 'disabled' : ''}>
-  <label class="trip-sort__btn"  for="sort-${sortType}">${sortType}</label>
+export const sortWords = ['DAY', 'EVENT', 'TIME', 'PRICE', 'OFFERS'];
+export const sortList = (sortTypes, currentSortType) => sortTypes.map((sortType) => `<div class="trip-sort__item  trip-sort__item--${sortType.toLowerCase()}">
+  <input id="sort-${sortType.toLowerCase()}" class="trip-sort__input visually-hidden" type="radio" name="trip-sort"
+  value="sort-${sortType.toLowerCase()}" data-sort-type="${sortType === 'OFFERS' || sortType === 'EVENT' ? '' : SortType[sortType]}"
+  ${SortType[sortType] === currentSortType  ? 'checked' : ''} ${sortType === 'OFFERS' || sortType === 'EVENT' ? 'disabled' : ''}>
+  <label class="trip-sort__btn"  for="sort-${sortType.toLowerCase()}">${sortType}</label>
   </div>`);
 
 export const duration = (begin, end) => {
@@ -110,7 +109,6 @@ export const getFormatTime = (dateFrom, dateTo) => {
   const fullDateTo = humanizeDate(dateTo, 'DD/MM/YY HH:mm');
   return { fromDate, toDate, fromDateMinutes, toDateMinutes, fullDateFrom, fullDateTo };
 };
-
 
 export const getPhotos = (pictures) => pictures.map(({ src }) => (`<img class="event__photo" src="${src}" alt="Event photo">`)).join('');
 

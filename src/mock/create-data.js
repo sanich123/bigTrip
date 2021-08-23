@@ -14,7 +14,7 @@ const TYPES = [
   'restaurant',
 ];
 
-const OPTIONS = [
+export const OPTIONS = [
   {
     type: 'taxi',
     offers: [
@@ -227,14 +227,14 @@ const getRandomArrayLength = (min, arr) => {
   return arr.slice(newLength);
 };
 
-const generateDestination = () => ({
+export const generateDestination = () => ({
   description: getRandomArrayLengthByNumber(0, DESCRIPTIONS, 5),
   name: getRandomArrayMember(CITIES),
   pictures: getRandomArrayLength(1, PICTURES),
 });
 
 
-const getOffersByType = (arr, tip) => {
+export const getOffersByType = (arr, tip) => {
   let result;
   arr.forEach((it) => {
     if (it.type === tip) {

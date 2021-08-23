@@ -2,7 +2,7 @@ import TripListUl from '../view/trip-list-ul.js';
 import TripListLi from '../view/trip-list-li.js';
 import Empty from '../view/empty.js';
 import PointsList from '../view/points-list.js';
-import EditingPoint from '../view/editing-point.js';
+import EditingPoint from '../view/point-edit.js';
 import { renderPosition, render, remove } from '../utils/rendering-utils.js';
 import TripPoint from '../presenter/trip-point.js';
 import { updateItem } from '../utils/common.js';
@@ -14,7 +14,7 @@ export default class Points {
   constructor(container) {
     this._container = container;
     this._tripPresenter = new Map();
-    this._currentSortType = SortType.day;
+    this._currentSortType = SortType.DAY;
     this._sortMenu = new SortMenu();
     this._empty = new Empty();
     this._tripListUl = new TripListUl();
@@ -25,6 +25,7 @@ export default class Points {
     this._handlePointChange = this._handlePointChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+
   }
 
   init(points) {
@@ -53,9 +54,9 @@ export default class Points {
     this._points.forEach((point, index) => this._renderPoint(point, index));
   }
 
-  _renderPoint(point, index) {
+  _renderPoint(point) {
     const tripPoint = new TripPoint(this._tripListUl, this._handlePointChange, this._handleModeChange);
-    tripPoint.init(point, index);
+    tripPoint.init(point);
     this._tripPresenter.set(point.id, tripPoint);
   }
 
@@ -82,10 +83,10 @@ export default class Points {
 
   _sortPoints(sortType) {
     switch (sortType) {
-      case SortType.time:
+      case SortType.TIME:
         this._points.sort((a, b) => Math.abs(dayjs(a.dateFrom).diff(dayjs(a.dateTo))) - Math.abs(dayjs(b.dateFrom).diff(dayjs(b.dateTo))));
         break;
-      case SortType.price:
+      case SortType.PRICE:
         this._points.sort((a, b) => a.basePrice - b.basePrice);
         break;
       default:
