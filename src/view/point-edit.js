@@ -92,6 +92,12 @@ export default class EditingPoint extends Smart {
     this._cityChangeHandler = this._cityChangeHandler.bind(this);
   }
 
+  reset(point) {
+    this.updateData(
+      EditingPoint.parseTaskToData(point),
+    );
+  }
+
   _setInnerHandlers() {
     this.getElement().querySelector('.event__type-group').addEventListener('change', this._typeChangeHandler);
     this.getElement().addEventListener('submit', this._formSubmitHandler);
@@ -101,33 +107,8 @@ export default class EditingPoint extends Smart {
 
   restoreHandlers() {
     this._setInnerHandlers();
+    // this.setFormSubmitHandler();
   }
-
-  updateData(update) {
-    if (!update) {
-      return;
-    }
-
-    this._data = Object.assign(
-      {},
-      this._data,
-      update,
-    );
-
-    this.updateElement();
-  }
-
-  updateElement() {
-    const prevElement = this.getElement();
-    const parent = prevElement.parentElement;
-    this.removeElement();
-
-    const newElement = this.getElement();
-
-    parent.replaceChild(newElement, prevElement);
-    this.restoreHandlers();
-  }
-
 
   _formSubmitHandler(evt) {
     evt.preventDefault();

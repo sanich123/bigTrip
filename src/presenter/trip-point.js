@@ -91,6 +91,7 @@ export default class TripPoint {
   _escKeyDownHandler(evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      this._editPoint.reset(this._point);
       this._replaceFormToCard();
     }
   }
