@@ -1,11 +1,11 @@
 import { humanizeDate  } from './common.js';
 import { SortType } from './common.js';
 
-export const addOffers = (offers) => offers.map(({title, price}) => (
+export const addOffers = (offers) => offers.map(({title, price}, index) => (
   `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked=""
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${index}" type="checkbox" name="event-offer-luggage"
     >
-    <label class="event__offer-label" for="event-offer-luggage-1">
+    <label class="event__offer-label" for="event-offer-luggage-${index}">
       <span class="event__offer-title">${title}</span>
       +€&nbsp;
       <span class="event__offer-price">${price}</span>

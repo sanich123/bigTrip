@@ -80,7 +80,6 @@ const editPoint = (point) => {
   </section>
 </section>
 </form>`;
-//
 };
 
 export default class EditingPoint extends Smart {
@@ -132,7 +131,7 @@ export default class EditingPoint extends Smart {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit( );
+    this._callback.formSubmit(EditingPoint.parseDataToTask(this._data));
   }
 
   _editClickHandler(evt) {
@@ -190,7 +189,7 @@ export default class EditingPoint extends Smart {
       {
         // destination: {
         //   description: generateDestination().description,
-        //   name: evt.target.value,
+        //   name: this._data,
         //   pictures: generateDestination().pictures,
         // },
         // type: evt.target.value,
