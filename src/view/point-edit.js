@@ -95,7 +95,10 @@ export default class EditingPoint extends Smart {
     this._cityChangeHandler = this._cityChangeHandler.bind(this);
 
     this._timeFromHandler = this._timeFromHandler.bind(this);
-    this._setDatePicker = this._setDatePicker.bind(this);
+    this._timeToHandler = this._timeToHandler.bind(this);
+    this._setDatePickerStart = this._setDatePickerStart.bind(this);
+    this._setDatePickerEnd = this._setDatePickerEnd.bind(this);
+
   }
 
   reset(point) {
@@ -110,7 +113,8 @@ export default class EditingPoint extends Smart {
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
     this.getElement().querySelector('.event__input--destination').addEventListener('change', this._cityChangeHandler);
     this.getElement().querySelector('.event__input--time').addEventListener('click', this._timeFromHandler);
-    this._setDatePicker;
+    this._setDatePickerStart();
+    this._setDatePickerEnd();
   }
 
   restoreHandlers() {
@@ -139,11 +143,13 @@ export default class EditingPoint extends Smart {
     this.getElement().querySelector('.event__type-group').addEventListener('change', this._typeChangeHandler);
   }
 
-  setTimeFromHandler() {
-    this.getElement().querySelector('.event__input--time').addEventListener('click', this._timeFromHandler);
+  _timeFromHandler([userDate]) {
+    this.updateData({
+      dateFrom: userDate,
+    });
   }
 
-  _timeFromHandler([userDate]) {
+  _timeToHandler([userDate]) {
     this.updateData({
       dateFrom: userDate,
     });
@@ -170,11 +176,24 @@ export default class EditingPoint extends Smart {
       });
   }
 
-  _setDatePicker() {
+  _setDatePickerStart() {
     this._datepicker = flatpickr(
-      this.getElement().querySelector('.event__input--time'),
+      this.getElement().querySelector('[name = "event-start-time"]'),
       {
-        dateFormat: 'j F',
+        dateFormat: 'd/m/y H:i',
+        enableTime: true,
+        defaultDate: this._data.dateFrom,
+        onChange: this._timeFromHandler,
+      },
+    );
+  }
+
+  _setDatePickerEnd() {
+    this._datepicker = flatpickr(
+      this.getElement().querySelector('[name = "event-end-time"]'),
+      {
+        dateFormat: 'd/m/y H:i',
+        enableTime: true,
         defaultDate: this._data.dateFrom,
         onChange: this._timeFromHandler,
       },
