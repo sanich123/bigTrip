@@ -10,9 +10,11 @@
     "start": "webpack-dev-server --open"
   },
   "devDependencies": {
+    "css-loader": "5.2.7",
     "eslint": "7.31.0",
     "eslint-config-htmlacademy": "4.0.2",
-    "nanoid": "3.1.22"
+    "nanoid": "3.1.22",
+    "style-loader": "2.0.0"
   },
   "engines": {
     "node": "12"
@@ -20,11 +22,9 @@
   "dependencies": {
     "chart.js": "2.9.4",
     "chartjs-plugin-datalabels": "0.7.0",
-    "css-loader": "5.2.7",
     "dayjs": "1.9.5",
     "flatpickr": "4.6.9",
     "he": "1.2.0",
-    "style-loader": "2.0.0",
     "webpack": "4.44.2",
     "webpack-cli": "3.3.12",
     "webpack-dev-server": "3.11.0"

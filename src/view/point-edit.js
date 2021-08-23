@@ -1,6 +1,8 @@
 import { TYPES, CITIES, OPTIONS, getOffersByType, generateDestination } from '../mock/create-data.js';
 import { addOffers, createTypes, createCities, getFormatTime, getPhotos } from '../utils/rendering-data-utils.js';
 import Smart from '../view/smart.js';
+import flatpickr from 'flatpickr';
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const editPoint = (point) => {
 
@@ -86,10 +88,14 @@ export default class EditingPoint extends Smart {
   constructor(point) {
     super();
     this._data = EditingPoint.parseTaskToData(point);
+    this._datepicker = null;
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
     this._typeChangeHandler = this._typeChangeHandler.bind(this);
     this._cityChangeHandler = this._cityChangeHandler.bind(this);
+
+    this._timeFromHandler = this._timeFromHandler.bind(this);
+    this._setDatePicker = this._setDatePicker.bind(this);
   }
 
   reset(point) {
@@ -103,11 +109,12 @@ export default class EditingPoint extends Smart {
     this.getElement().addEventListener('submit', this._formSubmitHandler);
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
     this.getElement().querySelector('.event__input--destination').addEventListener('change', this._cityChangeHandler);
+    this.getElement().querySelector('.event__input--time').addEventListener('click', this._timeFromHandler);
+    this._setDatePicker;
   }
 
   restoreHandlers() {
     this._setInnerHandlers();
-    // this.setFormSubmitHandler();
   }
 
   _formSubmitHandler(evt) {
@@ -132,6 +139,16 @@ export default class EditingPoint extends Smart {
     this.getElement().querySelector('.event__type-group').addEventListener('change', this._typeChangeHandler);
   }
 
+  setTimeFromHandler() {
+    this.getElement().querySelector('.event__input--time').addEventListener('click', this._timeFromHandler);
+  }
+
+  _timeFromHandler([userDate]) {
+    this.updateData({
+      dateFrom: userDate,
+    });
+  }
+
   _cityChangeHandler(evt) {
     evt.preventDefault();
     this.updateData(
@@ -151,6 +168,17 @@ export default class EditingPoint extends Smart {
         type: evt.target.value,
         offers: getOffersByType(OPTIONS, evt.target.value),
       });
+  }
+
+  _setDatePicker() {
+    this._datepicker = flatpickr(
+      this.getElement().querySelector('.event__input--time'),
+      {
+        dateFormat: 'j F',
+        defaultDate: this._data.dateFrom,
+        onChange: this._timeFromHandler,
+      },
+    );
   }
 
   setFormSubmitHandler(callback) {
