@@ -1,19 +1,21 @@
 import { humanizeDate  } from './common.js';
 import { SortType } from './common.js';
+import { nanoid } from 'nanoid';
 
-export const addOffers = (offers) => offers.map(({title, price}, index) => (
-  `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${index}" type="checkbox" name="event-offer-luggage">
-    <label class="event__offer-label" for="event-offer-luggage-${index}">
+export const addOffers = (offers) => offers.map(({title, price}) => {
+  const id = nanoid();
+  return `<div class="event__offer-selector">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${id}" type="checkbox" name="event-offer-luggage">
+    <label class="event__offer-label" for="event-offer-luggage-${id}">
       <span class="event__offer-title">${title}</span>
       +€&nbsp;
       <span class="event__offer-price">${price}</span>
     </label>
-  </div>`)).join('');
-
+  </div>`;}).join('');
+const upperCaseFirstLetter = (type) => type[0].toUpperCase() + type.split('').splice(1).join('');
 export const createTypes = (id, types) => types.map((type) => `<div class="event__type-item">
           <input id="event-type-${type}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
-          <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-${id}">${type[0].toUpperCase() + type.split('').splice(1).join('')}</label>
+          <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-${id}">${upperCaseFirstLetter(type)}</label>
         </div>`).join('');
 
 export const createCities = (cities) => cities.map((city) => (`<option value="${city}"></option>`)).join('');

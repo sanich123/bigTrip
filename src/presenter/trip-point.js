@@ -89,6 +89,11 @@ export default class TripPoint {
     this._mode = Mode.DEFAULT;
   }
 
+  // _destroyDatePickers() {
+  //   this._datepicker.destroy();
+  //   this._datepicker = null;
+  // }
+
   _escKeyDownHandler(evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
