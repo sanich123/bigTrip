@@ -112,6 +112,22 @@ export default class EditingPoint extends Smart {
     this._setInnerHandlers();
   }
 
+  removeElement() {
+    super.removeElement();
+    this._resetDatepicker();
+  }
+
+  _resetDatepicker() {
+    if (this._datepicker1) {
+      this._datepicker1.destroy();
+      this._datepicker1 = null;
+    }
+    if (this._datepicker2) {
+      this._datepicker2.destroy();
+      this._datepicker2 = null;
+    }
+  }
+
   reset(point) {
     this.updateData(
       EditingPoint.parseTaskToData(point),
@@ -171,13 +187,6 @@ export default class EditingPoint extends Smart {
 
   setTypeChangeHandler() {
     this.getElement().querySelector('.event__type-group').addEventListener('change', this._typeChangeHandler);
-  }
-
-  _destroyDatePickers() {
-    this._datepicker1.destroy();
-    this._datepicker2.destroy();
-    this._datepicker1 = null;
-    this._datepicker2 = null;
   }
 
   _setDatePicker() {
