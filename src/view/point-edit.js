@@ -189,13 +189,13 @@ export default class EditingPoint extends Smart {
       this._datepicker2.destroy();
       this._datepicker2 = null;
     }
+
     this._datepicker1 = flatpickr(
       this.getElement().querySelector('[name = "event-start-time"]'),
       {
         dateFormat: 'd/m/y H:i',
         enableTime: true,
         'time_24hr': true,
-        // defaultDate: this._data.dateFrom,
         onChange: this._timeFromHandler,
       },
     ),
@@ -204,8 +204,8 @@ export default class EditingPoint extends Smart {
       {
         dateFormat: 'd/m/y H:i',
         enableTime: true,
+        minDate: this._datepicker1.input.value,
         'time_24hr': true,
-        // defaultDate: this._data.dateTo,
         onChange: this._timeToHandler,
       },
     );
