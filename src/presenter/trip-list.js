@@ -21,9 +21,6 @@ export default class Points {
     this._tripListLi = new TripListLi();
     this._editingPoint = new EditingPoint();
     this._pointsList = new PointsList();
-    //
-    // this._datepicker = null;
-
     this._handlePointChange = this._handlePointChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
@@ -101,11 +98,10 @@ export default class Points {
     this._tripPresenter.forEach((presenter) => presenter.resetView());
   }
 
-
   _clearPointsList() {
-    // this._tripPresenter.forEach((presenter) => {
-    //   presenter._destroyDatePickers();
-    // });
+    this._tripPresenter.forEach((presenter) => {
+      presenter._editPoint._destroyDatePickers();
+    });
     this._tripPresenter.forEach((presenter) => presenter.destroy());
     this._tripPresenter.clear();
   }

@@ -29,9 +29,7 @@ export default class TripPoint {
     this._point = point;
     const prevPointEvent = this._pointEvent;
     const prevEditPoint = this._editPoint;
-
     const prevTripListLi = this._tripListLi;
-
     this._tripListLi = new TripListLi();
     this._pointEvent = new PointsList(point);
     this._editPoint = new EditingPoint(point);
@@ -43,7 +41,6 @@ export default class TripPoint {
     this._pointEvent.setEditClickHandler(this._handleEditClick);
     this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
     this._editPoint.setEditClickHandler(this._handleEditClickBack);
-
     this._editPoint.setTypeChangeHandler(this._typeChangeHandler);
     this._editPoint.setCityChangeHandler(this._cityChangeHandler);
     this._editPoint._setDatePicker(this._timeFromHandler);
@@ -88,11 +85,6 @@ export default class TripPoint {
     document.removeEventListener('keydown', this._escKeyDownHandler);
     this._mode = Mode.DEFAULT;
   }
-
-  // _destroyDatePickers() {
-  //   this._datepicker.destroy();
-  //   this._datepicker = null;
-  // }
 
   _escKeyDownHandler(evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
