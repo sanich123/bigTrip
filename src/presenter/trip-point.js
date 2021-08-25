@@ -29,9 +29,7 @@ export default class TripPoint {
     this._point = point;
     const prevPointEvent = this._pointEvent;
     const prevEditPoint = this._editPoint;
-
     const prevTripListLi = this._tripListLi;
-
     this._tripListLi = new TripListLi();
     this._pointEvent = new PointsList(point);
     this._editPoint = new EditingPoint(point);
@@ -43,9 +41,9 @@ export default class TripPoint {
     this._pointEvent.setEditClickHandler(this._handleEditClick);
     this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
     this._editPoint.setEditClickHandler(this._handleEditClickBack);
-
     this._editPoint.setTypeChangeHandler(this._typeChangeHandler);
     this._editPoint.setCityChangeHandler(this._cityChangeHandler);
+    this._editPoint._setDatePicker(this._timeFromHandler);
 
     if (prevPointEvent === null || prevEditPoint === null) {
       render(this._tripListLi, this._pointEvent, renderPosition.BEFOREEND);
@@ -91,6 +89,7 @@ export default class TripPoint {
   _escKeyDownHandler(evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      this._editPoint.reset(this._point);
       this._replaceFormToCard();
     }
   }

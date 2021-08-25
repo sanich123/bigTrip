@@ -1,23 +1,24 @@
 import { humanizeDate  } from './common.js';
 import { SortType } from './common.js';
+import { nanoid } from 'nanoid';
 
-export const addOffers = (offers) => offers.map(({title, price}) => (
-  `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked=""
-    >
-    <label class="event__offer-label" for="event-offer-luggage-1">
+export const addOffers = (offers) => offers.map(({title, price}) => {
+  const id = nanoid();
+  return `<div class="event__offer-selector">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${id}" type="checkbox" name="event-offer-luggage">
+    <label class="event__offer-label" for="event-offer-luggage-${id}">
       <span class="event__offer-title">${title}</span>
       +€&nbsp;
       <span class="event__offer-price">${price}</span>
     </label>
-  </div>`)).join('');
-
+  </div>`;}).join('');
+const upperCaseFirstLetter = (type) => type[0].toUpperCase() + type.split('').splice(1).join('');
 export const createTypes = (id, types) => types.map((type) => `<div class="event__type-item">
           <input id="event-type-${type}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
-          <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-${id}">${type}</label>
+          <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-${id}">${upperCaseFirstLetter(type)}</label>
         </div>`).join('');
 
-export const createCities = (cities) => cities.map((it) => (`<option value="${it}"></option>`)).join('');
+export const createCities = (cities) => cities.map((city) => (`<option value="${city}"></option>`)).join('');
 
 export const titlePrice = (offers) => offers.map(({ title, price }) => (`<li class="event__offer">
   <span class="event__offer-title">${title}</span>
@@ -26,10 +27,15 @@ export const titlePrice = (offers) => offers.map(({ title, price }) => (`<li cla
 </li>`)).join('');
 
 export const sortWords = ['DAY', 'EVENT', 'TIME', 'PRICE', 'OFFERS'];
-export const sortList = (sortTypes, currentSortType) => sortTypes.map((sortType) => `<div class="trip-sort__item  trip-sort__item--${sortType.toLowerCase()}">
-  <input id="sort-${sortType.toLowerCase()}" class="trip-sort__input visually-hidden" type="radio" name="trip-sort"
-  value="sort-${sortType.toLowerCase()}" data-sort-type="${sortType === 'OFFERS' || sortType === 'EVENT' ? '' : SortType[sortType]}"
-  ${SortType[sortType] === currentSortType  ? 'checked' : ''} ${sortType === 'OFFERS' || sortType === 'EVENT' ? 'disabled' : ''}>
+
+export const sortList = (sortTypes, currentSortType) => sortTypes.map((sortType) =>
+  `<div class="trip-sort__item  trip-sort__item--${sortType.toLowerCase()}">
+  <input id="sort-${sortType.toLowerCase()}"
+  class="trip-sort__input visually-hidden" type="radio" name="trip-sort"
+  value="sort-${sortType.toLowerCase()}"
+  data-sort-type="${sortType === SortType.OFFERS || sortType === SortType.EVENT ? '' : SortType[sortType]}"
+  ${SortType[sortType] === currentSortType  ? 'checked' : ''}
+  ${sortType === SortType.OFFERS || sortType === SortType.EVENT ? 'disabled' : ''}>
   <label class="trip-sort__btn"  for="sort-${sortType.toLowerCase()}">${sortType}</label>
   </div>`);
 

@@ -21,11 +21,9 @@ export default class Points {
     this._tripListLi = new TripListLi();
     this._editingPoint = new EditingPoint();
     this._pointsList = new PointsList();
-
     this._handlePointChange = this._handlePointChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
-
   }
 
   init(points) {
@@ -51,7 +49,7 @@ export default class Points {
   }
 
   _renderPointsList() {
-    this._points.forEach((point, index) => this._renderPoint(point, index));
+    this._points.forEach((point) => this._renderPoint(point));
   }
 
   _renderPoint(point) {
@@ -71,9 +69,7 @@ export default class Points {
       return;
     }
     this._currentSortType = sortType;
-    this._sortPoints(sortType);
     this._clearPointsList();
-
     remove(this._sortMenu);
     this._sortMenu = new SortMenu(this._currentSortType);
     render(this._container, this._sortMenu, renderPosition.AFTERBEGIN);

@@ -1,6 +1,8 @@
 import { TYPES, CITIES, OPTIONS, getOffersByType, generateDestination } from '../mock/create-data.js';
 import { addOffers, createTypes, createCities, getFormatTime, getPhotos } from '../utils/rendering-data-utils.js';
 import Smart from '../view/smart.js';
+import flatpickr from 'flatpickr';
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const editPoint = (point) => {
 
@@ -80,17 +82,22 @@ const editPoint = (point) => {
   </section>
 </section>
 </form>`;
-//
 };
 
 export default class EditingPoint extends Smart {
   constructor(point) {
     super();
     this._data = EditingPoint.parseTaskToData(point);
+    this._datepicker1 = null;
+    this._datepicker2 = null;
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
     this._typeChangeHandler = this._typeChangeHandler.bind(this);
     this._cityChangeHandler = this._cityChangeHandler.bind(this);
+
+    this._timeFromHandler = this._timeFromHandler.bind(this);
+    this._timeToHandler = this._timeToHandler.bind(this);
+    this._setDatePicker = this._setDatePicker.bind(this);
   }
 
   _setInnerHandlers() {
@@ -98,41 +105,42 @@ export default class EditingPoint extends Smart {
     this.getElement().addEventListener('submit', this._formSubmitHandler);
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
     this.getElement().querySelector('.event__input--destination').addEventListener('change', this._cityChangeHandler);
+    this._setDatePicker();
   }
 
   restoreHandlers() {
     this._setInnerHandlers();
   }
 
-  updateData(update) {
-    if (!update) {
-      return;
+  removeElement() {
+    super.removeElement();
+    this._resetDatepicker();
+  }
+
+  _resetDatepicker() {
+    if (this._datepicker1) {
+      this._datepicker1.destroy();
+      this._datepicker1 = null;
     }
+    if (this._datepicker2) {
+      this._datepicker2.destroy();
+      this._datepicker2 = null;
+    }
+  }
 
-    this._data = Object.assign(
-      {},
-      this._data,
-      update,
+  reset(point) {
+    this.updateData(
+      EditingPoint.parseTaskToData(point),
     );
-
-    this.updateElement();
   }
 
-  updateElement() {
-    const prevElement = this.getElement();
-    const parent = prevElement.parentElement;
-    this.removeElement();
-
-    const newElement = this.getElement();
-
-    parent.replaceChild(newElement, prevElement);
-    this.restoreHandlers();
+  getTemplate() {
+    return editPoint(this._data);
   }
-
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit( );
+    this._callback.formSubmit(EditingPoint.parseDataToTask(this._data));
   }
 
   _editClickHandler(evt) {
@@ -140,16 +148,16 @@ export default class EditingPoint extends Smart {
     this._callback.editClick();
   }
 
-  getTemplate() {
-    return editPoint(this._data);
+  _timeFromHandler([userDate]) {
+    this.updateData({
+      dateFrom: userDate,
+    });
   }
 
-  setCityChangeHandler() {
-    this.getElement().querySelector('.event__input--destination').addEventListener('change', this._cityChangeHandler);
-  }
-
-  setTypeChangeHandler() {
-    this.getElement().querySelector('.event__type-group').addEventListener('change', this._typeChangeHandler);
+  _timeToHandler([userDate]) {
+    this.updateData({
+      dateTo: userDate,
+    });
   }
 
   _cityChangeHandler(evt) {
@@ -173,6 +181,45 @@ export default class EditingPoint extends Smart {
       });
   }
 
+  setCityChangeHandler() {
+    this.getElement().querySelector('.event__input--destination').addEventListener('change', this._cityChangeHandler);
+  }
+
+  setTypeChangeHandler() {
+    this.getElement().querySelector('.event__type-group').addEventListener('change', this._typeChangeHandler);
+  }
+
+  _setDatePicker() {
+    if (this._datepicker1) {
+      this._datepicker1.destroy();
+      this._datepicker1 = null;
+    }
+    if (this._datepicker2) {
+      this._datepicker2.destroy();
+      this._datepicker2 = null;
+    }
+
+    this._datepicker1 = flatpickr(
+      this.getElement().querySelector('[name = "event-start-time"]'),
+      {
+        dateFormat: 'd/m/y H:i',
+        enableTime: true,
+        'time_24hr': true,
+        onChange: this._timeFromHandler,
+      },
+    ),
+    this._datepicker2 = flatpickr(
+      this.getElement().querySelector('[name = "event-end-time"]'),
+      {
+        dateFormat: 'd/m/y H:i',
+        enableTime: true,
+        minDate: this._datepicker1.input.value,
+        'time_24hr': true,
+        onChange: this._timeToHandler,
+      },
+    );
+  }
+
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
     this.getElement().addEventListener('submit', this._formSubmitHandler);
@@ -190,7 +237,7 @@ export default class EditingPoint extends Smart {
       {
         // destination: {
         //   description: generateDestination().description,
-        //   name: evt.target.value,
+        //   name: this._data,
         //   pictures: generateDestination().pictures,
         // },
         // type: evt.target.value,

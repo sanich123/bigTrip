@@ -1,7 +1,8 @@
 import Abstract from '../view/abstract.js';
 import { sortList, sortWords } from '../utils/rendering-data-utils.js';
+import { SortType } from '../utils/common.js';
 
-const sort = (currentSortType = 'DAY') =>
+const sort = (currentSortType = SortType.DAY) =>
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
   ${sortList(sortWords, currentSortType).join('')}
 </form>`;
