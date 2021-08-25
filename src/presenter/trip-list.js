@@ -5,7 +5,6 @@ import PointsList from '../view/points-list.js';
 import EditingPoint from '../view/point-edit.js';
 import { renderPosition, render, remove } from '../utils/rendering-utils.js';
 import TripPoint from '../presenter/trip-point.js';
-import { updateItem } from '../utils/common.js';
 import { SortType } from '../utils/common.js';
 import dayjs from 'dayjs';
 import SortMenu from '../view/sort.js';
@@ -27,11 +26,8 @@ export default class PointsPresenter {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
-  init(points) {
-    this._points = points.slice();
-    this._sourcedPoints = points.slice();
-
-    if (this._points.length === 0) {
+  init() {
+    if (this._pointsModel.getPoints().length === 0) {
       render(this._container, this._empty, renderPosition.BEFOREEND);
     } else {
       this._renderSort();
@@ -39,6 +35,12 @@ export default class PointsPresenter {
   }
 
   _getPoints() {
+    switch (this._currentSortType) {
+      case SortType.TIME:
+        return this._pointsModel.getPoints().slice().sort((a, b) => Math.abs(dayjs(a.dateFrom).diff(dayjs(a.dateTo))) - Math.abs(dayjs(b.dateFrom).diff(dayjs(b.dateTo))));
+      case SortType.PRICE:
+        return this._pointsModel.getPoints().slice().sort((a, b) => a.basePrice - b.basePrice);
+    }
     return this._pointsModel.getPoints();
   }
 
@@ -54,7 +56,7 @@ export default class PointsPresenter {
   }
 
   _renderPointsList() {
-    this._points.forEach((point) => this._renderPoint(point));
+    this._getPoints().slice().forEach((point) => this._renderPoint(point));
   }
 
   _renderPoint(point) {
@@ -64,8 +66,7 @@ export default class PointsPresenter {
   }
 
   _handlePointChange(updatedPoint) {
-    this._points = updateItem(this._points, updatedPoint);
-    this._sourcedPoints = updateItem(this._sourcedPoints, updatedPoint);
+  // Здесь будем вызывать обновление модели
     this._tripPresenter.get(updatedPoint.id).init(updatedPoint);
   }
 
@@ -74,27 +75,12 @@ export default class PointsPresenter {
       return;
     }
     this._currentSortType = sortType;
-    this._sortPoints(sortType);
     this._clearPointsList();
     remove(this._sortMenu);
     this._sortMenu = new SortMenu(this._currentSortType);
     render(this._container, this._sortMenu, renderPosition.AFTERBEGIN);
     this._sortMenu.setSortTypeChangeHandler(this._handleSortTypeChange);
     this._renderPointsList();
-  }
-
-  _sortPoints(sortType) {
-    switch (sortType) {
-      case SortType.TIME:
-        this._points.sort((a, b) => Math.abs(dayjs(a.dateFrom).diff(dayjs(a.dateTo))) - Math.abs(dayjs(b.dateFrom).diff(dayjs(b.dateTo))));
-        break;
-      case SortType.PRICE:
-        this._points.sort((a, b) => a.basePrice - b.basePrice);
-        break;
-      default:
-        this._points = this._sourcedPoints.slice();
-    }
-    this._currentSortType = sortType;
   }
 
   _handleModeChange() {

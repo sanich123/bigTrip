@@ -29,7 +29,7 @@ render(toNavigation, new NavigationView(), renderPosition.AFTERBEGIN);
 render(toFilters, new FiltersView(), renderPosition.AFTERBEGIN);
 
 const pointsPresenter = new PointsPresenter(toSort, pointsModel);
-pointsPresenter.init(points);
+pointsPresenter.init();
 
 
 // render(toSort, new Loading().getElement(), renderPosition.BEFOREEND);
