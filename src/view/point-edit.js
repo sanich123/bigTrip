@@ -94,7 +94,7 @@ export default class EditingPoint extends Smart {
     this._editClickHandler = this._editClickHandler.bind(this);
     this._typeChangeHandler = this._typeChangeHandler.bind(this);
     this._cityChangeHandler = this._cityChangeHandler.bind(this);
-
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
     this._timeFromHandler = this._timeFromHandler.bind(this);
     this._timeToHandler = this._timeToHandler.bind(this);
     this._setDatePicker = this._setDatePicker.bind(this);
@@ -105,10 +105,12 @@ export default class EditingPoint extends Smart {
     this.getElement().addEventListener('submit', this._formSubmitHandler);
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
     this.getElement().querySelector('.event__input--destination').addEventListener('change', this._cityChangeHandler);
-    this._setDatePicker();
+
   }
 
   restoreHandlers() {
+    this.setDeleteClickHandler(this._callback.deleteClick);
+    this._setDatePicker();
     this._setInnerHandlers();
   }
 
@@ -136,6 +138,16 @@ export default class EditingPoint extends Smart {
 
   getTemplate() {
     return editPoint(this._data);
+  }
+
+  _formDeleteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(EditingPoint.parseDataToTask(this._data));
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._formDeleteClickHandler);
   }
 
   _formSubmitHandler(evt) {
