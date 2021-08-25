@@ -97,7 +97,7 @@ export default class TripPoint {
 
   _handleFavoriteClick() {
     this._changeData(
-      UserAction.UPDATE_TASK,
+      UserAction.UPDATE_POINT,
       UpdateType.MINOR,
       Object.assign(
         {},

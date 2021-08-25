@@ -86,13 +86,13 @@ export default class PointsPresenter {
     // update - обновленные данные
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this._tasksModel.updateTask(updateType, update);
+        this._pointsModel.updatePoint(updateType, update);
         break;
       case UserAction.ADD_POINT:
-        this._tasksModel.addTask(updateType, update);
+        this._pointsModel.addPoint(updateType, update);
         break;
       case UserAction.DELETE_POINT:
-        this._tasksModel.deleteTask(updateType, update);
+        this._pointsModel.deletePoint(updateType, update);
         break;
     }
   }
