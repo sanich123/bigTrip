@@ -21,9 +21,13 @@ export default class PointsPresenter {
     this._tripListLi = new TripListLi();
     this._editingPoint = new EditingPoint();
     this._pointsList = new PointsList();
-    this._handlePointChange = this._handlePointChange.bind(this);
+
+    this._handleViewAction = this._handleViewAction.bind(this);
+    this._handleModelEvent = this._handleModelEvent.bind(this);
+    // this._handlePointChange = this._handlePointChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+    this._pointsModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -60,14 +64,31 @@ export default class PointsPresenter {
   }
 
   _renderPoint(point) {
-    const tripPoint = new TripPoint(this._tripListUl, this._handlePointChange, this._handleModeChange);
+    // const tripPoint = new TripPoint(this._tripListUl, this._handlePointChange, this._handleModeChange);
+    const tripPoint = new TripPoint(this._tripListUl, this._handleViewAction, this._handleModeChange);
     tripPoint.init(point);
     this._tripPresenter.set(point.id, tripPoint);
   }
 
-  _handlePointChange(updatedPoint) {
-  // Здесь будем вызывать обновление модели
-    this._tripPresenter.get(updatedPoint.id).init(updatedPoint);
+  // _handlePointChange(updatedPoint) {
+  // // Здесь будем вызывать обновление модели
+  //   this._tripPresenter.get(updatedPoint.id).init(updatedPoint);
+  // }
+
+  _handleViewAction(actionType, updateType, update) {
+    console.log(actionType, updateType, update);
+    // Здесь будем вызывать обновление модели.
+    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
+    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
+    // update - обновленные данные
+  }
+
+  _handleModelEvent(updateType, data) {
+    console.log(updateType, data);
+    // В зависимости от типа изменений решаем, что делать:
+    // - обновить часть списка (например, когда поменялось описание)
+    // - обновить список (например, когда задача ушла в архив)
+    // - обновить всю доску (например, при переключении фильтра)
   }
 
   _handleSortTypeChange(sortType) {
