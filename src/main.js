@@ -7,12 +7,17 @@ import NavigationView from './view/navigation.js';
 // import NewPoint from './view/newPoint.js';
 import { generatePoint } from './mock/create-data.js';
 import { renderPosition, render } from './utils/rendering-utils.js';
-import Points from './presenter/trip-list.js';
+import PointsPresenter from './presenter/trip-list.js';
+import PointsModel from './model/points.js';
 
-const COUNT_OF_POINTS = 2;
+const COUNT_OF_POINTS = 12;
 
 const points = new Array(COUNT_OF_POINTS).fill().map(generatePoint);
 points.sort((a, b) => b.dateFrom - a.dateFrom);
+
+const pointsModel = new PointsModel();
+pointsModel.setPoints(points);
+
 
 const priceAndTripSection = document.querySelector('.trip-main');
 const toNavigation = document.querySelector('.trip-controls__navigation');
@@ -23,7 +28,7 @@ render(priceAndTripSection, new PriceTripView(points), renderPosition.AFTERBEGIN
 render(toNavigation, new NavigationView(), renderPosition.AFTERBEGIN);
 render(toFilters, new FiltersView(), renderPosition.AFTERBEGIN);
 
-const pointsPresenter = new Points(toSort);
+const pointsPresenter = new PointsPresenter(toSort, pointsModel);
 pointsPresenter.init(points);
 
 

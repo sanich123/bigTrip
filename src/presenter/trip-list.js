@@ -10,8 +10,9 @@ import { SortType } from '../utils/common.js';
 import dayjs from 'dayjs';
 import SortMenu from '../view/sort.js';
 
-export default class Points {
-  constructor(container) {
+export default class PointsPresenter {
+  constructor(container, pointsModel) {
+    this._pointsModel = pointsModel;
     this._container = container;
     this._tripPresenter = new Map();
     this._currentSortType = SortType.DAY;
@@ -35,6 +36,10 @@ export default class Points {
     } else {
       this._renderSort();
     }
+  }
+
+  _getPoints() {
+    return this._pointsModel.getPoints();
   }
 
   _renderSort() {
@@ -69,6 +74,7 @@ export default class Points {
       return;
     }
     this._currentSortType = sortType;
+    this._sortPoints(sortType);
     this._clearPointsList();
     remove(this._sortMenu);
     this._sortMenu = new SortMenu(this._currentSortType);
