@@ -15,7 +15,8 @@ export default class PointsPresenter {
     this._container = container;
     this._tripPresenter = new Map();
     this._currentSortType = SortType.DAY;
-    this._sortMenu = new SortMenu();
+
+    this._sortMenu = null;
     this._empty = new Empty();
     this._tripListUl = new TripListUl();
     this._tripListLi = new TripListLi();
@@ -24,7 +25,7 @@ export default class PointsPresenter {
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
-    // this._handlePointChange = this._handlePointChange.bind(this);
+
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._pointsModel.addObserver(this._handleModelEvent);
@@ -32,10 +33,14 @@ export default class PointsPresenter {
 
   init() {
     if (this._pointsModel.getPoints().length === 0) {
-      render(this._container, this._empty, renderPosition.BEFOREEND);
+      this._renderEmpty();
     } else {
       this._renderSort();
     }
+  }
+
+  _renderEmpty() {
+    render(this._container, this._empty, renderPosition.BEFOREEND);
   }
 
   _getPoints() {
@@ -49,6 +54,10 @@ export default class PointsPresenter {
   }
 
   _renderSort() {
+    if (this._sortMenu !== null) {
+      this._sortMenu = null;
+    }
+    this._sortMenu = new SortMenu(this._currentSortType);
     render(this._container, this._sortMenu, renderPosition.AFTERBEGIN);
     this._sortMenu.setSortTypeChangeHandler(this._handleSortTypeChange);
     this._renderTripListUl();
@@ -64,16 +73,10 @@ export default class PointsPresenter {
   }
 
   _renderPoint(point) {
-    // const tripPoint = new TripPoint(this._tripListUl, this._handlePointChange, this._handleModeChange);
     const tripPoint = new TripPoint(this._tripListUl, this._handleViewAction, this._handleModeChange);
     tripPoint.init(point);
     this._tripPresenter.set(point.id, tripPoint);
   }
-
-  // _handlePointChange(updatedPoint) {
-  // // Здесь будем вызывать обновление модели
-  //   this._tripPresenter.get(updatedPoint.id).init(updatedPoint);
-  // }
 
   _handleViewAction(actionType, updateType, update) {
     console.log(actionType, updateType, update);
@@ -82,13 +85,13 @@ export default class PointsPresenter {
     // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
     // update - обновленные данные
     switch (actionType) {
-      case UserAction.UPDATE_TASK:
+      case UserAction.UPDATE_POINT:
         this._tasksModel.updateTask(updateType, update);
         break;
-      case UserAction.ADD_TASK:
+      case UserAction.ADD_POINT:
         this._tasksModel.addTask(updateType, update);
         break;
-      case UserAction.DELETE_TASK:
+      case UserAction.DELETE_POINT:
         this._tasksModel.deleteTask(updateType, update);
         break;
     }
@@ -107,9 +110,13 @@ export default class PointsPresenter {
         this._taskPresenter.get(data.id).init(data);
         break;
       case UpdateType.MINOR:
+        this._clearBoard();
+        this._renderBoard();
         // - обновить список (например, когда задача ушла в архив)
         break;
       case UpdateType.MAJOR:
+        this._clearBoard({resetSortType: true});
+        this._renderBoard();
         // - обновить всю доску (например, при переключении фильтра)
         break;
     }
@@ -120,11 +127,27 @@ export default class PointsPresenter {
       return;
     }
     this._currentSortType = sortType;
-    this._clearPointsList();
+    this._clearBoard();
+    this._renderBoard();
+  }
+
+  _clearBoard({resetSortType = false} = {}) {
+    this._tripPresenter.forEach((presenter) => presenter.destroy());
+    this._tripPresenter.clear();
+
     remove(this._sortMenu);
-    this._sortMenu = new SortMenu(this._currentSortType);
-    render(this._container, this._sortMenu, renderPosition.AFTERBEGIN);
-    this._sortMenu.setSortTypeChangeHandler(this._handleSortTypeChange);
+
+    if (resetSortType) {
+      this._currentSortType = SortType.DEFAULT;
+    }
+  }
+
+  _renderBoard() {
+    if (this._pointsModel.getPoints() === 0) {
+      this._renderEmpty();
+      return;
+    }
+    this._renderSort();
     this._renderPointsList();
   }
 
