@@ -148,7 +148,6 @@ export default class PointsPresenter {
       return;
     }
     this._renderSort();
-    this._renderPointsList();
   }
 
   _handleModeChange() {
