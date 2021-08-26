@@ -53,7 +53,7 @@ const editPoint = (point) => {
       <span class="visually-hidden">Price</span>
       €
     </label>
-    <input class="event__input  event__input--price" id="event-price-${id}" type="text" name="event-price" value="${basePrice}">
+    <input class="event__input  event__input--price" id="event-price-${id}" type="number" name="event-price" value="${basePrice}">
   </div>
 
   <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
