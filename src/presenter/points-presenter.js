@@ -4,13 +4,15 @@ import Empty from '../view/empty.js';
 import PointsList from '../view/points-list.js';
 import EditingPoint from '../view/point-edit.js';
 import { renderPosition, render, remove } from '../utils/rendering-utils.js';
-import TripPoint from '../presenter/trip-point.js';
+import TripPoint from './point-presenter.js';
 import { SortType, UpdateType, UserAction } from '../utils/common.js';
 import dayjs from 'dayjs';
+import { filter } from '../utils/filter.js';
 import SortMenu from '../view/sort.js';
 
 export default class PointsPresenter {
-  constructor(container, pointsModel) {
+  constructor(container, pointsModel, filtersModel) {
+    this._filterModel = filtersModel;
     this._pointsModel = pointsModel;
     this._container = container;
     this._tripPresenter = new Map();
@@ -29,6 +31,7 @@ export default class PointsPresenter {
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._pointsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -44,13 +47,16 @@ export default class PointsPresenter {
   }
 
   _getPoints() {
+    const filterType = this._filterModel.getFilter();
+    const points = this._pointsModel.getPoints();
+    const filtredPoints = filter[filterType](points);
     switch (this._currentSortType) {
       case SortType.TIME:
-        return this._pointsModel.getPoints().slice().sort((a, b) => Math.abs(dayjs(a.dateFrom).diff(dayjs(a.dateTo))) - Math.abs(dayjs(b.dateFrom).diff(dayjs(b.dateTo))));
+        return filtredPoints.sort((a, b) => Math.abs(dayjs(a.dateFrom).diff(dayjs(a.dateTo))) - Math.abs(dayjs(b.dateFrom).diff(dayjs(b.dateTo))));
       case SortType.PRICE:
-        return this._pointsModel.getPoints().slice().sort((a, b) => a.basePrice - b.basePrice);
+        return filtredPoints.sort((a, b) => a.basePrice - b.basePrice);
     }
-    return this._pointsModel.getPoints();
+    return filtredPoints.sort((a, b) => b.dateFrom - a.dateFrom);
   }
 
   _renderSort() {
