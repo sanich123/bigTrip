@@ -10,7 +10,7 @@ import { renderPosition, render } from './utils/rendering-utils.js';
 import PointsPresenter from './presenter/trip-list.js';
 import PointsModel from './model/points.js';
 
-const COUNT_OF_POINTS = 2;
+const COUNT_OF_POINTS = 12;
 
 const points = new Array(COUNT_OF_POINTS).fill().map(generatePoint);
 points.sort((a, b) => b.dateFrom - a.dateFrom);

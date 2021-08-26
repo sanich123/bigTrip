@@ -26,7 +26,6 @@ export default class PointsModel extends AbstractObserver {
       update,
       ...this._points.slice(index + 1),
     ];
-
     this._notify(updateType, update);
   }
 

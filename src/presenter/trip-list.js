@@ -153,9 +153,4 @@ export default class PointsPresenter {
   _handleModeChange() {
     this._tripPresenter.forEach((presenter) => presenter.resetView());
   }
-
-  _clearPointsList() {
-    this._tripPresenter.forEach((presenter) => presenter.destroy());
-    this._tripPresenter.clear();
-  }
 }

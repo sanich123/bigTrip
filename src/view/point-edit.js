@@ -105,7 +105,6 @@ export default class EditingPoint extends Smart {
     this.getElement().addEventListener('submit', this._formSubmitHandler);
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
     this.getElement().querySelector('.event__input--destination').addEventListener('change', this._cityChangeHandler);
-
   }
 
   restoreHandlers() {
