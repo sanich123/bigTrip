@@ -5,7 +5,7 @@ import PointsList from '../view/points-list.js';
 import EditingPoint from '../view/point-edit.js';
 import { renderPosition, render, remove } from '../utils/rendering-utils.js';
 import TripPoint from './point-presenter.js';
-import { SortType, UpdateType, UserAction } from '../utils/common.js';
+import { SortType, UpdateType, UserAction, FilterType } from '../utils/common.js';
 import dayjs from 'dayjs';
 import { filter } from '../utils/filter.js';
 import SortMenu from '../view/sort.js';
@@ -17,9 +17,10 @@ export default class PointsPresenter {
     this._container = container;
     this._tripPresenter = new Map();
     this._currentSortType = SortType.DAY;
+    this._filterType = FilterType.EVERYTHING;
 
     this._sortMenu = null;
-    this._empty = new Empty();
+    this._empty = null;
     this._tripListUl = new TripListUl();
     this._tripListLi = new TripListLi();
     this._editingPoint = new EditingPoint();
@@ -43,13 +44,14 @@ export default class PointsPresenter {
   }
 
   _renderEmpty() {
+    this._empty = new Empty(this._filterType);
     render(this._container, this._empty, renderPosition.BEFOREEND);
   }
 
   _getPoints() {
-    const filterType = this._filterModel.getFilter();
+    this._filterType = this._filterModel.getFilter();
     const points = this._pointsModel.getPoints();
-    const filtredPoints = filter[filterType](points);
+    const filtredPoints = filter[this._filterType](points);
     switch (this._currentSortType) {
       case SortType.TIME:
         return filtredPoints.sort((a, b) => Math.abs(dayjs(a.dateFrom).diff(dayjs(a.dateTo))) - Math.abs(dayjs(b.dateFrom).diff(dayjs(b.dateTo))));
@@ -142,7 +144,9 @@ export default class PointsPresenter {
     this._tripPresenter.clear();
 
     remove(this._sortMenu);
-
+    if (this._empty) {
+      remove(this._empty);
+    }
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
     }

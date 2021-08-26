@@ -9,6 +9,7 @@ export default class FiltersPresenter {
     this._filterModel = filterModel;
     this._tasksModel = tasksModel;
 
+
     this._filterComponent = null;
 
     this._handleModelEvent = this._handleModelEvent.bind(this);

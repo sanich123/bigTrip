@@ -10,7 +10,7 @@ import PointsPresenter from './presenter/points-presenter.js';
 import PointsModel from './model/points-model.js';
 import FiltersModel from './model/filters-model.js';
 import FiltersPresenter from './presenter/filters-presenter.js';
-const COUNT_OF_POINTS = 12;
+const COUNT_OF_POINTS = 3;
 
 const points = new Array(COUNT_OF_POINTS).fill().map(generatePoint);
 points.sort((a, b) => b.dateFrom - a.dateFrom);
