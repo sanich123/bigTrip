@@ -143,7 +143,7 @@ export default class PointsPresenter {
   }
 
   _renderBoard() {
-    if (this._pointsModel.getPoints() === 0) {
+    if (this._pointsModel.getPoints().length === 0) {
       this._renderEmpty();
       return;
     }
