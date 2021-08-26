@@ -1,6 +1,5 @@
 import FiltersView from '../view/filters-view.js';
 import { render, renderPosition, replace, remove } from '../utils/rendering-utils.js';
-import { filter } from '../utils/filter.js';
 import { FilterType, UpdateType } from '../utils/common.js';
 
 
@@ -20,10 +19,8 @@ export default class FiltersPresenter {
   }
 
   init() {
-    const filters = this._getFilters();
     const prevFilterComponent = this._filterComponent;
-
-    this._filterComponent = new FiltersView(filters, this._filterModel.getFilter());
+    this._filterComponent = new FiltersView(this._filterModel.getFilter());
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
     if (prevFilterComponent === null) {
@@ -47,7 +44,6 @@ export default class FiltersPresenter {
   }
 
   _getFilters() {
-    // const points = this._tasksModel.getPoints();
     return [
       {
         type: FilterType.EVERYTHING,
