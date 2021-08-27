@@ -32,6 +32,11 @@ const filterPresenter = new FiltersPresenter(toFilters, filtersModel, pointsMode
 pointsPresenter.init();
 filterPresenter.init();
 
+document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
+  evt.preventDefault();
+  pointsPresenter.createPoint();
+});
+
 // render(toSort, new Loading().getElement(), renderPosition.BEFOREEND);
 // render(toSort, new Empty().getElement(), renderPosition.BEFOREEND);
 

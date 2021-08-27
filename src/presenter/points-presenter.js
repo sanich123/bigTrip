@@ -9,6 +9,7 @@ import { SortType, UpdateType, UserAction, FilterType } from '../utils/common.js
 import dayjs from 'dayjs';
 import { filter } from '../utils/filter.js';
 import SortMenu from '../view/sort.js';
+import NewTripPoint from './new-point-presenter.js';
 
 export default class PointsPresenter {
   constructor(container, pointsModel, filtersModel) {
@@ -33,6 +34,7 @@ export default class PointsPresenter {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+    this._newTripPoint = new NewTripPoint(this._tripListUl, this._handleViewAction);
   }
 
   init() {
@@ -41,6 +43,12 @@ export default class PointsPresenter {
     } else {
       this._renderSort();
     }
+  }
+
+  createPoint() {
+    this._currentSortType = SortType.DAY;
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this._newTripPoint.init();
   }
 
   _renderEmpty() {
@@ -140,6 +148,7 @@ export default class PointsPresenter {
   }
 
   _clearBoard({resetSortType = false} = {}) {
+    this._newTripPoint.destroy();
     this._tripPresenter.forEach((presenter) => presenter.destroy());
     this._tripPresenter.clear();
 
@@ -161,6 +170,7 @@ export default class PointsPresenter {
   }
 
   _handleModeChange() {
+    this._newTripPoint.destroy();
     this._tripPresenter.forEach((presenter) => presenter.resetView());
   }
 }
