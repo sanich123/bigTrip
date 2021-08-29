@@ -25,6 +25,7 @@ export default class TripPoint {
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
     this._handleEditClickBack = this._handleEditClickBack.bind(this);
+
   }
 
   init(point) {
@@ -47,6 +48,8 @@ export default class TripPoint {
     this._editPoint.setTypeChangeHandler(this._typeChangeHandler);
     this._editPoint.setCityChangeHandler(this._cityChangeHandler);
     this._editPoint._setDatePicker(this._timeFromHandler);
+    this._editPoint.setOffersListener(this._offersListener);
+    this._editPoint.setOffersListener(this._offersListener2);
 
     if (prevPointEvent === null || prevEditPoint === null) {
       render(this._tripListLi, this._pointEvent, renderPosition.BEFOREEND);

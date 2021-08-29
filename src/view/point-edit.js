@@ -90,6 +90,8 @@ export default class EditingPoint extends Smart {
     this._data = EditingPoint.parseTaskToData(point);
     this._datepicker1 = null;
     this._datepicker2 = null;
+    this._offersListener = this._offersListener.bind(this);
+    this._offersListener2 = this._offersListener2.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
     this._typeChangeHandler = this._typeChangeHandler.bind(this);
@@ -105,12 +107,15 @@ export default class EditingPoint extends Smart {
     this.getElement().addEventListener('submit', this._formSubmitHandler);
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
     this.getElement().querySelector('.event__input--destination').addEventListener('change', this._cityChangeHandler);
+
   }
 
   restoreHandlers() {
     this.setDeleteClickHandler(this._callback.deleteClick);
     this._setDatePicker();
     this._setInnerHandlers();
+    this.setOffersListener(this._offersListener);
+    this.setOffersListener(this._offersListener2);
   }
 
   removeElement() {
@@ -152,6 +157,21 @@ export default class EditingPoint extends Smart {
   _formSubmitHandler(evt) {
     evt.preventDefault();
     this._callback.formSubmit(EditingPoint.parseDataToTask(this._data));
+  }
+
+  setOffersListener() {
+    this.getElement().querySelector('.event__available-offers').addEventListener('change', this._offersListener);
+    this.getElement().querySelector('.event__available-offers').addEventListener('change', this._offersListener2);
+  }
+
+  _offersListener2() {
+    const checkedOffers = Array.from(this.getElement().querySelectorAll('[type="checkbox"]:checked'));
+    const offersSummary = checkedOffers.slice().reduce((accumulator, it) => accumulator + parseInt(it.labels[0].childNodes[3].outerText, 10), 0);
+    console.log(offersSummary);
+  }
+
+  _offersListener(evt) {
+    evt.preventDefault();
   }
 
   _editClickHandler(evt) {

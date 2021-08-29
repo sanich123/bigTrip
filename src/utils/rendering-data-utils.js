@@ -12,7 +12,9 @@ export const addOffers = (offers) => offers.map(({title, price}) => {
       <span class="event__offer-price">${price}</span>
     </label>
   </div>`;}).join('');
+
 const upperCaseFirstLetter = (type) => type[0].toUpperCase() + type.split('').splice(1).join('');
+
 export const createTypes = (id, types) => types.map((type) => `<div class="event__type-item">
           <input id="event-type-${type}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
           <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-${id}">${upperCaseFirstLetter(type)}</label>
