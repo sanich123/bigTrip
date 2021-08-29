@@ -29,12 +29,11 @@ export default class PointsPresenter {
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
-
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
-    this._newTripPoint = new NewTripPoint(this._tripListUl, this._handleViewAction);
+    this._newTripPoint = new NewTripPoint(this._tripListUl, this._handleViewAction, this._pointsModel);
   }
 
   init() {

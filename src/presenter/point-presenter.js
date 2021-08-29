@@ -48,6 +48,8 @@ export default class TripPoint {
     this._editPoint.setCityChangeHandler(this._cityChangeHandler);
     this._editPoint._setDatePicker(this._timeFromHandler);
 
+    this._newPointListener = this._newPointListener.bind(this);
+
     if (prevPointEvent === null || prevEditPoint === null) {
       render(this._tripListLi, this._pointEvent, renderPosition.BEFOREEND);
       return;
@@ -89,11 +91,23 @@ export default class TripPoint {
     this._mode = Mode.DEFAULT;
   }
 
+  setNewPointListener() {
+    document.querySelector('.trip-main__event-add-btn').addEventListener('click', this._newPointListener);
+    // this._restoreListeners();
+  }
+
+  _newPointListener(evt) {
+    evt.preventDefault();
+    this.createPoint();
+    // this._restoreListeners();
+  }
+
   _escKeyDownHandler(evt) {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
       this._editPoint.reset(this._point);
       this._replaceFormToCard();
+      this.setNewPointListener();
     }
   }
 

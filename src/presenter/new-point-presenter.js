@@ -5,24 +5,20 @@ import { UserAction, UpdateType } from '../utils/common.js';
 import { nanoid } from 'nanoid';
 
 export default class NewTripPoint {
-  constructor(pointContainer, changeData) {
+  constructor(pointContainer, changeData, pointsModel) {
+    this._pointsModel = pointsModel;
     this._pointContainer = pointContainer;
     this._changeData = changeData;
-
     this._editPoint = null;
-
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
   init() {
-    if (this._editPoint !== null) {
-      return;
-    }
     this._tripListLi = new TripListLi();
     render(this._pointContainer, this._tripListLi, renderPosition.AFTERBEGIN);
-    this._editPoint = new EditingPoint();
+    this._editPoint = new EditingPoint(this._pointsModel.getPoints()[0]);
 
     this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
     this._editPoint.setDeleteClickHandler(this._handleDeleteClick);

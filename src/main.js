@@ -10,6 +10,7 @@ import PointsPresenter from './presenter/points-presenter.js';
 import PointsModel from './model/points-model.js';
 import FiltersModel from './model/filters-model.js';
 import FiltersPresenter from './presenter/filters-presenter.js';
+
 const COUNT_OF_POINTS = 3;
 
 const points = new Array(COUNT_OF_POINTS).fill().map(generatePoint);
@@ -24,7 +25,7 @@ const toNavigation = document.querySelector('.trip-controls__navigation');
 const toFilters = document.querySelector('.trip-controls__filters');
 const toSort = document.querySelector('.trip-events');
 
-render(priceAndTripSection, new PriceTripView(points), renderPosition.AFTERBEGIN);
+render(priceAndTripSection, new PriceTripView(pointsModel.getPoints()), renderPosition.AFTERBEGIN);
 render(toNavigation, new NavigationView(), renderPosition.AFTERBEGIN);
 
 const pointsPresenter = new PointsPresenter(toSort, pointsModel, filtersModel);
