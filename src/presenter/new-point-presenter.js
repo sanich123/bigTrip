@@ -1,4 +1,4 @@
-import EditingPoint from '../view/point-edit.js';
+import NewPoint from '../view/new-point.js';
 import TripListLi from '../view/trip-list-li.js';
 import { renderPosition, render, remove } from '../utils/rendering-utils.js';
 import { UserAction, UpdateType } from '../utils/common.js';
@@ -18,10 +18,13 @@ export default class NewTripPoint {
   init() {
     this._tripListLi = new TripListLi();
     render(this._pointContainer, this._tripListLi, renderPosition.AFTERBEGIN);
-    this._editPoint = new EditingPoint(this._pointsModel.getPoints()[0]);
+    this._editPoint = new NewPoint(this._pointsModel.getPoints()[0]);
 
     this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
     this._editPoint.setDeleteClickHandler(this._handleDeleteClick);
+    this._editPoint._setDatePicker(this._timeFromHandler);
+    this._editPoint.setTypeChangeHandler(this._typeChangeHandler);
+    this._editPoint.setCityChangeHandler(this._cityChangeHandler);
     this._editPoint._setDatePicker(this._timeFromHandler);
     render(this._tripListLi, this._editPoint, renderPosition.AFTERBEGIN);
     document.addEventListener('keydown', this._escKeyDownHandler);
@@ -55,4 +58,5 @@ export default class NewTripPoint {
       this.destroy();
     }
   }
+
 }
