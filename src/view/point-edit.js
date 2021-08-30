@@ -6,13 +6,7 @@ import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const editPoint = (point) => {
 
-  const {
-    basePrice,
-    dateFrom,
-    dateTo,
-    destination,
-    offers,
-    type, id } = point;
+  const { basePrice, dateFrom, dateTo, destination, offers, type, id } = point;
 
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
@@ -104,39 +98,6 @@ export default class EditingPoint extends Smart {
     this._setDatePicker = this._setDatePicker.bind(this);
   }
 
-  _setInnerHandlers() {
-    this.getElement().querySelector('.event__type-group').addEventListener('change', this._typeChangeHandler);
-    this.getElement().addEventListener('submit', this._formSubmitHandler);
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
-    this.getElement().querySelector('.event__input--destination').addEventListener('change', this._cityChangeHandler);
-
-  }
-
-  restoreHandlers() {
-    this.setDeleteClickHandler(this._callback.deleteClick);
-    this._setDatePicker();
-    this._setInnerHandlers();
-    this.setOffersListener(this._offersListener);
-    this.setPriceListener(this._priceChangeHandler);
-    this.setCityChangeListener(this._cityChangeListener);
-  }
-
-  removeElement() {
-    super.removeElement();
-    this._resetDatepicker();
-  }
-
-  _resetDatepicker() {
-    if (this._datepicker1) {
-      this._datepicker1.destroy();
-      this._datepicker1 = null;
-    }
-    if (this._datepicker2) {
-      this._datepicker2.destroy();
-      this._datepicker2 = null;
-    }
-  }
-
   reset(point) {
     this.updateData(
       EditingPoint.parseTaskToData(point),
@@ -147,19 +108,14 @@ export default class EditingPoint extends Smart {
     return editPoint(this._data);
   }
 
-  _formDeleteClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.deleteClick(EditingPoint.parseDataToTask(this._data));
-  }
-
   setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
     this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._formDeleteClickHandler);
   }
 
-  _formSubmitHandler(evt) {
+  _formDeleteClickHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit(EditingPoint.parseDataToTask(this._data));
+    this._callback.deleteClick(EditingPoint.parseDataToTask(this._data));
   }
 
   setOffersListener() {
@@ -184,7 +140,7 @@ export default class EditingPoint extends Smart {
   }
 
   setPriceListener() {
-    this.getElement().querySelector('.event__input--price').addEventListener('click', this._priceChangeHandler);
+    this.getElement().querySelector('.event__input--price').addEventListener('change', this._priceChangeHandler);
   }
 
   _priceChangeHandler(evt) {
@@ -212,6 +168,16 @@ export default class EditingPoint extends Smart {
     inputValue.reportValidity();
   }
 
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().addEventListener('submit', this._formSubmitHandler);
+  }
+
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.formSubmit(EditingPoint.parseDataToTask(this._data));
+  }
+
   // _cityChangeListener2(evt) {
   //   evt.preventDefault();
   //   const inputValue = this.getElement().querySelector('.event__input--destination');
@@ -220,21 +186,18 @@ export default class EditingPoint extends Smart {
   //   }
   // }
 
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
+  }
+
   _editClickHandler(evt) {
     evt.preventDefault();
     this._callback.editClick();
   }
 
-  _timeFromHandler([userDate]) {
-    this.updateData({
-      dateFrom: userDate,
-    });
-  }
-
-  _timeToHandler([userDate]) {
-    this.updateData({
-      dateTo: userDate,
-    });
+  setCityChangeHandler() {
+    this.getElement().querySelector('.event__input--destination').addEventListener('change', this._cityChangeHandler);
   }
 
   _cityChangeHandler(evt) {
@@ -249,6 +212,10 @@ export default class EditingPoint extends Smart {
       });
   }
 
+  setTypeChangeHandler() {
+    this.getElement().querySelector('.event__type-group').addEventListener('change', this._typeChangeHandler);
+  }
+
   _typeChangeHandler(evt) {
     evt.preventDefault();
     this.updateData(
@@ -258,13 +225,6 @@ export default class EditingPoint extends Smart {
       });
   }
 
-  setCityChangeHandler() {
-    this.getElement().querySelector('.event__input--destination').addEventListener('change', this._cityChangeHandler);
-  }
-
-  setTypeChangeHandler() {
-    this.getElement().querySelector('.event__type-group').addEventListener('change', this._typeChangeHandler);
-  }
 
   _setDatePicker() {
     if (this._datepicker1) {
@@ -297,14 +257,48 @@ export default class EditingPoint extends Smart {
     );
   }
 
-  setFormSubmitHandler(callback) {
-    this._callback.formSubmit = callback;
-    this.getElement().addEventListener('submit', this._formSubmitHandler);
+  removeElement() {
+    super.removeElement();
+    this._resetDatepicker();
   }
 
-  setEditClickHandler(callback) {
-    this._callback.editClick = callback;
+  _resetDatepicker() {
+    if (this._datepicker1) {
+      this._datepicker1.destroy();
+      this._datepicker1 = null;
+    }
+    if (this._datepicker2) {
+      this._datepicker2.destroy();
+      this._datepicker2 = null;
+    }
+  }
+
+  _timeFromHandler([userDate]) {
+    this.updateData({
+      dateFrom: userDate,
+    });
+  }
+
+  _timeToHandler([userDate]) {
+    this.updateData({
+      dateTo: userDate,
+    });
+  }
+
+  _setInnerHandlers() {
+    this.getElement().querySelector('.event__type-group').addEventListener('change', this._typeChangeHandler);
+    this.getElement().addEventListener('submit', this._formSubmitHandler);
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
+    this.getElement().querySelector('.event__input--destination').addEventListener('change', this._cityChangeHandler);
+  }
+
+  restoreHandlers() {
+    this.setDeleteClickHandler(this._callback.deleteClick);
+    this._setDatePicker();
+    this._setInnerHandlers();
+    this.setOffersListener(this._offersListener);
+    this.setPriceListener(this._priceChangeHandler);
+    this.setCityChangeListener(this._cityChangeListener);
   }
 
   static parseTaskToData(point) {
@@ -312,20 +306,12 @@ export default class EditingPoint extends Smart {
       {},
       point,
       {
-        // destination: {
-        //   description: generateDestination().description,
-        //   name: this._data,
-        //   pictures: generateDestination().pictures,
-        // },
-        // type: evt.target.value,
-        // offers: getOffersByType(OPTIONS, evt.target.value),
       },
     );
   }
 
   static parseDataToTask(data) {
     data = Object.assign({}, data);
-
     return data;
   }
 }

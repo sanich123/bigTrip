@@ -4,24 +4,20 @@ import { FilterType, UpdateType } from '../utils/common.js';
 
 
 export default class FiltersPresenter {
-  constructor(filterContainer, filterModel, tasksModel) {
+  constructor(filterContainer, filtersModel, tasksModel) {
     this._filterContainer = filterContainer;
-    this._filterModel = filterModel;
+    this._filtersModel = filtersModel;
     this._tasksModel = tasksModel;
-
-
     this._filterComponent = null;
-
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
-
     this._tasksModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
+    this._filtersModel.addObserver(this._handleModelEvent);
   }
 
   init() {
     const prevFilterComponent = this._filterComponent;
-    this._filterComponent = new FiltersView(this._filterModel.getFilter());
+    this._filterComponent = new FiltersView(this._filtersModel.getFilter());
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
     if (prevFilterComponent === null) {
@@ -38,10 +34,10 @@ export default class FiltersPresenter {
   }
 
   _handleFilterTypeChange(filterType) {
-    if (this._filterModel.getFilter() === filterType) {
+    if (this._filtersModel.getFilter() === filterType) {
       return;
     }
-    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+    this._filtersModel.setFilter(UpdateType.MAJOR, filterType);
   }
 
   _getFilters() {

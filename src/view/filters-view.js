@@ -19,7 +19,6 @@ export const filters = (currentFilterType) => (
 export default class FiltersView extends Abstract {
   constructor(currentFilterType) {
     super();
-    // this._filters = filters;
     this._currentFilterType = currentFilterType;
     this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
   }

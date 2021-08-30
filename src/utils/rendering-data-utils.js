@@ -1,5 +1,4 @@
-import { humanizeDate  } from './common.js';
-import { SortType } from './common.js';
+import { humanizeDate, SortType  } from './common.js';
 import { nanoid } from 'nanoid';
 
 export const addOffers = (offers) => offers.map(({title, price}) => {

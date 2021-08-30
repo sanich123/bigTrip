@@ -56,7 +56,7 @@ export default class NewTripPoint {
         ],
       },
       isFavorite: false,
-      type: 'restaurant',
+      type: 'taxi',
       offers: [
         {
           'title': 'Хочу сибаса',
@@ -78,11 +78,12 @@ export default class NewTripPoint {
     };
     this._editPoint = new NewPoint(point);
     this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
+    this._editPoint.setPriceListener(this._priceChangeHandler);
     this._editPoint.setDeleteClickHandler(this._handleDeleteClick);
-    this._editPoint._setDatePicker(this._timeFromHandler);
-    this._editPoint.setTypeChangeHandler(this._typeChangeHandler);
     this._editPoint.setCityChangeHandler(this._cityChangeHandler);
+    this._editPoint.setTypeChangeHandler(this._typeChangeHandler);
     this._editPoint._setDatePicker(this._timeFromHandler);
+    this._editPoint._setDatePicker(this._timeToHandler);
     render(this._tripListLi, this._editPoint, renderPosition.AFTERBEGIN);
     document.addEventListener('keydown', this._escKeyDownHandler);
   }

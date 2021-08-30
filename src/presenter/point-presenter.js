@@ -2,12 +2,7 @@ import EditingPoint from '../view/point-edit.js';
 import TripListLi from '../view/trip-list-li.js';
 import PointsList from '../view/points-list.js';
 import { renderPosition, render, replace, remove } from '../utils/rendering-utils.js';
-import { UserAction, UpdateType } from '../utils/common.js';
-
-const Mode = {
-  DEFAULT: 'DEFAULT',
-  EDITING: 'EDITING',
-};
+import { UserAction, UpdateType, Mode } from '../utils/common.js';
 
 export default class TripPoint {
   constructor(pointContainer, changeData, changeMode) {
@@ -25,7 +20,6 @@ export default class TripPoint {
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
     this._handleEditClickBack = this._handleEditClickBack.bind(this);
-
   }
 
   init(point) {
@@ -69,18 +63,6 @@ export default class TripPoint {
     remove(prevEditPoint);
   }
 
-  destroy() {
-    remove(this._tripListLi);
-    remove(this._pointEvent);
-    remove(this._editPoint);
-  }
-
-  resetView() {
-    if (this._mode !== Mode.DEFAULT) {
-      this._replaceFormToCard();
-    }
-  }
-
   _replaceCardToForm() {
     replace(this._editPoint, this._pointEvent);
     document.addEventListener('keydown', this._escKeyDownHandler);
@@ -92,15 +74,6 @@ export default class TripPoint {
     replace(this._pointEvent, this._editPoint);
     document.removeEventListener('keydown', this._escKeyDownHandler);
     this._mode = Mode.DEFAULT;
-  }
-
-  _escKeyDownHandler(evt) {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
-      evt.preventDefault();
-      this._editPoint.reset(this._point);
-      this._replaceFormToCard();
-      this.setNewPointListener();
-    }
   }
 
   _handleFavoriteClick() {
@@ -140,5 +113,25 @@ export default class TripPoint {
 
   _handleEditClickBack() {
     this._replaceFormToCard();
+  }
+
+  _escKeyDownHandler(evt) {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      this._editPoint.reset(this._point);
+      this._replaceFormToCard();
+    }
+  }
+
+  destroy() {
+    remove(this._tripListLi);
+    remove(this._pointEvent);
+    remove(this._editPoint);
+  }
+
+  resetView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceFormToCard();
+    }
   }
 }
