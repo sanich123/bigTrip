@@ -5,11 +5,10 @@ import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const editPoint = (point) => {
-
   const {
     destination,
     offers,
-    type, id } = point;
+    type, id, dateFrom, dateTo } = point;
 
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
@@ -39,10 +38,10 @@ const editPoint = (point) => {
 
   <div class="event__field-group  event__field-group--time">
     <label class="visually-hidden" for="event-start-time-${id}">From</label>
-    <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="19/03/19 00:00">
+    <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${dateFrom}">
     —
     <label class="visually-hidden" for="event-end-time-${id}">To</label>
-    <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="19/03/19 00:00">
+    <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${dateTo}">
   </div>
 
   <div class="event__field-group  event__field-group--price">

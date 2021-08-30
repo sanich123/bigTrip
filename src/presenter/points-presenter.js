@@ -33,7 +33,8 @@ export default class PointsPresenter {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
-    this._newTripPoint = new NewTripPoint(this._tripListUl, this._handleViewAction, this._pointsModel);
+    this._newTripPoint = new NewTripPoint(this._tripListUl, this._handleViewAction,
+      this._pointsModel);
   }
 
   init() {
@@ -94,7 +95,7 @@ export default class PointsPresenter {
   }
 
   _handleViewAction(actionType, updateType, update) {
-    // console.log(actionType, updateType, update);
+    console.log(actionType, updateType, update);
     // Здесь будем вызывать обновление модели.
     // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
     // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
