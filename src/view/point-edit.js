@@ -90,6 +90,8 @@ export default class EditingPoint extends Smart {
     this._data = EditingPoint.parseTaskToData(point);
     this._datepicker1 = null;
     this._datepicker2 = null;
+    this._cityChangeListener = this._cityChangeListener.bind(this);
+    // this._cityChangeListener2 = this._cityChangeListener2.bind(this);
     this._offersListener = this._offersListener.bind(this);
     this._priceChangeHandler = this._priceChangeHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
@@ -116,6 +118,7 @@ export default class EditingPoint extends Smart {
     this._setInnerHandlers();
     this.setOffersListener(this._offersListener);
     this.setPriceListener(this._priceChangeHandler);
+    this.setCityChangeListener(this._cityChangeListener);
   }
 
   removeElement() {
@@ -198,6 +201,33 @@ export default class EditingPoint extends Smart {
       basePrice: evt.target.value,
     });
   }
+
+  setCityChangeListener() {
+    this.getElement().querySelector('.event__input--destination').addEventListener('input',
+      this._cityChangeListener);
+    // this.getElement().querySelector('.event__input--destination').addEventListener('invalid',
+    //   this._cityChangeListener2);
+  }
+
+  _cityChangeListener(evt) {
+    evt.preventDefault();
+    const inputValue = this.getElement().querySelector('.event__input--destination');
+
+    if (inputValue.value !== 'Amsterdam' || inputValue.value !== 'Brussel') {
+      inputValue.setCustomValidity('Название города должно соответствовать названию города из списка');
+    } else {
+      inputValue.setCustomValidity('');
+    }
+    inputValue.reportValidity();
+  }
+
+  // _cityChangeListener2(evt) {
+  //   evt.preventDefault();
+  //   const inputValue = this.getElement().querySelector('.event__input--destination');
+  //   if (inputValue.validity.valueMissing) {
+  //     inputValue.setCustomValidity('Обязательное поле');
+  //   }
+  // }
 
   _editClickHandler(evt) {
     evt.preventDefault();
