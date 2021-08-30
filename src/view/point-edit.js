@@ -169,23 +169,14 @@ export default class EditingPoint extends Smart {
   _offersListener(evt) {
     evt.preventDefault();
     const checkedOffers = Array.from(this.getElement().querySelectorAll('[type="checkbox"]:checked'));
-    const summaryPrice = checkedOffers.slice().reduce((accumulator, it) => accumulator + parseInt(it.labels[0].childNodes[3].outerText, 10), 0);
-
-    console.log(summaryPrice);
-
+    // const summaryPrice = checkedOffers.slice().reduce((accumulator, it) => accumulator + parseInt(it.labels[0].childNodes[3].outerText, 10), 0);
     const offersPrice = checkedOffers.slice().map((it) => parseInt(it.labels[0].childNodes[3].outerText, 10));
-
-    console.log(offersPrice);
-
     const offersTitles = Array.from(this.getElement().querySelectorAll('[type="checkbox"]:checked')).slice().map((it) => it.labels[0].childNodes[1].outerText);
 
     const result = {};
     offersTitles.forEach((title, price) => result[title] = offersPrice[price]);
 
-    const result2 = Object.entries(result).map((it) => ({ title: it[0], price: it[1] }));
-
-    console.log(result2);
-
+    // const result2 = Object.entries(result).map((it) => ({ title: it[0], price: it[1] }));
     // this.updateData(
     //   {
     //     basePrice: summaryPrice,
