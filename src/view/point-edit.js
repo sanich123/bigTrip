@@ -91,6 +91,7 @@ export default class EditingPoint extends Smart {
     this._datepicker1 = null;
     this._datepicker2 = null;
     this._offersListener = this._offersListener.bind(this);
+    this._priceChangeHandler = this._priceChangeHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
     this._typeChangeHandler = this._typeChangeHandler.bind(this);
@@ -114,6 +115,7 @@ export default class EditingPoint extends Smart {
     this._setDatePicker();
     this._setInnerHandlers();
     this.setOffersListener(this._offersListener);
+    this.setPriceListener(this._priceChangeHandler);
   }
 
   removeElement() {
@@ -163,12 +165,38 @@ export default class EditingPoint extends Smart {
 
   _offersListener(evt) {
     evt.preventDefault();
-    this._offersSummary = Array.from(this.getElement().querySelectorAll('[type="checkbox"]:checked')).slice().reduce((accumulator, it) => accumulator + parseInt(it.labels[0].childNodes[3].outerText, 10), 0);
-    console.log(this._offersSummary);
+    const checkedOffers = Array.from(this.getElement().querySelectorAll('[type="checkbox"]:checked'));
+    const summaryPrice = checkedOffers.slice().reduce((accumulator, it) => accumulator + parseInt(it.labels[0].childNodes[3].outerText, 10), 0);
+
+    console.log(summaryPrice);
+
+    const offersPrice = checkedOffers.slice().map((it) => parseInt(it.labels[0].childNodes[3].outerText, 10));
+
+    console.log(offersPrice);
+
+    const offersTitles = Array.from(this.getElement().querySelectorAll('[type="checkbox"]:checked')).slice().map((it) => it.labels[0].childNodes[1].outerText);
+
+    const result = {};
+    offersTitles.forEach((title, price) => result[title] = offersPrice[price]);
+
+    const result2 = Object.entries(result).map((it) => ({ title: it[0], price: it[1] }));
+
+    console.log(result2);
+
     // this.updateData(
-    // {
-    //   basePrice: this._offersSummary,
-    // });
+    //   {
+    //     basePrice: summaryPrice,
+    //   });
+  }
+
+  setPriceListener() {
+    this.getElement().querySelector('.event__input--price').addEventListener('click', this._priceChangeHandler);
+  }
+
+  _priceChangeHandler(evt) {
+    this.updateData({
+      basePrice: evt.target.value,
+    });
   }
 
   _editClickHandler(evt) {

@@ -49,6 +49,7 @@ export default class TripPoint {
     this._editPoint.setCityChangeHandler(this._cityChangeHandler);
     this._editPoint._setDatePicker(this._timeFromHandler);
     this._editPoint.setOffersListener(this._offersListener);
+    this._editPoint.setPriceListener(this._priceChangeHandler);
 
     if (prevPointEvent === null || prevEditPoint === null) {
       render(this._tripListLi, this._pointEvent, renderPosition.BEFOREEND);

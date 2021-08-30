@@ -18,6 +18,7 @@ points.sort((a, b) => b.dateFrom - a.dateFrom);
 
 const pointsModel = new PointsModel();
 pointsModel.setPoints(points);
+
 const filtersModel = new FiltersModel();
 
 const priceAndTripSection = document.querySelector('.trip-main');
