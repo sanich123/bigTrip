@@ -19,12 +19,12 @@ export default class NewTripPoint {
     this._tripListLi = new TripListLi();
     render(this._pointContainer, this._tripListLi, renderPosition.AFTERBEGIN);
     const point = {
-      'id': 'EonUL9vr16YZ-v_Bs0pu0',
-      'basePrice': 1253,
-      'dateFrom': '2021-08-03T14:35:00.000Z',
-      'dateTo': '2021-08-04T06:25:00.000Z',
-      'destination': {
-        'description': [
+      id: nanoid(),
+      basePrice: 0,
+      dateFrom: '2019-03-03T00:00:00.000Z',
+      dateTo: '2019-03-04T00:00:00.000Z',
+      destination: {
+        description: [
           'Fusce tristique felis at fermentum pharetra. ',
           'Aliquam id orci ut lectus varius viverra. ',
           ' Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. ',
@@ -35,8 +35,8 @@ export default class NewTripPoint {
           'Nunc fermentum tortor ac porta dapibus. ',
           'In rutrum ac purus sit amet tempus. ',
         ],
-        'name': 'London',
-        'pictures': [
+        name: '',
+        pictures: [
           {
             'src': 'http://picsum.photos/300/200?r=0.5051691418046964',
             'description': 'Cras aliquet varius magna, non porta ligula feugiat eget. ',
@@ -55,9 +55,9 @@ export default class NewTripPoint {
           },
         ],
       },
-      'isFavorite': false,
-      'type': 'restaurant',
-      'offers': [
+      isFavorite: false,
+      type: 'restaurant',
+      offers: [
         {
           'title': 'Хочу сибаса',
           'price': 120,
@@ -76,10 +76,7 @@ export default class NewTripPoint {
         },
       ],
     };
-    this._editPoint = new NewPoint(point,
-
-    );
-
+    this._editPoint = new NewPoint(point);
     this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
     this._editPoint.setDeleteClickHandler(this._handleDeleteClick);
     this._editPoint._setDatePicker(this._timeFromHandler);
@@ -96,7 +93,7 @@ export default class NewTripPoint {
     }
     remove(this._tripListLi);
     remove(this._editPoint);
-    this._editPoints = null;
+    // this._editPoint = null;
     document.removeEventListener('keydown', this._escKeyDownHandler);
   }
 
@@ -118,5 +115,4 @@ export default class NewTripPoint {
       this.destroy();
     }
   }
-
 }
