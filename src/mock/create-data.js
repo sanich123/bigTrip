@@ -180,6 +180,14 @@ const CITIES = [
   'London',
   'Bratislava'];
 
+export const isWrongCity = (city, array) => {
+  if (city && array.some((it) => it === city)) {
+    return '';
+  }
+  return 'disabled';
+};
+
+export const isRightPrice = (price) => Math.abs(price);
 const DESCRIPTIONS = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
   'Cras aliquet varius magna, non porta ligula feugiat eget. ',

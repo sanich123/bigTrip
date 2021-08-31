@@ -1,4 +1,4 @@
-import { TYPES, CITIES, OPTIONS, getOffersByType, generateDestination } from '../mock/create-data.js';
+import { TYPES, CITIES, OPTIONS, getOffersByType, generateDestination, isWrongCity, isRightPrice } from '../mock/create-data.js';
 import { addOffers, createTypes, createCities, getPhotos, getFormatTime } from '../utils/rendering-data-utils.js';
 import Smart from '../view/smart.js';
 import flatpickr from 'flatpickr';
@@ -46,7 +46,7 @@ const editPoint = (point) => {
       <span class="visually-hidden">Price</span>
       €
     </label>
-    <input class="event__input  event__input--price" id="event-price-${id}" type=""
+    <input class="event__input  event__input--price" id="event-price-${id}" type="number"
     name="event-price" value="${basePrice}">
   </div>
 
@@ -83,14 +83,33 @@ export default class EditingPoint extends Smart {
     this._data = EditingPoint.parseTaskToData(point);
     this._datepicker1 = null;
     this._datepicker2 = null;
-    this._formSubmitHandler = this._formSubmitHandler.bind(this);
-    this._typeChangeHandler = this._typeChangeHandler.bind(this);
-    this._cityChangeHandler = this._cityChangeHandler.bind(this);
-    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
     this._timeFromHandler = this._timeFromHandler.bind(this);
     this._timeToHandler = this._timeToHandler.bind(this);
     this._setDatePicker = this._setDatePicker.bind(this);
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
+    this._typeChangeHandler = this._typeChangeHandler.bind(this);
+    this._cityChangeHandler = this._cityChangeHandler.bind(this);
+    this._cityInputHandler = this._cityInputHandler.bind(this);
     this._priceChangeHandler = this._priceChangeHandler.bind(this);
+    this._priceInputHandler = this._priceInputHandler.bind(this);
+    this._offersListener = this._offersListener.bind(this);
+  }
+
+  setPriceInputListener() {
+    this.getElement().querySelector('.event__input--price').addEventListener('input', this._priceInputHandler);
+  }
+
+  _priceInputHandler(evt) {
+    evt.preventDefault();
+    const inputValue = this.getElement().querySelector('.event__input--price');
+    const price = evt.target.value;
+    if (!price ||  isRightPrice(price) === 0) {
+      inputValue.setCustomValidity('Поле цены не может быть пустым или равным нулю');
+    } else {
+      inputValue.setCustomValidity('');
+    }
+    inputValue.reportValidity();
   }
 
   setPriceListener() {
@@ -100,8 +119,8 @@ export default class EditingPoint extends Smart {
   _priceChangeHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      basePrice: Math.abs(evt.target.value),
-      isDisabled: Math.abs(evt.target.value) === 0 || !Math.abs(evt.target.value) ? 'disabled' : '',
+      basePrice: isRightPrice(evt.target.value),
+      isDisabled: isRightPrice(evt.target.value) === 0 || !isRightPrice(evt.target.value) ? 'disabled' : '',
     });
   }
 
@@ -113,6 +132,41 @@ export default class EditingPoint extends Smart {
   _formDeleteClickHandler(evt) {
     evt.preventDefault();
     this._callback.deleteClick(EditingPoint.parseDataToTask(this._data));
+  }
+
+  setOffersListener() {
+    this.getElement().querySelector('.event__available-offers').addEventListener('change', this._offersListener);
+  }
+
+  _offersListener(evt) {
+    evt.preventDefault();
+    const checkedOffers = Array.from(this.getElement().querySelectorAll('[type="checkbox"]:checked'));
+    // const summaryPrice = checkedOffers.slice().reduce((accumulator, it) => accumulator + parseInt(it.labels[0].childNodes[3].outerText, 10), 0);
+    const offersPrice = checkedOffers.slice().map((it) => parseInt(it.labels[0].childNodes[3].outerText, 10));
+    const offersTitles = Array.from(this.getElement().querySelectorAll('[type="checkbox"]:checked')).slice().map((it) => it.labels[0].childNodes[1].outerText);
+    const result = {};
+    offersTitles.forEach((title, price) => result[title] = offersPrice[price]);
+    // const result2 = Object.entries(result).map((it) => ({ title: it[0], price: it[1] }));
+    // this.updateData(
+    //   {
+    //     basePrice: summaryPrice,
+    //   });
+  }
+
+  setCityInputHandler() {
+    this.getElement().querySelector('.event__input--destination').addEventListener('input', this._cityInputHandler);
+  }
+
+  _cityInputHandler(evt) {
+    evt.preventDefault();
+    const inputValue = this.getElement().querySelector('.event__input--destination');
+    const city = evt.target.value;
+    if (!city ||  isWrongCity(city, CITIES)) {
+      inputValue.setCustomValidity('Название города должно соответствовать названию города из списка и не может быть пустым полем');
+    } else {
+      inputValue.setCustomValidity('');
+    }
+    inputValue.reportValidity();
   }
 
   setCityChangeHandler() {
@@ -128,7 +182,7 @@ export default class EditingPoint extends Smart {
           name: evt.target.value,
           pictures: generateDestination().pictures,
         },
-        isDisabled: !evt.target.value ? 'disabled' : '',
+        isDisabled: isWrongCity(evt.target.value, CITIES),
       });
   }
 
@@ -166,7 +220,10 @@ export default class EditingPoint extends Smart {
     this.setDeleteClickHandler(this._callback.deleteClick);
     this._setDatePicker();
     this._setInnerHandlers();
+    this.setOffersListener(this._offersListener);
     this.setPriceListener(this._priceChangeHandler);
+    this.setCityInputHandler(this._cityInputHandler);
+    this.setPriceInputListener(this._priceInputHandler);
   }
 
   removeElement() {

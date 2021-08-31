@@ -13,7 +13,6 @@ export default class TripPoint {
     this._pointEvent = null;
     this._editPoint = null;
     this._mode = Mode.DEFAULT;
-
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._handleEditClick = this._handleEditClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
@@ -36,14 +35,18 @@ export default class TripPoint {
     }
     this._pointEvent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._pointEvent.setEditClickHandler(this._handleEditClick);
-    this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
     this._editPoint.setEditClickHandler(this._handleEditClickBack);
+    this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
     this._editPoint.setDeleteClickHandler(this._handleDeleteClick);
-    this._editPoint.setTypeChangeHandler(this._typeChangeHandler);
-    this._editPoint.setCityChangeHandler(this._cityChangeHandler);
-    this._editPoint._setDatePicker(this._timeFromHandler);
-    this._editPoint.setOffersListener(this._offersListener);
     this._editPoint.setPriceListener(this._priceChangeHandler);
+    this._editPoint.setPriceInputListener(this._priceInputHandler);
+    this._editPoint.setCityChangeHandler(this._cityChangeHandler);
+    this._editPoint.setCityInputHandler(this._cityInputHandler);
+    this._editPoint.setTypeChangeHandler(this._typeChangeHandler);
+    this._editPoint.setOffersListener(this._offersListener);
+    this._editPoint._setDatePicker(this._timeFromHandler);
+    this._editPoint._setDatePicker(this._timeToHandler);
+
 
     if (prevPointEvent === null || prevEditPoint === null) {
       render(this._tripListLi, this._pointEvent, renderPosition.BEFOREEND);
@@ -101,6 +104,9 @@ export default class TripPoint {
   }
 
   _handleFormSubmit(update) {
+    if (update.basePrice === 0 || update.destination.name === '') {
+      return;
+    }
     this._changeData(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,

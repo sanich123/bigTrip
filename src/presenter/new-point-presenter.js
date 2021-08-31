@@ -21,8 +21,8 @@ export default class NewTripPoint {
     const point = {
       id: nanoid(),
       basePrice: 0,
-      dateFrom: '2021-03-03T00:00:00.000Z',
-      dateTo: '2021-03-04T00:00:00.000Z',
+      dateFrom: '2021-09-09T00:00:00.000Z',
+      dateTo: '2021-09-10T00:00:00.000Z',
       destination: {
         description: [
           'Fusce tristique felis at fermentum pharetra. ',
@@ -78,11 +78,15 @@ export default class NewTripPoint {
       ],
     };
     this._editPoint = new NewPoint(point);
+
     this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
-    this._editPoint.setPriceListener(this._priceChangeHandler);
     this._editPoint.setDeleteClickHandler(this._handleDeleteClick);
+    this._editPoint.setPriceListener(this._priceChangeHandler);
+    this._editPoint.setPriceInputListener(this._priceInputHandler);
     this._editPoint.setCityChangeHandler(this._cityChangeHandler);
+    this._editPoint.setCityInputHandler(this._cityInputHandler);
     this._editPoint.setTypeChangeHandler(this._typeChangeHandler);
+    this._editPoint.setOffersListener(this._offersListener);
     this._editPoint._setDatePicker(this._timeFromHandler);
     this._editPoint._setDatePicker(this._timeToHandler);
     render(this._tripListLi, this._editPoint, renderPosition.AFTERBEGIN);
@@ -99,11 +103,14 @@ export default class NewTripPoint {
     document.removeEventListener('keydown', this._escKeyDownHandler);
   }
 
-  _handleFormSubmit(point) {
+  _handleFormSubmit(newPoint) {
+    if (newPoint.basePrice === 0 || newPoint.destination.name === '') {
+      return;
+    }
     this._changeData(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
-      Object.assign({id: nanoid()}, point),
+      Object.assign({id: nanoid()}, newPoint),
     );
   }
 
