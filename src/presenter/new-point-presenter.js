@@ -21,8 +21,8 @@ export default class NewTripPoint {
     const point = {
       id: nanoid(),
       basePrice: 0,
-      dateFrom: '2019-03-03T00:00:00.000Z',
-      dateTo: '2019-03-04T00:00:00.000Z',
+      dateFrom: '2021-03-03T00:00:00.000Z',
+      dateTo: '2021-03-04T00:00:00.000Z',
       destination: {
         description: [
           'Fusce tristique felis at fermentum pharetra. ',
@@ -56,6 +56,7 @@ export default class NewTripPoint {
         ],
       },
       isFavorite: false,
+      isDisabled: 'disabled',
       type: 'taxi',
       offers: [
         {

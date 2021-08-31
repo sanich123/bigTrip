@@ -5,7 +5,7 @@ import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const editPoint = (point) => {
-  const { destination, offers, type, id, dateFrom, dateTo } = point;
+  const { destination, offers, type, id, dateFrom, dateTo, isDisabled, basePrice } = point;
 
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
@@ -46,10 +46,11 @@ const editPoint = (point) => {
       <span class="visually-hidden">Price</span>
       €
     </label>
-    <input class="event__input  event__input--price" id="event-price-${id}" type="number" name="event-price" value="">
+    <input class="event__input  event__input--price" id="event-price-${id}" type=""
+    name="event-price" value="${basePrice}">
   </div>
 
-  <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+  <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled}>Save</button>
   <button class="event__reset-btn" type="reset">Cancel</button>
     <span class="visually-hidden">Open event</span>
   </button>
@@ -99,7 +100,8 @@ export default class EditingPoint extends Smart {
   _priceChangeHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      basePrice: evt.target.value,
+      basePrice: Math.abs(evt.target.value),
+      isDisabled: Math.abs(evt.target.value) === 0 || !Math.abs(evt.target.value) ? 'disabled' : '',
     });
   }
 
@@ -126,6 +128,7 @@ export default class EditingPoint extends Smart {
           name: evt.target.value,
           pictures: generateDestination().pictures,
         },
+        isDisabled: !evt.target.value ? 'disabled' : '',
       });
   }
 

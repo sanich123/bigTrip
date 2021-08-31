@@ -6,7 +6,7 @@ import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const editPoint = (point) => {
 
-  const { basePrice, dateFrom, dateTo, destination, offers, type, id } = point;
+  const { basePrice, dateFrom, dateTo, destination, offers, type, id, isDisabled } = point;
 
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
@@ -47,10 +47,10 @@ const editPoint = (point) => {
       <span class="visually-hidden">Price</span>
       €
     </label>
-    <input class="event__input  event__input--price" id="event-price-${id}" type="number" name="event-price" value="${basePrice}">
+    <input class="event__input  event__input--price" id="event-price-${id}" name="event-price" value="${basePrice}">
   </div>
 
-  <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+  <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled}>Save</button>
   <button class="event__reset-btn" type="reset">Delete</button>
   <button class="event__rollup-btn" type="button">
     <span class="visually-hidden">Open event</span>
@@ -84,8 +84,6 @@ export default class EditingPoint extends Smart {
     this._data = EditingPoint.parseTaskToData(point);
     this._datepicker1 = null;
     this._datepicker2 = null;
-    this._cityChangeListener = this._cityChangeListener.bind(this);
-    // this._cityChangeListener2 = this._cityChangeListener2.bind(this);
     this._offersListener = this._offersListener.bind(this);
     this._priceChangeHandler = this._priceChangeHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
@@ -145,27 +143,9 @@ export default class EditingPoint extends Smart {
 
   _priceChangeHandler(evt) {
     this.updateData({
-      basePrice: evt.target.value,
+      basePrice: Math.abs(evt.target.value),
+      isDisabled: Math.abs(evt.target.value) === 0 || !Math.abs(evt.target.value) ? 'disabled' : '',
     });
-  }
-
-  setCityChangeListener() {
-    this.getElement().querySelector('.event__input--destination').addEventListener('input',
-      this._cityChangeListener);
-    // this.getElement().querySelector('.event__input--destination').addEventListener('invalid',
-    //   this._cityChangeListener2);
-  }
-
-  _cityChangeListener(evt) {
-    evt.preventDefault();
-    const inputValue = this.getElement().querySelector('.event__input--destination');
-
-    if (inputValue.value !== 'Amsterdam' || inputValue.value !== 'Brussel') {
-      inputValue.setCustomValidity('Название города должно соответствовать названию города из списка');
-    } else {
-      inputValue.setCustomValidity('');
-    }
-    inputValue.reportValidity();
   }
 
   setFormSubmitHandler(callback) {
@@ -177,14 +157,6 @@ export default class EditingPoint extends Smart {
     evt.preventDefault();
     this._callback.formSubmit(EditingPoint.parseDataToTask(this._data));
   }
-
-  // _cityChangeListener2(evt) {
-  //   evt.preventDefault();
-  //   const inputValue = this.getElement().querySelector('.event__input--destination');
-  //   if (inputValue.validity.valueMissing) {
-  //     inputValue.setCustomValidity('Обязательное поле');
-  //   }
-  // }
 
   setEditClickHandler(callback) {
     this._callback.editClick = callback;
@@ -202,13 +174,23 @@ export default class EditingPoint extends Smart {
 
   _cityChangeHandler(evt) {
     evt.preventDefault();
+    // const inputValue = this.getElement().querySelector('.event__input--destination');
+    const city = evt.target.value;
+    // if (city !== 'Amsterdam' || inputValue.value !== 'Brussel') {
+    //   inputValue.setCustomValidity('Название города должно соответствовать названию города из списка');
+    // } else {
+    //   inputValue.setCustomValidity('');
+    // }
+    // inputValue.reportValidity();
+
     this.updateData(
       {
         destination: {
           description: generateDestination().description,
-          name: evt.target.value,
+          name: city,
           pictures: generateDestination().pictures,
         },
+        isDisabled: !city ? 'disabled' : '',
       });
   }
 
@@ -298,7 +280,6 @@ export default class EditingPoint extends Smart {
     this._setInnerHandlers();
     this.setOffersListener(this._offersListener);
     this.setPriceListener(this._priceChangeHandler);
-    this.setCityChangeListener(this._cityChangeListener);
   }
 
   static parseTaskToData(point) {
