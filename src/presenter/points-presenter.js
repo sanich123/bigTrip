@@ -21,7 +21,7 @@ export default class PointsPresenter {
     this._filterType = FilterType.EVERYTHING;
 
     this._sortMenu = null;
-    this._empty = null;
+    // this._empty = null;
     this._tripListUl = new TripListUl();
     this._tripListLi = new TripListLi();
     this._editingPoint = new EditingPoint();
@@ -75,7 +75,10 @@ export default class PointsPresenter {
   }
 
   _renderBoard() {
-    if (this._pointsModel.getPoints().length === 0) {
+    this._filterType = this._filtersModel.getFilter();
+    const points = this._pointsModel.getPoints();
+    const filtredPoints = filter[this._filterType](points);
+    if (filtredPoints.length === 0) {
       this._renderEmpty();
       return;
     }

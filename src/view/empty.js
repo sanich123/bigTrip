@@ -9,7 +9,8 @@ const noPointsTextType = {
 
 const empty = (filterType) => {
   const noPointsTextValue = noPointsTextType[filterType];
-  return `<p class="trip-events__msg">${noPointsTextValue}</p>`;
+  return (
+    `<p class="trip-events__msg">${noPointsTextValue}</p>`);
 };
 
 export default class Empty extends Abstract {
