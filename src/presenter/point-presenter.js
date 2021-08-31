@@ -2,11 +2,7 @@ import EditingPoint from '../view/point-edit.js';
 import TripListLi from '../view/trip-list-li.js';
 import PointsList from '../view/points-list.js';
 import { renderPosition, render, replace, remove } from '../utils/rendering-utils.js';
-
-const Mode = {
-  DEFAULT: 'DEFAULT',
-  EDITING: 'EDITING',
-};
+import { UserAction, UpdateType, Mode } from '../utils/common.js';
 
 export default class TripPoint {
   constructor(pointContainer, changeData, changeMode) {
@@ -17,7 +13,7 @@ export default class TripPoint {
     this._pointEvent = null;
     this._editPoint = null;
     this._mode = Mode.DEFAULT;
-
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._handleEditClick = this._handleEditClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
@@ -39,11 +35,18 @@ export default class TripPoint {
     }
     this._pointEvent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._pointEvent.setEditClickHandler(this._handleEditClick);
-    this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
     this._editPoint.setEditClickHandler(this._handleEditClickBack);
-    this._editPoint.setTypeChangeHandler(this._typeChangeHandler);
+    this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
+    this._editPoint.setDeleteClickHandler(this._handleDeleteClick);
+    this._editPoint.setPriceListener(this._priceChangeHandler);
+    this._editPoint.setPriceInputListener(this._priceInputHandler);
     this._editPoint.setCityChangeHandler(this._cityChangeHandler);
+    this._editPoint.setCityInputHandler(this._cityInputHandler);
+    this._editPoint.setTypeChangeHandler(this._typeChangeHandler);
+    this._editPoint.setOffersListener(this._offersListener);
     this._editPoint._setDatePicker(this._timeFromHandler);
+    this._editPoint._setDatePicker(this._timeToHandler);
+
 
     if (prevPointEvent === null || prevEditPoint === null) {
       render(this._tripListLi, this._pointEvent, renderPosition.BEFOREEND);
@@ -61,18 +64,6 @@ export default class TripPoint {
     remove(prevEditPoint);
   }
 
-  destroy() {
-    remove(this._tripListLi);
-    remove(this._pointEvent);
-    remove(this._editPoint);
-  }
-
-  resetView() {
-    if (this._mode !== Mode.DEFAULT) {
-      this._replaceFormToCard();
-    }
-  }
-
   _replaceCardToForm() {
     replace(this._editPoint, this._pointEvent);
     document.addEventListener('keydown', this._escKeyDownHandler);
@@ -86,16 +77,10 @@ export default class TripPoint {
     this._mode = Mode.DEFAULT;
   }
 
-  _escKeyDownHandler(evt) {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
-      evt.preventDefault();
-      this._editPoint.reset(this._point);
-      this._replaceFormToCard();
-    }
-  }
-
   _handleFavoriteClick() {
     this._changeData(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR,
       Object.assign(
         {},
         this._point,
@@ -106,16 +91,51 @@ export default class TripPoint {
     );
   }
 
+  _handleDeleteClick(point) {
+    this._changeData(
+      UserAction.DELETE_POINT,
+      UpdateType.MINOR,
+      point,
+    );
+  }
+
   _handleEditClick() {
     this._replaceCardToForm();
   }
 
-  _handleFormSubmit() {
+  _handleFormSubmit(update) {
+    if (update.basePrice === 0 || update.destination.name === '') {
+      return;
+    }
+    this._changeData(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR,
+      update,
+    );
     this._replaceFormToCard();
-    // this._changeData();
   }
 
   _handleEditClickBack() {
     this._replaceFormToCard();
+  }
+
+  _escKeyDownHandler(evt) {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      this._editPoint.reset(this._point);
+      this._replaceFormToCard();
+    }
+  }
+
+  destroy() {
+    remove(this._tripListLi);
+    remove(this._pointEvent);
+    remove(this._editPoint);
+  }
+
+  resetView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceFormToCard();
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { TYPES, CITIES, OPTIONS, getOffersByType, generateDestination } from '../mock/create-data.js';
+import { TYPES, CITIES, OPTIONS, getOffersByType, generateDestination, isWrongCity, isRightPrice } from '../mock/create-data.js';
 import { addOffers, createTypes, createCities, getFormatTime, getPhotos } from '../utils/rendering-data-utils.js';
 import Smart from '../view/smart.js';
 import flatpickr from 'flatpickr';
@@ -6,13 +6,7 @@ import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const editPoint = (point) => {
 
-  const {
-    basePrice,
-    dateFrom,
-    dateTo,
-    destination,
-    offers,
-    type, id } = point;
+  const { basePrice, dateFrom, dateTo, destination, offers, type, id, isDisabled } = point;
 
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
@@ -53,10 +47,10 @@ const editPoint = (point) => {
       <span class="visually-hidden">Price</span>
       €
     </label>
-    <input class="event__input  event__input--price" id="event-price-${id}" type="text" name="event-price" value="${basePrice}">
+    <input class="event__input  event__input--price" id="event-price-${id}" type="number" name="event-price" value="${basePrice}">
   </div>
 
-  <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+  <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled}>Save</button>
   <button class="event__reset-btn" type="reset">Delete</button>
   <button class="event__rollup-btn" type="button">
     <span class="visually-hidden">Open event</span>
@@ -90,74 +84,96 @@ export default class EditingPoint extends Smart {
     this._data = EditingPoint.parseTaskToData(point);
     this._datepicker1 = null;
     this._datepicker2 = null;
-    this._formSubmitHandler = this._formSubmitHandler.bind(this);
-    this._editClickHandler = this._editClickHandler.bind(this);
-    this._typeChangeHandler = this._typeChangeHandler.bind(this);
-    this._cityChangeHandler = this._cityChangeHandler.bind(this);
-
     this._timeFromHandler = this._timeFromHandler.bind(this);
     this._timeToHandler = this._timeToHandler.bind(this);
     this._setDatePicker = this._setDatePicker.bind(this);
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
+    this._typeChangeHandler = this._typeChangeHandler.bind(this);
+    this._cityChangeHandler = this._cityChangeHandler.bind(this);
+    this._cityInputHandler = this._cityInputHandler.bind(this);
+    this._priceChangeHandler = this._priceChangeHandler.bind(this);
+    this._priceInputHandler = this._priceInputHandler.bind(this);
+    this._offersListener = this._offersListener.bind(this);
+    this._editClickHandler = this._editClickHandler.bind(this);
   }
 
-  _setInnerHandlers() {
-    this.getElement().querySelector('.event__type-group').addEventListener('change', this._typeChangeHandler);
-    this.getElement().addEventListener('submit', this._formSubmitHandler);
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
+  setPriceInputListener() {
+    this.getElement().querySelector('.event__input--price').addEventListener('input', this._priceInputHandler);
+  }
+
+  _priceInputHandler(evt) {
+    evt.preventDefault();
+    const inputValue = this.getElement().querySelector('.event__input--price');
+    const price = evt.target.value;
+    if (!price ||  isRightPrice(price) === 0) {
+      inputValue.setCustomValidity('Поле цены не может быть пустым или равным нулю');
+    } else {
+      inputValue.setCustomValidity('');
+    }
+    inputValue.reportValidity();
+  }
+
+  setPriceListener() {
+    this.getElement().querySelector('.event__input--price').addEventListener('change', this._priceChangeHandler);
+  }
+
+  _priceChangeHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      basePrice: isRightPrice(evt.target.value),
+      isDisabled: isRightPrice(evt.target.value) === 0 || !isRightPrice(evt.target.value) ? 'disabled' : '',
+    });
+  }
+
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._formDeleteClickHandler);
+  }
+
+  _formDeleteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(EditingPoint.parseDataToTask(this._data));
+  }
+
+  setOffersListener() {
+    this.getElement().querySelector('.event__available-offers').addEventListener('change', this._offersListener);
+  }
+
+  _offersListener(evt) {
+    evt.preventDefault();
+    const checkedOffers = Array.from(this.getElement().querySelectorAll('[type="checkbox"]:checked'));
+    // const summaryPrice = checkedOffers.slice().reduce((accumulator, it) => accumulator + parseInt(it.labels[0].childNodes[3].outerText, 10), 0);
+    const offersPrice = checkedOffers.slice().map((it) => parseInt(it.labels[0].childNodes[3].outerText, 10));
+    const offersTitles = Array.from(this.getElement().querySelectorAll('[type="checkbox"]:checked')).slice().map((it) => it.labels[0].childNodes[1].outerText);
+    const result = {};
+    offersTitles.forEach((title, price) => result[title] = offersPrice[price]);
+    // const result2 = Object.entries(result).map((it) => ({ title: it[0], price: it[1] }));
+    // this.updateData(
+    //   {
+    //     basePrice: summaryPrice,
+    //   });
+  }
+
+  setCityInputHandler() {
+    this.getElement().querySelector('.event__input--destination').addEventListener('input', this._cityInputHandler);
+  }
+
+  _cityInputHandler(evt) {
+    evt.preventDefault();
+    const inputValue = this.getElement().querySelector('.event__input--destination');
+    const city = evt.target.value;
+    if (!city ||  isWrongCity(city, CITIES)) {
+      inputValue.setCustomValidity('Название города должно соответствовать названию города из списка и не может быть пустым полем');
+    } else {
+      inputValue.setCustomValidity('');
+    }
+    inputValue.reportValidity();
+  }
+
+  setCityChangeHandler() {
     this.getElement().querySelector('.event__input--destination').addEventListener('change', this._cityChangeHandler);
-    this._setDatePicker();
-  }
-
-  restoreHandlers() {
-    this._setInnerHandlers();
-  }
-
-  removeElement() {
-    super.removeElement();
-    this._resetDatepicker();
-  }
-
-  _resetDatepicker() {
-    if (this._datepicker1) {
-      this._datepicker1.destroy();
-      this._datepicker1 = null;
-    }
-    if (this._datepicker2) {
-      this._datepicker2.destroy();
-      this._datepicker2 = null;
-    }
-  }
-
-  reset(point) {
-    this.updateData(
-      EditingPoint.parseTaskToData(point),
-    );
-  }
-
-  getTemplate() {
-    return editPoint(this._data);
-  }
-
-  _formSubmitHandler(evt) {
-    evt.preventDefault();
-    this._callback.formSubmit(EditingPoint.parseDataToTask(this._data));
-  }
-
-  _editClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.editClick();
-  }
-
-  _timeFromHandler([userDate]) {
-    this.updateData({
-      dateFrom: userDate,
-    });
-  }
-
-  _timeToHandler([userDate]) {
-    this.updateData({
-      dateTo: userDate,
-    });
   }
 
   _cityChangeHandler(evt) {
@@ -169,7 +185,12 @@ export default class EditingPoint extends Smart {
           name: evt.target.value,
           pictures: generateDestination().pictures,
         },
+        isDisabled: isWrongCity(evt.target.value, CITIES),
       });
+  }
+
+  setTypeChangeHandler() {
+    this.getElement().querySelector('.event__type-group').addEventListener('change', this._typeChangeHandler);
   }
 
   _typeChangeHandler(evt) {
@@ -181,12 +202,24 @@ export default class EditingPoint extends Smart {
       });
   }
 
-  setCityChangeHandler() {
-    this.getElement().querySelector('.event__input--destination').addEventListener('change', this._cityChangeHandler);
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().addEventListener('submit', this._formSubmitHandler);
   }
 
-  setTypeChangeHandler() {
-    this.getElement().querySelector('.event__type-group').addEventListener('change', this._typeChangeHandler);
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.formSubmit(EditingPoint.parseDataToTask(this._data));
+  }
+
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
+  }
+
+  _editClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editClick();
   }
 
   _setDatePicker() {
@@ -220,14 +253,60 @@ export default class EditingPoint extends Smart {
     );
   }
 
-  setFormSubmitHandler(callback) {
-    this._callback.formSubmit = callback;
-    this.getElement().addEventListener('submit', this._formSubmitHandler);
+  removeElement() {
+    super.removeElement();
+    this._resetDatepicker();
   }
 
-  setEditClickHandler(callback) {
-    this._callback.editClick = callback;
+  _resetDatepicker() {
+    if (this._datepicker1) {
+      this._datepicker1.destroy();
+      this._datepicker1 = null;
+    }
+    if (this._datepicker2) {
+      this._datepicker2.destroy();
+      this._datepicker2 = null;
+    }
+  }
+
+  _timeFromHandler([userDate]) {
+    this.updateData({
+      dateFrom: userDate,
+    });
+  }
+
+  _timeToHandler([userDate]) {
+    this.updateData({
+      dateTo: userDate,
+    });
+  }
+
+  reset(point) {
+    this.updateData(
+      EditingPoint.parseTaskToData(point),
+    );
+  }
+
+  getTemplate() {
+    return editPoint(this._data);
+  }
+
+  _setInnerHandlers() {
+    this.getElement().querySelector('.event__type-group').addEventListener('change', this._typeChangeHandler);
+    this.getElement().addEventListener('submit', this._formSubmitHandler);
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
+    this.getElement().querySelector('.event__input--destination').addEventListener('change', this._cityChangeHandler);
+    this.getElement().querySelector('.event__input--price').addEventListener('change', this._priceChangeHandler);
+  }
+
+  restoreHandlers() {
+    this.setDeleteClickHandler(this._callback.deleteClick);
+    this._setDatePicker();
+    this._setInnerHandlers();
+    this.setOffersListener(this._offersListener);
+    this.setPriceListener(this._priceChangeHandler);
+    this.setCityInputHandler(this._cityInputHandler);
+    this.setPriceInputListener(this._priceInputHandler);
   }
 
   static parseTaskToData(point) {
@@ -235,20 +314,12 @@ export default class EditingPoint extends Smart {
       {},
       point,
       {
-        // destination: {
-        //   description: generateDestination().description,
-        //   name: this._data,
-        //   pictures: generateDestination().pictures,
-        // },
-        // type: evt.target.value,
-        // offers: getOffersByType(OPTIONS, evt.target.value),
       },
     );
   }
 
   static parseDataToTask(data) {
     data = Object.assign({}, data);
-
     return data;
   }
 }

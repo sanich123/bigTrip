@@ -1,5 +1,4 @@
 import PriceTripView from './view/price-trip.js';
-import FiltersView from './view/filters.js';
 import NavigationView from './view/navigation.js';
 // import Loading from './view/loading.js';
 // import NewWithoutDestination from './view/newWithoutDestination.js';
@@ -7,25 +6,38 @@ import NavigationView from './view/navigation.js';
 // import NewPoint from './view/newPoint.js';
 import { generatePoint } from './mock/create-data.js';
 import { renderPosition, render } from './utils/rendering-utils.js';
-import Points from './presenter/trip-list.js';
+import PointsPresenter from './presenter/points-presenter.js';
+import PointsModel from './model/points-model.js';
+import FiltersModel from './model/filters-model.js';
+import FiltersPresenter from './presenter/filters-presenter.js';
 
-const COUNT_OF_POINTS = 2;
+const COUNT_OF_POINTS = 3;
 
 const points = new Array(COUNT_OF_POINTS).fill().map(generatePoint);
 points.sort((a, b) => b.dateFrom - a.dateFrom);
+
+const pointsModel = new PointsModel();
+pointsModel.setPoints(points);
+
+const filtersModel = new FiltersModel();
 
 const priceAndTripSection = document.querySelector('.trip-main');
 const toNavigation = document.querySelector('.trip-controls__navigation');
 const toFilters = document.querySelector('.trip-controls__filters');
 const toSort = document.querySelector('.trip-events');
 
-render(priceAndTripSection, new PriceTripView(points), renderPosition.AFTERBEGIN);
+render(priceAndTripSection, new PriceTripView(pointsModel.getPoints()), renderPosition.AFTERBEGIN);
 render(toNavigation, new NavigationView(), renderPosition.AFTERBEGIN);
-render(toFilters, new FiltersView(), renderPosition.AFTERBEGIN);
 
-const pointsPresenter = new Points(toSort);
-pointsPresenter.init(points);
+const pointsPresenter = new PointsPresenter(toSort, pointsModel, filtersModel);
+const filterPresenter = new FiltersPresenter(toFilters, filtersModel, pointsModel);
+pointsPresenter.init();
+filterPresenter.init();
 
+document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
+  evt.preventDefault();
+  pointsPresenter.createPoint();
+});
 
 // render(toSort, new Loading().getElement(), renderPosition.BEFOREEND);
 // render(toSort, new Empty().getElement(), renderPosition.BEFOREEND);
