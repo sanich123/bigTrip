@@ -10,6 +10,8 @@ import PointsPresenter from './presenter/points-presenter.js';
 import PointsModel from './model/points-model.js';
 import FiltersModel from './model/filters-model.js';
 import FiltersPresenter from './presenter/filters-presenter.js';
+import { MenuItem, UpdateType, FilterType } from './utils/constants.js';
+import StatisticsView from './view/statistics.js';
 
 const COUNT_OF_POINTS = 3;
 
@@ -27,11 +29,34 @@ const toFilters = document.querySelector('.trip-controls__filters');
 const toSort = document.querySelector('.trip-events');
 
 render(priceAndTripSection, new PriceTripView(pointsModel.getPoints()), renderPosition.AFTERBEGIN);
-render(toNavigation, new NavigationView(), renderPosition.AFTERBEGIN);
+const navigationView = new NavigationView();
+render(toNavigation, navigationView, renderPosition.AFTERBEGIN);
 
 const pointsPresenter = new PointsPresenter(toSort, pointsModel, filtersModel);
 const filterPresenter = new FiltersPresenter(toFilters, filtersModel, pointsModel);
+
+const handleNavigationClick = (menuItem) => {
+  switch (menuItem) {
+    // case MenuItem.ADD_NEW_TASK:
+    //   // Скрыть статистику
+    //   // Показать доску
+    //   // Показать форму добавления новой задачи
+    //   // Убрать выделение с ADD NEW TASK после сохранения
+    //   break;
+    case MenuItem.POINTS:
+      pointsPresenter.init();
+      // Скрыть статистику
+      break;
+    case MenuItem.STATISTICS:
+      pointsPresenter.destroy();
+      // Показать статистику
+      break;
+  }
+};
+
+navigationView.setMenuClickHandler(handleNavigationClick);
 pointsPresenter.init();
+render(toSort, new StatisticsView(pointsModel.getPoints()), renderPosition.BEFOREEND);
 filterPresenter.init();
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {

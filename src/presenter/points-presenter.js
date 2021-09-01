@@ -32,11 +32,12 @@ export default class PointsPresenter {
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
-    this._pointsModel.addObserver(this._handleModelEvent);
-    this._filtersModel.addObserver(this._handleModelEvent);
+
   }
 
   init() {
+    this._pointsModel.addObserver(this._handleModelEvent);
+    this._filtersModel.addObserver(this._handleModelEvent);
     if (this._pointsModel.getPoints().length === 0) {
       this._renderEmpty();
     } else {
@@ -83,6 +84,16 @@ export default class PointsPresenter {
       return;
     }
     this._renderSort();
+  }
+
+  destroy() {
+    this._clearBoard({resetSortType: true});
+
+    // remove(this._taskListComponent);
+    // remove(this._boardComponent);
+
+    this._tasksModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
   }
 
   createPoint() {
