@@ -1,4 +1,4 @@
-import { FilterType } from '../utils/common.js';
+import { FilterType } from '../utils/constants.js';
 import dayjs from 'dayjs';
 
 export const getFutureDate = (dateFrom) => dayjs(dateFrom) >= dayjs();

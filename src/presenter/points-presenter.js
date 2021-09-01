@@ -7,7 +7,7 @@ import EditingPoint from '../view/point-edit.js';
 import NewTripPoint from './new-point-presenter.js';
 import TripPoint from './point-presenter.js';
 import { renderPosition, render, remove } from '../utils/rendering-utils.js';
-import { SortType, UpdateType, UserAction, FilterType } from '../utils/common.js';
+import { SortType, UpdateType, UserAction, FilterType } from '../utils/constants.js';
 import dayjs from 'dayjs';
 import { filter } from '../utils/filter.js';
 

@@ -1,7 +1,7 @@
 import NewPoint from '../view/new-point.js';
 import TripListLi from '../view/trip-list-li.js';
 import { renderPosition, render, remove } from '../utils/rendering-utils.js';
-import { UserAction, UpdateType } from '../utils/common.js';
+import { UserAction, UpdateType } from '../utils/constants.js';
 import { nanoid } from 'nanoid';
 
 export default class NewTripPoint {

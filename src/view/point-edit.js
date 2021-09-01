@@ -1,5 +1,6 @@
-import { TYPES, CITIES, OPTIONS, getOffersByType, generateDestination, isWrongCity, isRightPrice } from '../mock/create-data.js';
+import { TYPES, CITIES, OPTIONS, getOffersByType, generateDestination } from '../mock/create-data.js';
 import { addOffers, createTypes, createCities, getFormatTime, getPhotos } from '../utils/rendering-data-utils.js';
+import { checkPrice, checkCity } from '../utils/common.js';
 import Smart from '../view/smart.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
@@ -106,7 +107,7 @@ export default class EditingPoint extends Smart {
     evt.preventDefault();
     const inputValue = this.getElement().querySelector('.event__input--price');
     const price = evt.target.value;
-    if (!price ||  isRightPrice(price) === 0) {
+    if (!price ||  checkPrice(price) === 0) {
       inputValue.setCustomValidity('Поле цены не может быть пустым или равным нулю');
     } else {
       inputValue.setCustomValidity('');
@@ -121,8 +122,8 @@ export default class EditingPoint extends Smart {
   _priceChangeHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      basePrice: isRightPrice(evt.target.value),
-      isDisabled: isRightPrice(evt.target.value) === 0 || !isRightPrice(evt.target.value) ? 'disabled' : '',
+      basePrice: checkPrice(evt.target.value),
+      isDisabled: checkPrice(evt.target.value) === 0 || !checkPrice(evt.target.value) ? 'disabled' : '',
     });
   }
 
@@ -164,7 +165,7 @@ export default class EditingPoint extends Smart {
     evt.preventDefault();
     const inputValue = this.getElement().querySelector('.event__input--destination');
     const city = evt.target.value;
-    if (!city ||  isWrongCity(city, CITIES)) {
+    if (!city ||  checkCity(city, CITIES)) {
       inputValue.setCustomValidity('Название города должно соответствовать названию города из списка и не может быть пустым полем');
     } else {
       inputValue.setCustomValidity('');
@@ -185,7 +186,7 @@ export default class EditingPoint extends Smart {
           name: evt.target.value,
           pictures: generateDestination().pictures,
         },
-        isDisabled: isWrongCity(evt.target.value, CITIES),
+        isDisabled: checkCity(evt.target.value, CITIES),
       });
   }
 
@@ -223,15 +224,7 @@ export default class EditingPoint extends Smart {
   }
 
   _setDatePicker() {
-    if (this._datepicker1) {
-      this._datepicker1.destroy();
-      this._datepicker1 = null;
-    }
-    if (this._datepicker2) {
-      this._datepicker2.destroy();
-      this._datepicker2 = null;
-    }
-
+    this._resetDatepicker();
     this._datepicker1 = flatpickr(
       this.getElement().querySelector('[name = "event-start-time"]'),
       {
