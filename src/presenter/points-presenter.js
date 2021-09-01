@@ -32,7 +32,6 @@ export default class PointsPresenter {
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
-
   }
 
   init() {
@@ -89,7 +88,7 @@ export default class PointsPresenter {
   destroy() {
     this._clearBoard({resetSortType: true});
 
-    // remove(this._taskListComponent);
+    // remove(this._pointsList);
     // remove(this._boardComponent);
 
     this._tasksModel.removeObserver(this._handleModelEvent);
