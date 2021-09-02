@@ -87,12 +87,11 @@ export default class PointsPresenter {
 
   destroy() {
     this._clearBoard({resetSortType: true});
+    // remove(this._priceTrip);
+    remove(this._tripListUl);
 
-    // remove(this._pointsList);
-    // remove(this._boardComponent);
-
-    this._tasksModel.removeObserver(this._handleModelEvent);
-    this._filterModel.removeObserver(this._handleModelEvent);
+    // this._tasksModel.removeObserver(this._handleModelEvent);
+    // this._filterModel.removeObserver(this._handleModelEvent);
   }
 
   createPoint() {

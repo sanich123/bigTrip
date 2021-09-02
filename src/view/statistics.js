@@ -245,6 +245,9 @@ export default class StatisticsView extends Smart {
   constructor(points) {
     super();
     this._points = points;
+    this._renderMoneyChart = null;
+    this._renderTypeChart = null;
+    this._renderTimeChart = null;
     this._setCharts();
   }
 
@@ -257,6 +260,11 @@ export default class StatisticsView extends Smart {
   }
 
   _setCharts() {
+    if(this._renderMoneyChart !== null || this._renderTypeChart !== null || this._renderTimeChart !== null) {
+      this._renderMoneyChart = null;
+      this._renderTypeChart = null;
+      this._renderTimeChart = null;
+    }
     const moneyCtx = this.getElement().querySelector('#money');
     const typeCtx = this.getElement().querySelector('#type');
     const timeCtx = this.getElement().querySelector('#time-spend');

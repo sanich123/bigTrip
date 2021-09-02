@@ -5,7 +5,7 @@ import NavigationView from './view/navigation.js';
 // import NewWithoutOffers from './view/new-without-offers.js';
 // import NewPoint from './view/newPoint.js';
 import { generatePoint } from './mock/create-data.js';
-import { renderPosition, render } from './utils/rendering-utils.js';
+import { renderPosition, render, remove } from './utils/rendering-utils.js';
 import PointsPresenter from './presenter/points-presenter.js';
 import PointsModel from './model/points-model.js';
 import FiltersModel from './model/filters-model.js';
@@ -34,6 +34,7 @@ render(toNavigation, navigationView, renderPosition.AFTERBEGIN);
 
 const pointsPresenter = new PointsPresenter(toSort, pointsModel, filtersModel);
 const filterPresenter = new FiltersPresenter(toFilters, filtersModel, pointsModel);
+let statisticsComponent = null;
 
 const handleNavigationClick = (menuItem) => {
   switch (menuItem) {
@@ -45,18 +46,19 @@ const handleNavigationClick = (menuItem) => {
     //   break;
     case MenuItem.POINTS:
       pointsPresenter.init();
+      remove(statisticsComponent);
       // Скрыть статистику
       break;
     case MenuItem.STATISTICS:
       pointsPresenter.destroy();
-      // Показать статистику
+      statisticsComponent = new StatisticsView(pointsModel.getPoints());
+      render(toSort, statisticsComponent, renderPosition.BEFOREEND);
       break;
   }
 };
 
 navigationView.setMenuClickHandler(handleNavigationClick);
-// pointsPresenter.init();
-render(toSort, new StatisticsView(pointsModel.getPoints()), renderPosition.BEFOREEND);
+pointsPresenter.init();
 filterPresenter.init();
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
