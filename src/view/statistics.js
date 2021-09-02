@@ -15,12 +15,12 @@ const moneyChart = (moneyCtx, points) => {
     data: {
       labels: types,
       datasets: [{
+        // minBarLength: 50,
+        // barThickness: 44,
         data: money,
         backgroundColor: '#ffffff',
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
-        // minBarLength: 50,
-        // barThickness: 44,
       }],
     },
     options: {
