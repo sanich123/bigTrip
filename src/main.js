@@ -13,7 +13,7 @@ import FiltersPresenter from './presenter/filters-presenter.js';
 import { MenuItem, UpdateType, FilterType } from './utils/constants.js';
 import StatisticsView from './view/statistics.js';
 
-const COUNT_OF_POINTS = 14;
+const COUNT_OF_POINTS = 4;
 
 const points = new Array(COUNT_OF_POINTS).fill().map(generatePoint);
 points.sort((a, b) => b.dateFrom - a.dateFrom);
@@ -34,25 +34,33 @@ render(toNavigation, navigationView, renderPosition.AFTERBEGIN);
 
 const pointsPresenter = new PointsPresenter(toSort, pointsModel, filtersModel);
 const filterPresenter = new FiltersPresenter(toFilters, filtersModel, pointsModel);
+console.log(document.querySelector('.page-body__container').style)
 let statisticsComponent = null;
 
 const handleNavigationClick = (menuItem) => {
   switch (menuItem) {
-    // case MenuItem.ADD_NEW_TASK:
-    //   // Скрыть статистику
-    //   // Показать доску
-    //   // Показать форму добавления новой задачи
-    //   // Убрать выделение с ADD NEW TASK после сохранения
-    //   break;
     case MenuItem.POINTS:
+      pointsPresenter.destroy();
       pointsPresenter.init();
       remove(statisticsComponent);
-      // Скрыть статистику
+      statisticsComponent = null;
+      navigationView.addClassItem(MenuItem.POINTS);
+      navigationView.removeClassItem(MenuItem.STATISTICS);
+      document.querySelector('.trip-main__event-add-btn').disabled = false;
+      document.querySelectorAll('.trip-filters__filter-input').forEach((it) => it.disabled = false);
+
       break;
     case MenuItem.STATISTICS:
       pointsPresenter.destroy();
+      if (statisticsComponent !== null) {
+        return;
+      }
       statisticsComponent = new StatisticsView(pointsModel.getPoints());
       render(toSort, statisticsComponent, renderPosition.BEFOREEND);
+      navigationView.addClassItem(MenuItem.STATISTICS);
+      navigationView.removeClassItem(MenuItem.POINTS);
+      document.querySelector('.trip-main__event-add-btn').disabled = true;
+      document.querySelectorAll('.trip-filters__filter-input').forEach((it) => it.disabled = true);
       break;
   }
 };

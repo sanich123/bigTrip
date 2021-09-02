@@ -14,13 +14,10 @@ export default class NavigationView extends Abstract {
     this._menuClickHandler = this._menuClickHandler.bind(this);
   }
 
-  setMenuItem(menuItem) {
-    const item = this.getElement().querySelector(`[value=${menuItem}]`);
-
-    if (item !== null) {
-      item.checked = true;
-    }
-  }
+  // setMenuItem(menuItem) {
+  //   const item = this.getElement().querySelector(`[data-name=${menuItem}]`);
+  //   item.dataset.name === menuItem ? item.classList.add('trip-tabs__btn--active') : item.classList.remove('trip-tabs__btn--active');
+  // }
 
   getTemplate() {
     return navigationMenu();
@@ -36,6 +33,11 @@ export default class NavigationView extends Abstract {
     this.getElement().addEventListener('click', this._menuClickHandler);
   }
 
+  addClassItem(menuItem) {
+    this.getElement().querySelector(`[data-name=${menuItem}]`).classList.add('trip-tabs__btn--active');
+  }
 
-
+  removeClassItem(menuItem) {
+    this.getElement().querySelector(`[data-name=${menuItem}]`).classList.remove('trip-tabs__btn--active');
+  }
 }

@@ -87,7 +87,8 @@ export default class PointsPresenter {
 
   destroy() {
     this._clearBoard({resetSortType: true});
-    // remove(this._priceTrip);
+
+    // remove(this._sortMenu);
     remove(this._tripListUl);
 
     // this._tasksModel.removeObserver(this._handleModelEvent);
