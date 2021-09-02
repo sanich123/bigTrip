@@ -17,8 +17,8 @@ const moneyChart = (moneyCtx, points) => {
         backgroundColor: '#ffffff',
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
-        barThickness: 34,
-        minBarLength: 36,
+        barThickness: 30,
+        minBarLength: 40,
       }],
     },
     options: {
@@ -30,7 +30,7 @@ const moneyChart = (moneyCtx, points) => {
           color: '#000000',
           anchor: 'end',
           align: 'start',
-          formatter: () => '€ ${}',
+          formatter: (val) => `€ ${val}`,
         },
       },
       title: {
