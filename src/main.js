@@ -13,7 +13,7 @@ import FiltersPresenter from './presenter/filters-presenter.js';
 import { MenuItem, UpdateType, FilterType } from './utils/constants.js';
 import StatisticsView from './view/statistics.js';
 
-const COUNT_OF_POINTS = 23;
+const COUNT_OF_POINTS = 14;
 
 const points = new Array(COUNT_OF_POINTS).fill().map(generatePoint);
 points.sort((a, b) => b.dateFrom - a.dateFrom);
@@ -55,7 +55,7 @@ const handleNavigationClick = (menuItem) => {
 };
 
 navigationView.setMenuClickHandler(handleNavigationClick);
-pointsPresenter.init();
+// pointsPresenter.init();
 render(toSort, new StatisticsView(pointsModel.getPoints()), renderPosition.BEFOREEND);
 filterPresenter.init();
 

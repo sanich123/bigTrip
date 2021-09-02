@@ -1,6 +1,8 @@
 import Smart from './smart.js';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { duration } from '../utils/common.js';
+import dayjs from 'dayjs';
 
 const moneyChart = (moneyCtx, points) => {
   const set =  Array.from(points.reduce(
@@ -79,6 +81,7 @@ const typeChart = (typeCtx, points) => {
     (point, { type }) => point.set(type, (point.get(type) || 0) + 1), new Map));
   const types = set.slice().map((it) => it[0].toUpperCase());
   const repeats = set.slice().map((it) => it[1]);
+
   const chart = new Chart(typeCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
@@ -151,16 +154,17 @@ const typeChart = (typeCtx, points) => {
 
 const timeChart = (timeCtx, points) => {
   const set =  Array.from(points.reduce(
-    (point, { type }) => point.set(type, (point.get(type) || 0) + 1), new Map));
+    (point, { type, dateFrom, dateTo }) => point.set(type, (point.get(type) || 0) + Math.abs(dayjs(dateFrom).diff(dateTo))), new Map));
+
   const types = set.slice().map((it) => it[0].toUpperCase());
-  const repeats = set.slice().map((it) => it[1]);
+  const time = set.slice().map((it) => it[1]);
   const chart = new Chart(timeCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
       labels: types,
       datasets: [{
-        data: repeats,
+        data: time,
         backgroundColor: '#ffffff',
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
@@ -177,12 +181,12 @@ const timeChart = (timeCtx, points) => {
           color: '#000000',
           anchor: 'end',
           align: 'start',
-          formatter: (val) => `${val}x`,
+          formatter: (val) => `${duration(val)}`,
         },
       },
       title: {
         display: true,
-        text: 'TIME',
+        text: 'TIME-SPEND',
         fontColor: '#000000',
         fontSize: 23,
         position: 'left',
