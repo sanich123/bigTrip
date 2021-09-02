@@ -3,10 +3,10 @@ import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 const moneyChart = (moneyCtx, points) => {
-  const myMap =  Array.from(points.reduce(
+  const set =  Array.from(points.reduce(
     (point, { type, basePrice }) => point.set(type, (point.get(type) || 0) + basePrice), new Map));
-  const types = myMap.slice().map((it) => it[0]);
-  const money = myMap.slice().map((it) => it[1]);
+  const types = set.slice().map((it) => it[0].toUpperCase());
+  const money = set.slice().map((it) => it[1]);
   const chart = new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
@@ -17,8 +17,8 @@ const moneyChart = (moneyCtx, points) => {
         backgroundColor: '#ffffff',
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
-        barThickness: 30,
-        minBarLength: 40,
+        // minBarLength: 50,
+        // barThickness: 44,
       }],
     },
     options: {
@@ -51,6 +51,79 @@ const moneyChart = (moneyCtx, points) => {
             display: false,
             drawBorder: false,
           },
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false,
+          },
+        }],
+      },
+      legend: {
+        display: false,
+      },
+      tooltips: {
+        enabled: false,
+      },
+    },
+  });
+  return chart;
+};
+
+const typeChart = (typeCtx, points) => {
+  const set =  Array.from(points.reduce(
+    (point, { type }) => point.set(type, (point.get(type) || 0) + 1), new Map));
+  const types = set.slice().map((it) => it[0].toUpperCase());
+  const repeats = set.slice().map((it) => it[1]);
+  const chart = new Chart(typeCtx, {
+    plugins: [ChartDataLabels],
+    type: 'horizontalBar',
+    data: {
+      labels: types,
+      datasets: [{
+        data: repeats,
+        backgroundColor: '#ffffff',
+        hoverBackgroundColor: '#ffffff',
+        anchor: 'start',
+        // minBarLength: 50,
+        // barThickness: 44,
+      }],
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 13,
+          },
+          color: '#000000',
+          anchor: 'end',
+          align: 'start',
+          formatter: (val) => `${val}x`,
+        },
+      },
+      title: {
+        display: true,
+        text: 'TYPE',
+        fontColor: '#000000',
+        fontSize: 23,
+        position: 'left',
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: '#000000',
+            padding: 5,
+            fontSize: 13,
+            // margin: 15,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false,
+          },
 
         }],
         xAxes: [{
@@ -73,74 +146,83 @@ const moneyChart = (moneyCtx, points) => {
       },
     },
   });
-  console.log(chart)
   return chart;
 };
 
-// const typeChart = new Chart(typeCtx, {
-//   plugins: [ChartDataLabels],
-//   type: 'horizontalBar',
-//   data: {
-//     labels: ['TAXI', 'BUS', 'TRAIN', 'SHIP', 'TRANSPORT', 'DRIVE'],
-//     datasets: [{
-//       data: [4, 3, 2, 1, 1, 1],
-//       backgroundColor: '#ffffff',
-//       hoverBackgroundColor: '#ffffff',
-//       anchor: 'start',
-//     }],
-//   },
-//   options: {
-//     plugins: {
-//       datalabels: {
-//         font: {
-//           size: 13,
-//         },
-//         color: '#000000',
-//         anchor: 'end',
-//         align: 'start',
-//         formatter: (val) => '${val}x',
-//       },
-//     },
-//     title: {
-//       display: true,
-//       text: 'TYPE',
-//       fontColor: '#000000',
-//       fontSize: 23,
-//       position: 'left',
-//     },
-//     scales: {
-//       yAxes: [{
-//         ticks: {
-//           fontColor: '#000000',
-//           padding: 5,
-//           fontSize: 13,
-//         },
-//         gridLines: {
-//           display: false,
-//           drawBorder: false,
-//         },
-//         barThickness: 44,
-//       }],
-//       xAxes: [{
-//         ticks: {
-//           display: false,
-//           beginAtZero: true,
-//         },
-//         gridLines: {
-//           display: false,
-//           drawBorder: false,
-//         },
-//         minBarLength: 50,
-//       }],
-//     },
-//     legend: {
-//       display: false,
-//     },
-//     tooltips: {
-//       enabled: false,
-//     },
-//   },
-// });
+const timeChart = (timeCtx, points) => {
+  const set =  Array.from(points.reduce(
+    (point, { type }) => point.set(type, (point.get(type) || 0) + 1), new Map));
+  const types = set.slice().map((it) => it[0].toUpperCase());
+  const repeats = set.slice().map((it) => it[1]);
+  const chart = new Chart(timeCtx, {
+    plugins: [ChartDataLabels],
+    type: 'horizontalBar',
+    data: {
+      labels: types,
+      datasets: [{
+        data: repeats,
+        backgroundColor: '#ffffff',
+        hoverBackgroundColor: '#ffffff',
+        anchor: 'start',
+        // minBarLength: 50,
+        // barThickness: 44,
+      }],
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 13,
+          },
+          color: '#000000',
+          anchor: 'end',
+          align: 'start',
+          formatter: (val) => `${val}x`,
+        },
+      },
+      title: {
+        display: true,
+        text: 'TIME',
+        fontColor: '#000000',
+        fontSize: 23,
+        position: 'left',
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: '#000000',
+            padding: 5,
+            fontSize: 13,
+            // margin: 15,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false,
+          },
+
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false,
+          },
+
+        }],
+      },
+      legend: {
+        display: false,
+      },
+      tooltips: {
+        enabled: false,
+      },
+    },
+  });
+  return chart;
+};
 
 const createStatistics = () => `<section class="statistics">
           <h2 class="visually-hidden">Trip statistics</h2>
@@ -172,17 +254,17 @@ export default class StatisticsView extends Smart {
 
   _setCharts() {
     const moneyCtx = this.getElement().querySelector('#money');
-    // const typeCtx = this.getElement().querySelector('#type');
-    // const timeCtx = this.getElement().querySelector('#time-spend');
+    const typeCtx = this.getElement().querySelector('#type');
+    const timeCtx = this.getElement().querySelector('#time-spend');
 
     const BAR_HEIGHT = 55;
     moneyCtx.height = BAR_HEIGHT * 5;
-    // typeCtx.height = BAR_HEIGHT * 5;
-    // timeCtx.height = BAR_HEIGHT * 5;
+    typeCtx.height = BAR_HEIGHT * 5;
+    timeCtx.height = BAR_HEIGHT * 5;
 
     this._renderMoneyChart = moneyChart(moneyCtx, this._points);
-    // this._renderTypeChart = typeChart(typeCtx, this._points);
-    // this._renderTimeChart = timeChart(timeCtx, this._points);
+    this._renderTypeChart = typeChart(typeCtx, this._points);
+    this._renderTimeChart = timeChart(timeCtx, this._points);
   }
 
 }
