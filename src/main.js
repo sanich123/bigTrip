@@ -12,11 +12,23 @@ import FiltersModel from './model/filters-model.js';
 import FiltersPresenter from './presenter/filters-presenter.js';
 import { MenuItem } from './utils/constants.js';
 import StatisticsView from './view/statistics.js';
+import Api from './api.js';
 
 const COUNT_OF_POINTS = 24;
+const AUTHORIZATION = 'Basic hD3sb8dfSWcl2sA5j';
+const END_POINT = 'https://15.ecmascript.pages.academy/big-trip/';
 
 const points = new Array(COUNT_OF_POINTS).fill().map(generatePoint);
 points.sort((a, b) => b.dateFrom - a.dateFrom);
+const api = new Api(END_POINT, AUTHORIZATION);
+
+api.getPoints().then((point) => {
+  console.log(point);
+  // Есть проблема: cтруктура объекта похожа, но некоторые ключи называются иначе,
+  // а ещё на сервере используется snake_case, а у нас camelCase.
+  // Можно, конечно, переписать часть нашего клиентского приложения, но зачем?
+  // Есть вариант получше - паттерн "Адаптер"
+});
 
 const pointsModel = new PointsModel();
 pointsModel.setPoints(points);
