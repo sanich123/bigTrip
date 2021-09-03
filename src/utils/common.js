@@ -36,7 +36,7 @@ export const generateDate = () => {
   return dayjs().add(daysGap, 'm').toDate();
 };
 
-export const checkCity = (city, array) => {
+export const isCityExist = (city, array) => {
   if (city && array.some((it) => it === city)) {
     return '';
   }

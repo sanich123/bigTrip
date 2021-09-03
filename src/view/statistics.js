@@ -4,16 +4,13 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { duration } from '../utils/common.js';
 import dayjs from 'dayjs';
 
-const moneyChart = (moneyCtx, points) => {
-  const set =  Array.from(points.reduce(
-    (point, { type, basePrice }) => point.set(type, (point.get(type) || 0) + basePrice), new Map));
-  const types = set.slice().map((it) => it[0].toUpperCase());
-  const money = set.slice().map((it) => it[1]);
+const moneyChart = (moneyCtx, points, TYPES) => {
+  const money =  Array.from(points.reduce((point, { type, basePrice }) => point.set(type, (point.get(type) || 0) + basePrice), new Map)).slice().map((it) => it[1]);
   const chart = new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
-      labels: types,
+      labels: TYPES,
       datasets: [{
         // minBarLength: 50,
         // barThickness: 44,
@@ -76,17 +73,14 @@ const moneyChart = (moneyCtx, points) => {
   return chart;
 };
 
-const typeChart = (typeCtx, points) => {
-  const set =  Array.from(points.reduce(
-    (point, { type }) => point.set(type, (point.get(type) || 0) + 1), new Map));
-  const types = set.slice().map((it) => it[0].toUpperCase());
-  const repeats = set.slice().map((it) => it[1]);
+const typeChart = (typeCtx, points, TYPES) => {
+  const repeats =  Array.from(points.reduce((point, { type }) => point.set(type, (point.get(type) || 0) + 1), new Map)).slice().map((it) => it[1]);
 
   const chart = new Chart(typeCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
-      labels: types,
+      labels: TYPES,
       datasets: [{
         data: repeats,
         backgroundColor: '#ffffff',
@@ -152,17 +146,14 @@ const typeChart = (typeCtx, points) => {
   return chart;
 };
 
-const timeChart = (timeCtx, points) => {
-  const set =  Array.from(points.reduce(
-    (point, { type, dateFrom, dateTo }) => point.set(type, (point.get(type) || 0) + Math.abs(dayjs(dateFrom).diff(dateTo))), new Map));
+const timeChart = (timeCtx, points, TYPES) => {
+  const time =  Array.from(points.reduce((point, { type, dateFrom, dateTo }) => point.set(type, (point.get(type) || 0) + Math.abs(dayjs(dateFrom).diff(dateTo))), new Map)).slice().map((it) => it[1]);
 
-  const types = set.slice().map((it) => it[0].toUpperCase());
-  const time = set.slice().map((it) => it[1]);
   const chart = new Chart(timeCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
-      labels: types,
+      labels: TYPES,
       datasets: [{
         data: time,
         backgroundColor: '#ffffff',
@@ -259,7 +250,12 @@ export default class StatisticsView extends Smart {
     this._setCharts();
   }
 
+  _createTypes() {
+    return [...new Set((this._points.map((point) => point.type.toUpperCase())))];
+  }
+
   _setCharts() {
+    this._createTypes();
     if(this._renderMoneyChart !== null || this._renderTypeChart !== null || this._renderTimeChart !== null) {
       this._renderMoneyChart = null;
       this._renderTypeChart = null;
@@ -273,10 +269,10 @@ export default class StatisticsView extends Smart {
     moneyCtx.height = BAR_HEIGHT * 5;
     typeCtx.height = BAR_HEIGHT * 5;
     timeCtx.height = BAR_HEIGHT * 5;
-
-    this._renderMoneyChart = moneyChart(moneyCtx, this._points);
-    this._renderTypeChart = typeChart(typeCtx, this._points);
-    this._renderTimeChart = timeChart(timeCtx, this._points);
+    const TYPES = [...new Set((this._points.slice().map((point) => point.type.toUpperCase())))];
+    this._renderMoneyChart = moneyChart(moneyCtx, this._points, TYPES);
+    this._renderTypeChart = typeChart(typeCtx, this._points, TYPES);
+    this._renderTimeChart = timeChart(timeCtx, this._points, TYPES);
   }
 
 }

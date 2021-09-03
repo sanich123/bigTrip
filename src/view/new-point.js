@@ -1,6 +1,6 @@
 import { TYPES, CITIES, OPTIONS, getOffersByType, generateDestination } from '../mock/create-data.js';
 import { addOffers, createTypes, createCities, getPhotos, getFormatTime } from '../utils/rendering-data-utils.js';
-import { checkCity, checkPrice } from '../utils/common.js';
+import { isCityExist} from '../utils/common.js';
 import Smart from '../view/smart.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
@@ -105,7 +105,7 @@ export default class EditingPoint extends Smart {
     evt.preventDefault();
     const inputValue = this.getElement().querySelector('.event__input--price');
     const price = evt.target.value;
-    if (!price ||  checkPrice(price) === 0) {
+    if (!price ||  Math.abs(price) === 0) {
       inputValue.setCustomValidity('Поле цены не может быть пустым или равным нулю');
     } else {
       inputValue.setCustomValidity('');
@@ -120,8 +120,8 @@ export default class EditingPoint extends Smart {
   _priceChangeHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      basePrice: checkPrice(evt.target.value),
-      isDisabled: checkPrice(evt.target.value) === 0 || !checkPrice(evt.target.value) ? 'disabled' : '',
+      basePrice: Math.abs(evt.target.value),
+      isDisabled: Math.abs(evt.target.value) === 0 || !Math.abs(evt.target.value) ? 'disabled' : '',
     });
   }
 
@@ -162,7 +162,7 @@ export default class EditingPoint extends Smart {
     evt.preventDefault();
     const inputValue = this.getElement().querySelector('.event__input--destination');
     const city = evt.target.value;
-    if (!city ||  checkCity(city, CITIES)) {
+    if (!city ||  isCityExist(city, CITIES)) {
       inputValue.setCustomValidity('Название города должно соответствовать названию города из списка и не может быть пустым полем');
     } else {
       inputValue.setCustomValidity('');
@@ -183,7 +183,7 @@ export default class EditingPoint extends Smart {
           name: evt.target.value,
           pictures: generateDestination().pictures,
         },
-        isDisabled: checkCity(evt.target.value, CITIES),
+        isDisabled: isCityExist(evt.target.value, CITIES),
       });
   }
 
