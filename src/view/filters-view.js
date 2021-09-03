@@ -1,5 +1,5 @@
 import Abstract from './abstract.js';
-import { FilterType } from '../utils/common.js';
+import { FilterType } from '../utils/constants.js';
 
 const generateFilters = (currentFilterType = FilterType.EVERYTHING) =>
   Object.values(FilterType).map((filterType) =>

@@ -1,4 +1,5 @@
-import { humanizeDate, SortType  } from './common.js';
+import { humanizeDate } from './common.js';
+import { SortType } from './constants.js';
 import { nanoid } from 'nanoid';
 
 export const addOffers = (offers) => offers.map(({title, price}) => {
@@ -39,7 +40,14 @@ export const sortList = (sortTypes, currentSortType) => sortTypes.map((sortType)
   ${sortType === SortType.OFFERS || sortType === SortType.EVENT ? 'disabled' : ''}>
   <label class="trip-sort__btn"  for="sort-${sortType.toLowerCase()}">${sortType}</label>
   </div>`);
-
+export const difMillscs = (begin, end) => {
+  const time1 = new Date(begin);
+  const time2 = new Date(end);
+  const time1ms = time1.getTime(time1);
+  const time2ms = time2.getTime(time2);
+  const difference = new Date (Math.max(time2ms, time1ms) - Math.min(time2ms, time1ms));
+  return difference;
+};
 export const duration = (begin, end) => {
   const time1 = new Date(begin);
   const time2 = new Date(end);

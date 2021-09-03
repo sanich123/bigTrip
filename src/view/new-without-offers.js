@@ -1,4 +1,3 @@
-
 import {TYPES, CITIES } from '../mock/create-data.js';
 import { createTypes, createCities, getFormatTime, getPhotos } from '../utils/rendering-utils.js';
 import Abstract from '../view/abstract.js';

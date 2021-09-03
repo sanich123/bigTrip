@@ -5,13 +5,15 @@ import NavigationView from './view/navigation.js';
 // import NewWithoutOffers from './view/new-without-offers.js';
 // import NewPoint from './view/newPoint.js';
 import { generatePoint } from './mock/create-data.js';
-import { renderPosition, render } from './utils/rendering-utils.js';
+import { renderPosition, render, remove } from './utils/rendering-utils.js';
 import PointsPresenter from './presenter/points-presenter.js';
 import PointsModel from './model/points-model.js';
 import FiltersModel from './model/filters-model.js';
 import FiltersPresenter from './presenter/filters-presenter.js';
+import { MenuItem } from './utils/constants.js';
+import StatisticsView from './view/statistics.js';
 
-const COUNT_OF_POINTS = 3;
+const COUNT_OF_POINTS = 24;
 
 const points = new Array(COUNT_OF_POINTS).fill().map(generatePoint);
 points.sort((a, b) => b.dateFrom - a.dateFrom);
@@ -25,12 +27,45 @@ const priceAndTripSection = document.querySelector('.trip-main');
 const toNavigation = document.querySelector('.trip-controls__navigation');
 const toFilters = document.querySelector('.trip-controls__filters');
 const toSort = document.querySelector('.trip-events');
+const toStat = document.querySelector('main.page-body__page-main .page-body__container');
 
 render(priceAndTripSection, new PriceTripView(pointsModel.getPoints()), renderPosition.AFTERBEGIN);
-render(toNavigation, new NavigationView(), renderPosition.AFTERBEGIN);
+const navigationView = new NavigationView();
+render(toNavigation, navigationView, renderPosition.AFTERBEGIN);
 
 const pointsPresenter = new PointsPresenter(toSort, pointsModel, filtersModel);
 const filterPresenter = new FiltersPresenter(toFilters, filtersModel, pointsModel);
+
+let statisticsComponent = null;
+
+const handleNavigationClick = (menuItem) => {
+  switch (menuItem) {
+    case MenuItem.POINTS:
+      pointsPresenter.destroy();
+      pointsPresenter.init();
+      remove(statisticsComponent);
+      statisticsComponent = null;
+      navigationView.addClassItem(MenuItem.POINTS);
+      navigationView.removeClassItem(MenuItem.STATISTICS);
+      document.querySelector('.trip-main__event-add-btn').disabled = false;
+      document.querySelectorAll('.trip-filters__filter-input').forEach((it) => it.disabled = false);
+      break;
+    case MenuItem.STATISTICS:
+      if (statisticsComponent !== null) {
+        return;
+      }
+      pointsPresenter.destroy();
+      statisticsComponent = new StatisticsView(pointsModel.getPoints());
+      render(toStat, statisticsComponent, renderPosition.AFTERBEGIN);
+      navigationView.addClassItem(MenuItem.STATISTICS);
+      navigationView.removeClassItem(MenuItem.POINTS);
+      document.querySelector('.trip-main__event-add-btn').disabled = true;
+      document.querySelectorAll('.trip-filters__filter-input').forEach((it) => it.disabled = true);
+      break;
+  }
+};
+
+navigationView.setMenuClickHandler(handleNavigationClick);
 pointsPresenter.init();
 filterPresenter.init();
 

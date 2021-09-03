@@ -7,7 +7,7 @@ import EditingPoint from '../view/point-edit.js';
 import NewTripPoint from './new-point-presenter.js';
 import TripPoint from './point-presenter.js';
 import { renderPosition, render, remove } from '../utils/rendering-utils.js';
-import { SortType, UpdateType, UserAction, FilterType } from '../utils/common.js';
+import { SortType, UpdateType, UserAction, FilterType } from '../utils/constants.js';
 import dayjs from 'dayjs';
 import { filter } from '../utils/filter.js';
 
@@ -32,11 +32,11 @@ export default class PointsPresenter {
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
-    this._pointsModel.addObserver(this._handleModelEvent);
-    this._filtersModel.addObserver(this._handleModelEvent);
   }
 
   init() {
+    this._pointsModel.addObserver(this._handleModelEvent);
+    this._filtersModel.addObserver(this._handleModelEvent);
     if (this._pointsModel.getPoints().length === 0) {
       this._renderEmpty();
     } else {
@@ -83,6 +83,16 @@ export default class PointsPresenter {
       return;
     }
     this._renderSort();
+  }
+
+  destroy() {
+    this._clearBoard({resetSortType: true});
+
+    // remove(this._sortMenu);
+    remove(this._tripListUl);
+
+    // this._tasksModel.removeObserver(this._handleModelEvent);
+    // this._filterModel.removeObserver(this._handleModelEvent);
   }
 
   createPoint() {
