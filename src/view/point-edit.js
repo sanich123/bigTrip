@@ -307,12 +307,14 @@ export default class EditingPoint extends Smart {
       {},
       point,
       {
+
       },
     );
   }
 
   static parseDataToTask(data) {
     data = Object.assign({}, data);
+
     return data;
   }
 }
