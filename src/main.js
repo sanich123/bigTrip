@@ -4,42 +4,34 @@ import NavigationView from './view/navigation.js';
 // import NewWithoutDestination from './view/newWithoutDestination.js';
 // import NewWithoutOffers from './view/new-without-offers.js';
 // import NewPoint from './view/newPoint.js';
-import { generatePoint } from './mock/create-data.js';
+// import { generatePoint } from './mock/create-data.js';
 import { renderPosition, render, remove } from './utils/rendering-utils.js';
 import PointsPresenter from './presenter/points-presenter.js';
 import PointsModel from './model/points-model.js';
 import FiltersModel from './model/filters-model.js';
 import FiltersPresenter from './presenter/filters-presenter.js';
-import { MenuItem } from './utils/constants.js';
+import { MenuItem, UpdateType } from './utils/constants.js';
 import StatisticsView from './view/statistics.js';
 import Api from './api.js';
 
-const COUNT_OF_POINTS = 24;
+// const COUNT_OF_POINTS = 24;
 const AUTHORIZATION = 'Basic hD3sb8dfSWcl2sA5j';
-const END_POINT = 'https://15.ecmascript.pages.academy/big-trip/';
-
-const points = new Array(COUNT_OF_POINTS).fill().map(generatePoint);
-points.sort((a, b) => b.dateFrom - a.dateFrom);
-const api = new Api(END_POINT, AUTHORIZATION);
-
-api.getPoints().then((point) => {
-  console.log(point);
-  // Есть проблема: cтруктура объекта похожа, но некоторые ключи называются иначе,
-  // а ещё на сервере используется snake_case, а у нас camelCase.
-  // Можно, конечно, переписать часть нашего клиентского приложения, но зачем?
-  // Есть вариант получше - паттерн "Адаптер"
-});
-
-const pointsModel = new PointsModel();
-pointsModel.setPoints(points);
-
-const filtersModel = new FiltersModel();
+const END_POINT = 'https://14.ecmascript.pages.academy/big-trip/';
 
 const priceAndTripSection = document.querySelector('.trip-main');
 const toNavigation = document.querySelector('.trip-controls__navigation');
 const toFilters = document.querySelector('.trip-controls__filters');
 const toSort = document.querySelector('.trip-events');
 const toStat = document.querySelector('main.page-body__page-main .page-body__container');
+// const points = new Array(COUNT_OF_POINTS).fill().map(generatePoint);
+// points.sort((a, b) => b.dateFrom - a.dateFrom);
+
+const pointsModel = new PointsModel();
+const api = new Api(END_POINT, AUTHORIZATION);
+
+// pointsModel.setPoints(points);
+
+const filtersModel = new FiltersModel();
 
 render(priceAndTripSection, new PriceTripView(pointsModel.getPoints()), renderPosition.AFTERBEGIN);
 const navigationView = new NavigationView();
@@ -80,7 +72,12 @@ const handleNavigationClick = (menuItem) => {
 navigationView.setMenuClickHandler(handleNavigationClick);
 pointsPresenter.init();
 filterPresenter.init();
-
+api.getPoints().then((points) => {
+  pointsModel.setPoints(UpdateType.INIT, points);
+})
+  .catch(() => {
+    pointsModel.setPoints(UpdateType.INIT, []);
+  });
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
   evt.preventDefault();
   pointsPresenter.createPoint();

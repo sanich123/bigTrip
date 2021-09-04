@@ -6,8 +6,9 @@ export default class PointsModel extends AbstractObserver {
     this._points = [];
   }
 
-  setPoints(points) {
+  setPoints(updateType, points) {
     this._points = points.slice();
+    this._notify(updateType, points);
   }
 
   getPoints() {
@@ -18,7 +19,7 @@ export default class PointsModel extends AbstractObserver {
     const index = this._points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {
-      throw new Error('Can\'t update unexisting task');
+      throw new Error('Can\'t update unexisting ooint');
     }
 
     this._points = [

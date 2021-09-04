@@ -1,6 +1,7 @@
 import TripListUl from '../view/trip-list-ul.js';
 import TripListLi from '../view/trip-list-li.js';
 import PointsList from '../view/points-list.js';
+import Loading from '../view/loading.js';
 import Empty from '../view/empty.js';
 import SortMenu from '../view/sort.js';
 import EditingPoint from '../view/point-edit.js';
@@ -19,13 +20,15 @@ export default class PointsPresenter {
     this._tripPresenter = new Map();
     this._currentSortType = SortType.DAY;
     this._filterType = FilterType.EVERYTHING;
+    this._isLoading = true;
 
     this._sortMenu = null;
-    // this._empty = null;
+    this._empty = null;
     this._tripListUl = new TripListUl();
     this._tripListLi = new TripListLi();
     this._editingPoint = new EditingPoint();
     this._pointsList = new PointsList();
+    this._loading = new Loading();
     this._newTripPoint = new NewTripPoint(this._tripListUl, this._handleViewAction, this._pointsModel);
 
     this._handleViewAction = this._handleViewAction.bind(this);
@@ -47,6 +50,10 @@ export default class PointsPresenter {
   _renderEmpty() {
     this._empty = new Empty(this._filterType);
     render(this._container, this._empty, renderPosition.BEFOREEND);
+  }
+
+  _renderLoading() {
+    render(this._container, this._loading, renderPosition.BEFOREEND);
   }
 
   _renderSort() {
@@ -75,6 +82,11 @@ export default class PointsPresenter {
   }
 
   _renderBoard() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
+
     this._filterType = this._filtersModel.getFilter();
     const points = this._pointsModel.getPoints();
     const filtredPoints = filter[this._filterType](points);
@@ -88,7 +100,7 @@ export default class PointsPresenter {
   destroy() {
     this._clearBoard({resetSortType: true});
 
-    // remove(this._sortMenu);
+    remove(this._sortMenu);
     remove(this._tripListUl);
 
     // this._tasksModel.removeObserver(this._handleModelEvent);
@@ -120,6 +132,7 @@ export default class PointsPresenter {
     this._tripPresenter.clear();
 
     remove(this._sortMenu);
+    // remove(this._loading);
     if (this._empty) {
       remove(this._empty);
     }
@@ -144,7 +157,7 @@ export default class PointsPresenter {
   }
 
   _handleModelEvent(updateType, data) {
-    // console.log(updateType, data);
+    console.log(updateType, data);
     switch (updateType) {
       case UpdateType.PATCH:
         this._taskPresenter.get(data.id).init(data);
@@ -155,6 +168,13 @@ export default class PointsPresenter {
         break;
       case UpdateType.MAJOR:
         this._clearBoard({resetSortType: true});
+        this._renderBoard();
+        break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loading);
+        remove(this._empty);
+        this._clearBoard();
         this._renderBoard();
         break;
     }
