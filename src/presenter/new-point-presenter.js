@@ -117,7 +117,9 @@ export default class NewTripPoint {
     this._changeData(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
-      Object.assign({id: nanoid()}, newPoint),
+      Object.assign(
+        // {id: nanoid()},
+        newPoint),
     );
   }
 
