@@ -7,6 +7,7 @@ import SortMenu from '../view/sort.js';
 import EditingPoint from '../view/point-edit.js';
 import NewTripPoint from './new-point-presenter.js';
 import TripPoint from './point-presenter.js';
+import PriceTripView from '../view/price-trip.js';
 import { renderPosition, render, remove } from '../utils/rendering-utils.js';
 import { SortType, UpdateType, UserAction, FilterType } from '../utils/constants.js';
 import dayjs from 'dayjs';
@@ -24,6 +25,7 @@ export default class PointsPresenter {
 
     this._sortMenu = null;
     this._empty = null;
+    this._priceTrip = new PriceTripView();
     this._tripListUl = new TripListUl();
     this._tripListLi = new TripListLi();
     this._editingPoint = new EditingPoint();
@@ -45,6 +47,10 @@ export default class PointsPresenter {
     } else {
       this._renderSort();
     }
+  }
+
+  _renderPriceTrip() {
+    render(document.querySelector('.trip-main'), this._priceTrip(this._pointsModel.getPoints()), renderPosition.AFTERBEGIN);
   }
 
   _renderEmpty() {
@@ -94,7 +100,9 @@ export default class PointsPresenter {
       this._renderEmpty();
       return;
     }
+
     this._renderSort();
+    // this._renderPriceTrip();
   }
 
   destroy() {
@@ -132,12 +140,12 @@ export default class PointsPresenter {
     this._tripPresenter.clear();
 
     remove(this._sortMenu);
-    // remove(this._loading);
+    remove(this._loading);
     if (this._empty) {
       remove(this._empty);
     }
     if (resetSortType) {
-      this._currentSortType = SortType.DEFAULT;
+      this._currentSortType = SortType.DAY;
     }
   }
 
@@ -157,7 +165,7 @@ export default class PointsPresenter {
   }
 
   _handleModelEvent(updateType, data) {
-    console.log(updateType, data);
+    // console.log(updateType, data);
     switch (updateType) {
       case UpdateType.PATCH:
         this._taskPresenter.get(data.id).init(data);
