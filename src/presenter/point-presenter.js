@@ -3,6 +3,7 @@ import TripListLi from '../view/trip-list-li.js';
 import PointsList from '../view/points-list.js';
 import { renderPosition, render, replace, remove } from '../utils/rendering-utils.js';
 import { UserAction, UpdateType, Mode } from '../utils/constants.js';
+import dayjs from 'dayjs';
 
 export default class TripPoint {
   constructor(pointContainer, changeData, changeMode) {
@@ -103,14 +104,20 @@ export default class TripPoint {
     this._replaceCardToForm();
   }
 
-  _handleFormSubmit(update) {
-    if (update.basePrice === 0 || update.destination.name === '') {
-      return;
+  _handleFormSubmit(editPoint) {
+    if (editPoint.destination.name === '') {
+      const inputValue = this._editPoint._element[11];
+      return inputValue.setCustomValidity('Нельзя отправить пустое поле названия города');
+    } else if (editPoint.basePrice === 0) {
+      const inputValue = this._editPoint._element[14];
+      return inputValue.setCustomValidity('Нельзя отправить поле со значением 0');
+    } else if (dayjs(editPoint.dateTo) < dayjs(editPoint.dateFrom)) {
+      return this._editPoint._element[11].setCustomValidity('Дата окончания не может быть раньше начала');
     }
     this._changeData(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,
-      update,
+      editPoint,
     );
     this._replaceFormToCard();
   }
