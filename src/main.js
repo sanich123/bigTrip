@@ -30,7 +30,7 @@ render(priceAndTripSection, new PriceTripView(pointsModel.getPoints()), renderPo
 const navigationView = new NavigationView();
 render(toNavigation, navigationView, renderPosition.AFTERBEGIN);
 
-const pointsPresenter = new PointsPresenter(toSort, pointsModel, filtersModel);
+const pointsPresenter = new PointsPresenter(toSort, pointsModel, filtersModel, api);
 const filterPresenter = new FiltersPresenter(toFilters, filtersModel, pointsModel);
 
 let statisticsComponent = null;
@@ -61,18 +61,15 @@ const handleNavigationClick = (menuItem) => {
       break;
   }
 };
-
 navigationView.setMenuClickHandler(handleNavigationClick);
+
 pointsPresenter.init();
 filterPresenter.init();
 api.getPoints().then((points) => {
   pointsModel.setPoints(UpdateType.INIT, points);
-  document.querySelector('.trip-main__event-add-btn').disabled = false;
-
 })
   .catch(() => {
     pointsModel.setPoints(UpdateType.INIT, []);
-    document.querySelector('.trip-main__event-add-btn').disabled = false;
   });
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {

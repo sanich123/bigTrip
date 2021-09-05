@@ -14,7 +14,8 @@ import dayjs from 'dayjs';
 import { filter } from '../utils/filter.js';
 
 export default class PointsPresenter {
-  constructor(container, pointsModel, filtersModel) {
+  constructor(container, pointsModel, filtersModel, api) {
+    this._api = api;
     this._filtersModel = filtersModel;
     this._pointsModel = pointsModel;
     this._container = container;
@@ -154,7 +155,9 @@ export default class PointsPresenter {
     // console.log(actionType, updateType, update);
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this._pointsModel.updatePoint(updateType, update);
+          this._api.updatePoint(update).then((response) => {
+          this._pointsModel.updatePoint(updateType, response);
+        });
         break;
       case UserAction.ADD_POINT:
         this._pointsModel.addPoint(updateType, update);
