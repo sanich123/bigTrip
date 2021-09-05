@@ -3,6 +3,7 @@ import TripListLi from '../view/trip-list-li.js';
 import { renderPosition, render, remove } from '../utils/rendering-utils.js';
 import { UserAction, UpdateType } from '../utils/constants.js';
 import { nanoid } from 'nanoid';
+import dayjs from 'dayjs';
 
 export default class NewTripPoint {
   constructor(pointContainer, changeData, pointsModel) {
@@ -104,8 +105,14 @@ export default class NewTripPoint {
   }
 
   _handleFormSubmit(newPoint) {
-    if (newPoint.basePrice === 0 || newPoint.destination.name === '') {
-      return;
+    if (newPoint.destination.name === '') {
+      const inputValue = this._editPoint._element[11];
+      return inputValue.setCustomValidity('Нельзя отправить пустое поле названия города');
+    } else if (newPoint.basePrice === 0) {
+      const inputValue = this._editPoint._element[14];
+      return inputValue.setCustomValidity('Нельзя отправить поле со значением 0');
+    } else if (dayjs(newPoint.dateTo) < dayjs(newPoint.dateFrom)) {
+      return this._editPoint._element[11].setCustomValidity('Дата окончания не может быть раньше начала');
     }
     this._changeData(
       UserAction.ADD_POINT,
@@ -123,5 +130,6 @@ export default class NewTripPoint {
       evt.preventDefault();
       this.destroy();
     }
+    document.querySelector('.trip-main__event-add-btn').disabled = false;
   }
 }

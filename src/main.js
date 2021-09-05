@@ -67,12 +67,16 @@ pointsPresenter.init();
 filterPresenter.init();
 api.getPoints().then((points) => {
   pointsModel.setPoints(UpdateType.INIT, points);
+  document.querySelector('.trip-main__event-add-btn').disabled = false;
+
 })
   .catch(() => {
     pointsModel.setPoints(UpdateType.INIT, []);
+    document.querySelector('.trip-main__event-add-btn').disabled = false;
   });
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
   evt.preventDefault();
   pointsPresenter.createPoint();
+  document.querySelector('.trip-main__event-add-btn').disabled = true;
 });

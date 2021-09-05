@@ -4,14 +4,14 @@ import { FilterType, UpdateType } from '../utils/constants.js';
 
 
 export default class FiltersPresenter {
-  constructor(filterContainer, filtersModel, tasksModel) {
+  constructor(filterContainer, filtersModel, pointsModel) {
     this._filterContainer = filterContainer;
     this._filtersModel = filtersModel;
-    this._tasksModel = tasksModel;
+    this._pointsModel = pointsModel;
     this._filterComponent = null;
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
-    this._tasksModel.addObserver(this._handleModelEvent);
+    this._pointsModel.addObserver(this._handleModelEvent);
     this._filtersModel.addObserver(this._handleModelEvent);
   }
 

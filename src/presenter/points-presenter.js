@@ -7,7 +7,7 @@ import SortMenu from '../view/sort.js';
 import EditingPoint from '../view/point-edit.js';
 import NewTripPoint from './new-point-presenter.js';
 import TripPoint from './point-presenter.js';
-import PriceTripView from '../view/price-trip.js';
+// import PriceTripView from '../view/price-trip.js';
 import { renderPosition, render, remove } from '../utils/rendering-utils.js';
 import { SortType, UpdateType, UserAction, FilterType } from '../utils/constants.js';
 import dayjs from 'dayjs';
@@ -25,7 +25,7 @@ export default class PointsPresenter {
 
     this._sortMenu = null;
     this._empty = null;
-    this._priceTrip = new PriceTripView();
+    // this._priceTrip = new PriceTripView();
     this._tripListUl = new TripListUl();
     this._tripListLi = new TripListLi();
     this._editingPoint = new EditingPoint();
@@ -44,14 +44,15 @@ export default class PointsPresenter {
     this._filtersModel.addObserver(this._handleModelEvent);
     if (this._pointsModel.getPoints().length === 0) {
       this._renderEmpty();
+
     } else {
       this._renderSort();
     }
   }
 
-  _renderPriceTrip() {
-    render(document.querySelector('.trip-main'), this._priceTrip(this._pointsModel.getPoints()), renderPosition.AFTERBEGIN);
-  }
+  // _renderPriceTrip() {
+  //   render(document.querySelector('.trip-main'), this._priceTrip(this._pointsModel.getPoints()), renderPosition.AFTERBEGIN);
+  // }
 
   _renderEmpty() {
     this._empty = new Empty(this._filterType);
@@ -92,12 +93,12 @@ export default class PointsPresenter {
       this._renderLoading();
       return;
     }
-
     this._filterType = this._filtersModel.getFilter();
     const points = this._pointsModel.getPoints();
     const filtredPoints = filter[this._filterType](points);
     if (filtredPoints.length === 0) {
       this._renderEmpty();
+
       return;
     }
 
