@@ -194,7 +194,7 @@ export default class EditingPoint extends Smart {
     this.updateData(
       {
         destination: {
-          description: this._destinations.map((destination) => evt.target.value === destination.name ? destination.description : ''),
+          description: this._destinations.filter((destination) => evt.target.value === destination.name)[0].description,
           name: evt.target.value,
           pictures: this._destinations.map((destination) => evt.target.value === destination.name ? destination.pictures : ''),
         },
