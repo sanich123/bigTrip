@@ -95,22 +95,11 @@ export default class EditingPoint extends Smart {
     this._editClickHandler = this._editClickHandler.bind(this);
   }
 
-  _formInit() {
-    if (this._getDestinations().length === 0) {
-      this.getElement().querySelector('.event__input--destination').setCustomValidity('Отсутствует список пунктов назначения');
-    }
-    if (this._getOffers().length === 0) {
-      this.getElement().querySelector('.event__type-group').setCustomValidity('Отсутствует список доступных предложений');
-    }
-  }
-
   _getDestinations() {
-    this._formInit();
     return this._destinations.map((it) => it.name);
   }
 
   _getOffers() {
-    this._formInit();
     return this._offers;
   }
 
@@ -177,7 +166,6 @@ export default class EditingPoint extends Smart {
 
   _cityInputHandler(evt) {
     evt.preventDefault();
-this._formInit();
     const inputValue = this.getElement().querySelector('.event__input--destination');
     const city = evt.target.value;
     if (!city ||  isCityExist(city, this._getDestinations())) {
