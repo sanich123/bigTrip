@@ -196,7 +196,7 @@ export default class EditingPoint extends Smart {
         destination: {
           description: this._destinations.filter((destination) => evt.target.value === destination.name)[0].description,
           name: evt.target.value,
-          pictures: this._destinations.map((destination) => evt.target.value === destination.name ? destination.pictures : ''),
+          pictures: this._destinations.filter((destination) => evt.target.value === destination.name)[0].pictures,
         },
         // isDisabled: isCityExist(evt.target.value, CITIES),
       });
