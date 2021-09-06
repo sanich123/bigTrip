@@ -74,6 +74,7 @@ api.getPoints().then((points) => {
   .catch(() => {
     pointsModel.setPoints(UpdateType.INIT, []);
   });
+
 api.getDestinations().then((destinations) => {
   destinationsModel.setDestinations(destinations);
 });

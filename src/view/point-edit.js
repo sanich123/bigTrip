@@ -10,7 +10,7 @@ const editPoint = (point, availableOffers, destinations) => {
   const { basePrice, dateFrom, dateTo, type, id, isDisabled, destination, offers } = point;
 
   const availableDestinations = destinations.map((it) => it.name);
-
+  console.log(availableOffers, destinations);
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
   <div class="event__type-wrapper">
@@ -59,15 +59,7 @@ const editPoint = (point, availableOffers, destinations) => {
     <span class="visually-hidden">Open event</span>
   </button>
 </header>
-<section class="event__details">
-  <section class="event__section  event__section--offers">
-    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-    <div class="event__available-offers">
     ${addOffers(offers)}
-    </div>
-  </section>
-
   <section class="event__section  event__section--destination">
     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
     <p class="event__destination-description">${destination.description}</p>
@@ -103,11 +95,22 @@ export default class EditingPoint extends Smart {
     this._editClickHandler = this._editClickHandler.bind(this);
   }
 
+  _formInit() {
+    if (this._getDestinations().length === 0) {
+      this.getElement().querySelector('.event__input--destination').setCustomValidity('Отсутствует список пунктов назначения');
+    }
+    if (this._getOffers().length === 0) {
+      this.getElement().querySelector('.event__type-group').setCustomValidity('Отсутствует список доступных предложений');
+    }
+  }
+
   _getDestinations() {
+    this._formInit();
     return this._destinations.map((it) => it.name);
   }
 
   _getOffers() {
+    this._formInit();
     return this._offers;
   }
 
@@ -174,6 +177,7 @@ export default class EditingPoint extends Smart {
 
   _cityInputHandler(evt) {
     evt.preventDefault();
+this._formInit();
     const inputValue = this.getElement().querySelector('.event__input--destination');
     const city = evt.target.value;
     if (!city ||  isCityExist(city, this._getDestinations())) {
@@ -208,6 +212,9 @@ export default class EditingPoint extends Smart {
 
   _typeChangeHandler(evt) {
     evt.preventDefault();
+    if (this._offers.length === 0) {
+      this.getElement().querySelector('.event__type-group').disabled = true;
+    }
     this.updateData(
       {
         type: evt.target.value,
