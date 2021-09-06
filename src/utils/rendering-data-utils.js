@@ -18,11 +18,12 @@ const addSection2 = () => '</div></section>';
 
 const addSection3 = () => `<section class="event__section  event__section--offers">
 <div class="event__available-offers">`;
+
 export const addOffers = (offers, id) => {
   if (offers.length === 0) {
     return `${addSection3()} ${addSection2()}`;
   } else {
-  return `${addSection()} ${generateOffers(offers, id)} ${addSection2()}`;}
+    return `${addSection()} ${generateOffers(offers, id)} ${addSection2()}`;}
 };
 
 const upperCaseFirstLetter = (type) => type[0].toUpperCase() + type.split('').splice(1).join('');

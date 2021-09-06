@@ -48,7 +48,6 @@ export default class PointsPresenter {
     this._filtersModel.addObserver(this._handleModelEvent);
     if (this._pointsModel.getPoints().length === 0) {
       this._renderEmpty();
-
     } else {
       this._renderSort();
     }
@@ -102,14 +101,14 @@ export default class PointsPresenter {
     this._filterType = this._filtersModel.getFilter();
     const points = this._pointsModel.getPoints();
     const filtredPoints = filter[this._filterType](points);
+    // if (points.length !== 0) {
+    //   this._renderPriceTrip();
+    // }
     if (filtredPoints.length === 0) {
       this._renderEmpty();
-
       return;
     }
-
     this._renderSort();
-    // this._renderPriceTrip();
   }
 
   destroy() {
@@ -118,8 +117,8 @@ export default class PointsPresenter {
     remove(this._sortMenu);
     remove(this._tripListUl);
 
-    // this._tasksModel.removeObserver(this._handleModelEvent);
-    // this._filterModel.removeObserver(this._handleModelEvent);
+    this._pointsModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
   }
 
   createPoint() {

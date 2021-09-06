@@ -31,7 +31,6 @@ export const Mode = {
 };
 
 export const MenuItem = {
-  // ADD_NEW_POINT: 'ADD_NEW_POINT',
   POINTS: 'POINTS',
   STATISTICS: 'STATISTICS',
 };

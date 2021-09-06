@@ -59,7 +59,7 @@ const editPoint = (point, availableOffers, destinations) => {
     <span class="visually-hidden">Open event</span>
   </button>
 </header>
-    ${addOffers(offers)}
+    ${addOffers(offers, id)}
   <section class="event__section  event__section--destination">
     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
     <p class="event__destination-description">${destination.description}</p>
@@ -182,7 +182,6 @@ export default class EditingPoint extends Smart {
 
   _cityChangeHandler(evt) {
     evt.preventDefault();
-
     this.updateData(
       {
         destination: {
