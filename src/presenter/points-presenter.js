@@ -14,10 +14,13 @@ import dayjs from 'dayjs';
 import { filter } from '../utils/filter.js';
 
 export default class PointsPresenter {
-  constructor(container, pointsModel, filtersModel, api) {
+  constructor(container, pointsModel, filtersModel, api, destinationsModel, offersModel) {
     this._api = api;
     this._filtersModel = filtersModel;
     this._pointsModel = pointsModel;
+    this._destinationsModel = destinationsModel;
+    this._offersModel = offersModel;
+
     this._container = container;
     this._tripPresenter = new Map();
     this._currentSortType = SortType.DAY;
@@ -84,8 +87,10 @@ export default class PointsPresenter {
   }
 
   _renderPoint(point) {
+    this._offers = this._offersModel.getOffers();
+    this._destinations = this._destinationsModel.getDestinations();
     const tripPoint = new TripPoint(this._tripListUl, this._handleViewAction, this._handleModeChange);
-    tripPoint.init(point);
+    tripPoint.init(point, this._offers, this._destinations);
     this._tripPresenter.set(point.id, tripPoint);
   }
 

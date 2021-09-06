@@ -22,14 +22,14 @@ export default class TripPoint {
     this._handleEditClickBack = this._handleEditClickBack.bind(this);
   }
 
-  init(point) {
+  init(point, offers, destinations) {
     this._point = point;
     const prevPointEvent = this._pointEvent;
     const prevEditPoint = this._editPoint;
     const prevTripListLi = this._tripListLi;
     this._tripListLi = new TripListLi();
     this._pointEvent = new PointsList(point);
-    this._editPoint = new EditingPoint(point);
+    this._editPoint = new EditingPoint(point, offers, destinations);
 
     if (prevTripListLi === null) {
       render(this._pointContainer, this._tripListLi, renderPosition.AFTERBEGIN);

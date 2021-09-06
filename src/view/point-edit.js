@@ -1,13 +1,15 @@
-import { TYPES, CITIES, OPTIONS, getOffersByType } from '../mock/create-data.js';
+import { TYPES, getOffersByType } from '../mock/create-data.js';
 import { addOffers, createTypes, createCities, getFormatTime, getPhotos } from '../utils/rendering-data-utils.js';
 import { isCityExist } from '../utils/common.js';
 import Smart from '../view/smart.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
-const editPoint = (point) => {
+const editPoint = (point, availableOffers, destinations) => {
 
-  const { basePrice, dateFrom, dateTo, destination, offers, type, id, isDisabled } = point;
+  const { basePrice, dateFrom, dateTo, type, id, isDisabled, destination, offers } = point;
+
+  const availableDestinations = destinations.map((it) => it.name);
 
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
@@ -31,7 +33,7 @@ const editPoint = (point) => {
     </label>
     <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${destination.name}" list="destination-list-${id}">
     <datalist id="destination-list-${id}">
-    ${createCities(CITIES)}
+    ${createCities(availableDestinations)}
     </datalist>
   </div>
 
@@ -80,9 +82,11 @@ const editPoint = (point) => {
 };
 
 export default class EditingPoint extends Smart {
-  constructor(point) {
+  constructor(point, offers, destinations) {
     super();
     this._data = EditingPoint.parseTaskToData(point);
+    this._offers = offers;
+    this._destinations = destinations;
     this._datepicker1 = null;
     this._datepicker2 = null;
     this._timeFromHandler = this._timeFromHandler.bind(this);
@@ -97,6 +101,14 @@ export default class EditingPoint extends Smart {
     this._priceInputHandler = this._priceInputHandler.bind(this);
     this._offersListener = this._offersListener.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
+  }
+
+  _getDestinations() {
+    return this._destinations.map((it) => it.name);
+  }
+
+  _getOffers() {
+    return this._offers;
   }
 
   setPriceInputListener() {
@@ -123,10 +135,9 @@ export default class EditingPoint extends Smart {
     evt.preventDefault();
     this.updateData({
       basePrice: Math.abs(evt.target.value),
-      isDisabled: Math.abs(evt.target.value) === 0 || !Math.abs(evt.target.value) ? 'disabled' : '',
+      // isDisabled: Math.abs(evt.target.value) === 0 || !Math.abs(evt.target.value) ? 'disabled' : '',
     });
   }
-
 
   setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
@@ -165,7 +176,7 @@ export default class EditingPoint extends Smart {
     evt.preventDefault();
     const inputValue = this.getElement().querySelector('.event__input--destination');
     const city = evt.target.value;
-    if (!city ||  isCityExist(city, CITIES)) {
+    if (!city ||  isCityExist(city, this._getDestinations())) {
       inputValue.setCustomValidity('Название города должно соответствовать названию города из списка и не может быть пустым полем');
     } else {
       inputValue.setCustomValidity('');
@@ -179,14 +190,15 @@ export default class EditingPoint extends Smart {
 
   _cityChangeHandler(evt) {
     evt.preventDefault();
+
     this.updateData(
       {
         destination: {
-          description: generateDestination().description,
+          description: this._destinations.map((destination) => evt.target.value === destination.name ? destination.description : ''),
           name: evt.target.value,
-          pictures: generateDestination().pictures,
+          pictures: this._destinations.map((destination) => evt.target.value === destination.name ? destination.pictures : ''),
         },
-        isDisabled: isCityExist(evt.target.value, CITIES),
+        // isDisabled: isCityExist(evt.target.value, CITIES),
       });
   }
 
@@ -199,7 +211,7 @@ export default class EditingPoint extends Smart {
     this.updateData(
       {
         type: evt.target.value,
-        offers: getOffersByType(OPTIONS, evt.target.value),
+        offers: getOffersByType(this._offers, evt.target.value),
       });
   }
 
@@ -281,7 +293,7 @@ export default class EditingPoint extends Smart {
   }
 
   getTemplate() {
-    return editPoint(this._data);
+    return editPoint(this._data, this._offers, this._destinations);
   }
 
   _setInnerHandlers() {
