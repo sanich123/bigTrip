@@ -137,7 +137,7 @@ export default class PointsPresenter {
       case SortType.PRICE:
         return filtredPoints.sort((a, b) => a.basePrice - b.basePrice);
     }
-    return filtredPoints.sort((a, b) => b.dateFrom - a.dateFrom);
+    return filtredPoints.sort((a, b) => dayjs(b.dateFrom) - dayjs(a.dateFrom));
   }
 
   _clearBoard({resetSortType = false} = {}) {
