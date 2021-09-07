@@ -114,9 +114,9 @@ export default class PointsPresenter {
 
     remove(this._sortMenu);
     remove(this._tripListUl);
-
-    this._pointsModel.removeObserver(this._handleModelEvent);
-    this._filterModel.removeObserver(this._handleModelEvent);
+//Код ниже не работает при переключении на экран статистики, в других местах не парит вообще
+    // this._pointsModel.removeObserver(this._handleModelEvent);
+    // this._filterModel.removeObserver(this._handleModelEvent);
   }
 
   createPoint() {
