@@ -46,6 +46,8 @@ export default class PointsPresenter {
   init() {
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filtersModel.addObserver(this._handleModelEvent);
+    this._offersModel.addObserver(this._handleModelEvent);
+    this._destinationsModel.addObserver(this._handleModelEvent);
     if (this._pointsModel.getPoints().length === 0) {
       this._renderEmpty();
     } else {
@@ -113,8 +115,8 @@ export default class PointsPresenter {
     remove(this._sortMenu);
     remove(this._tripListUl);
 
-    // this._pointsModel.removeObserver(this._handleModelEvent);
-    // this._filterModel.removeObserver(this._handleModelEvent);
+    this._pointsModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
   }
 
   createPoint() {

@@ -78,8 +78,8 @@ Promise.all([
 ]).then((values) => {
   const [destinations, offers, points] = values;
   pointsModel.setPoints(UpdateType.INIT, points);
-  offersModel.setOffers(offers);
-  destinationsModel.setDestinations(destinations);
+  offersModel.setOffers(UpdateType.INIT, offers);
+  destinationsModel.setDestinations(UpdateType.INIT, destinations);
   newPointButton.disabled = false;
   render(priceAndTripSection, new PriceTripView(pointsModel.getPoints()), renderPosition.AFTERBEGIN);
   navigationView.setMenuClickHandler(handleNavigationClick);
