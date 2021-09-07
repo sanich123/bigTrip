@@ -1,4 +1,4 @@
-import { TYPES, getOffersByType } from '../mock/create-data.js';
+import { TYPES, getOffersByType } from '../utils/rendering-data-utils.js';
 import { addOffers, createTypes, createCities, getFormatTime, getPhotos } from '../utils/rendering-data-utils.js';
 import { isCityExist } from '../utils/common.js';
 import Smart from '../view/smart.js';
@@ -10,7 +10,15 @@ const editPoint = (point, availableOffers, destinations) => {
   const { basePrice, dateFrom, dateTo, type, id, isDisabled, destination, offers } = point;
 
   const availableDestinations = destinations.map((it) => it.name);
-  console.log(availableOffers, destinations);
+  const destinationListener = () => destination.name !== '' ? `<section class="event__section  event__section--destination"><h3 class="event__section-title  event__section-title--destination">Destination</h3>
+    <p class="event__destination-description">${destination.description}</p>
+      <div class="event__photos-container">
+        <div class="event__photos-tape">
+           ${destination.pictures === '' ? '' : getPhotos(destination.pictures)}
+        </div>
+       </div>
+  </section>` : '';
+
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
   <div class="event__type-wrapper">
@@ -60,15 +68,7 @@ const editPoint = (point, availableOffers, destinations) => {
   </button>
 </header>
     ${addOffers(offers, id)}
-  <section class="event__section  event__section--destination">
-    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-    <p class="event__destination-description">${destination.description}</p>
-      <div class="event__photos-container">
-        <div class="event__photos-tape">
-          ${getPhotos(destination.pictures)}
-        </div>
-       </div>
-  </section>
+${destinationListener()}
 </section>
 </form>`;
 };

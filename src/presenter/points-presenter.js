@@ -53,10 +53,6 @@ export default class PointsPresenter {
     }
   }
 
-  // _renderPriceTrip() {
-  //   render(document.querySelector('.trip-main'), this._priceTrip(this._pointsModel.getPoints()), renderPosition.AFTERBEGIN);
-  // }
-
   _renderEmpty() {
     this._empty = new Empty(this._filterType);
     render(this._container, this._empty, renderPosition.BEFOREEND);
@@ -117,14 +113,16 @@ export default class PointsPresenter {
     remove(this._sortMenu);
     remove(this._tripListUl);
 
-    this._pointsModel.removeObserver(this._handleModelEvent);
-    this._filterModel.removeObserver(this._handleModelEvent);
+    // this._pointsModel.removeObserver(this._handleModelEvent);
+    // this._filterModel.removeObserver(this._handleModelEvent);
   }
 
   createPoint() {
+    this._offers = this._offersModel.getOffers();
+    this._destinations = this._destinationsModel.getDestinations();
     this._currentSortType = SortType.DAY;
     this._filtersModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this._newTripPoint.init();
+    this._newTripPoint.init(this._offers, this._destinations);
   }
 
   _getPoints() {

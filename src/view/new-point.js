@@ -1,12 +1,25 @@
-import { TYPES, CITIES, OPTIONS, getOffersByType, generateDestination } from '../mock/create-data.js';
+import { TYPES, getOffersByType } from '../utils/rendering-data-utils.js';
 import { addOffers, createTypes, createCities, getPhotos, getFormatTime } from '../utils/rendering-data-utils.js';
 import { isCityExist} from '../utils/common.js';
 import Smart from '../view/smart.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
-const editPoint = (point) => {
-  const { destination, offers, type, id, dateFrom, dateTo, isDisabled, basePrice } = point;
+const editPoint = (point, availableOffers, destinations) => {
+  const { destination, offers, type, id, dateFrom, dateTo,
+    // isDisabled,
+    basePrice } = point;
+
+  const destinationListener = () => destination.name !== '' ? `<section class="event__section  event__section--destination"><h3 class="event__section-title  event__section-title--destination">Destination</h3>
+    <p class="event__destination-description">${destination.description}</p>
+      <div class="event__photos-container">
+        <div class="event__photos-tape">
+           ${destination.pictures === '' ? '' : getPhotos(destination.pictures)}
+        </div>
+       </div>
+  </section>` : '';
+
+  const availableDestinations = destinations.map((it) => it.name);
 
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
@@ -30,7 +43,7 @@ const editPoint = (point) => {
     </label>
     <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${destination.name}" list="destination-list-${id}">
     <datalist id="destination-list-${id}">
-    ${createCities(CITIES)}
+    ${createCities(availableDestinations)}
     </datalist>
   </div>
 
@@ -51,40 +64,26 @@ const editPoint = (point) => {
     name="event-price" value="${basePrice}">
   </div>
 
-  <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled}>Save</button>
+  <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
   <button class="event__reset-btn" type="reset">Cancel</button>
     <span class="visually-hidden">Open event</span>
   </button>
 </header>
-<section class="event__details">
-  <section class="event__section  event__section--offers">
-    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-    <div class="event__available-offers">
-    ${addOffers(offers)}
-    </div>
-  </section>
-
-  <section class="event__section  event__section--destination">
-    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-    <p class="event__destination-description">${destination.description.join('')}</p>
-      <div class="event__photos-container">
-        <div class="event__photos-tape">
-          ${getPhotos(destination.pictures)}
-        </div>
-       </div>
-  </section>
+${addOffers(offers, id)}
+${destinationListener()}
 </section>
 </form>`;
 };
 
 export default class EditingPoint extends Smart {
-  constructor(point) {
+  constructor(point, offers, destinations) {
     super();
     this._data = EditingPoint.parseTaskToData(point);
     this._datepicker1 = null;
     this._datepicker2 = null;
     this._timeFromHandler = this._timeFromHandler.bind(this);
+    this._offers = offers;
+    this._destinations = destinations;
     this._timeToHandler = this._timeToHandler.bind(this);
     this._setDatePicker = this._setDatePicker.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
@@ -121,7 +120,7 @@ export default class EditingPoint extends Smart {
     evt.preventDefault();
     this.updateData({
       basePrice: Math.abs(evt.target.value),
-      isDisabled: Math.abs(evt.target.value) === 0 || !Math.abs(evt.target.value) ? 'disabled' : '',
+      // isDisabled: Math.abs(evt.target.value) === 0 || !Math.abs(evt.target.value) ? 'disabled' : '',
     });
   }
 
@@ -163,7 +162,7 @@ export default class EditingPoint extends Smart {
     evt.preventDefault();
     const inputValue = this.getElement().querySelector('.event__input--destination');
     const city = evt.target.value;
-    if (!city ||  isCityExist(city, CITIES)) {
+    if (!city ||  !isCityExist(city, Array.from(this._destinations.map((destination) => destination.name)))) {
       inputValue.setCustomValidity('Название города должно соответствовать названию города из списка и не может быть пустым полем');
     } else {
       inputValue.setCustomValidity('');
@@ -177,15 +176,18 @@ export default class EditingPoint extends Smart {
 
   _cityChangeHandler(evt) {
     evt.preventDefault();
-    this.updateData(
-      {
-        destination: {
-          description: generateDestination().description,
-          name: evt.target.value,
-          pictures: generateDestination().pictures,
-        },
-        isDisabled: isCityExist(evt.target.value, CITIES),
-      });
+    if (evt.target.value === this._destinations.filter((destination) => evt.target.value === destination.name)[0].name) {
+      this.updateData(
+        {
+          destination: {
+            description: this._destinations.filter((destination) => evt.target.value === destination.name)[0].description,
+            name: evt.target.value,
+            pictures: this._destinations.filter((destination) => evt.target.value === destination.name)[0].pictures,
+          },
+        // isDisabled: isCityExist(evt.target.value, CITIES),
+        });
+      document.querySelector('.trip-main__event-add-btn').disabled = true;
+    }
   }
 
   setTypeChangeHandler() {
@@ -197,7 +199,7 @@ export default class EditingPoint extends Smart {
     this.updateData(
       {
         type: evt.target.value,
-        offers: getOffersByType(OPTIONS, evt.target.value),
+        offers: getOffersByType(this._offers, evt.target.value),
       });
   }
 
@@ -251,7 +253,7 @@ export default class EditingPoint extends Smart {
   }
 
   getTemplate() {
-    return editPoint(this._data);
+    return editPoint(this._data, this._offers, this._destinations);
   }
 
   _setDatePicker() {

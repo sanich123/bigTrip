@@ -62,7 +62,6 @@ const handleNavigationClick = (menuItem) => {
   }
 };
 
-
 pointsPresenter.init();
 filterPresenter.init();
 

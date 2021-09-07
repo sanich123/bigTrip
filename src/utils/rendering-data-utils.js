@@ -41,6 +41,28 @@ export const titlePrice = (offers) => offers.map(({ title, price }) => (`<li cla
   <span class="event__offer-price">${price}</span>
 </li>`)).join('');
 
+export const getOffersByType = (arr, tip) => {
+  let result;
+  arr.forEach((it) => {
+    if (it.type === tip) {
+      result = it.offers;
+      return result;
+    }
+  });
+  return result;
+};
+export const TYPES = [
+  'taxi',
+  'bus',
+  'train',
+  'ship',
+  'drive',
+  'flight',
+  'check-in',
+  'sightseeing',
+  'restaurant',
+];
+
 export const sortWords = ['DAY', 'EVENT', 'TIME', 'PRICE', 'OFFERS'];
 
 export const sortList = (sortTypes, currentSortType) => sortTypes.map((sortType) =>
