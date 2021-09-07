@@ -67,7 +67,7 @@ const editPoint = (point, availableOffers, destinations) => {
     <span class="visually-hidden">Open event</span>
   </button>
 </header>
-    ${addOffers(offers, id)}
+    ${addOffers(offers)}
 ${destinationListener()}
 </section>
 </form>`;
