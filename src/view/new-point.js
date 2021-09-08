@@ -96,6 +96,14 @@ export default class EditingPoint extends Smart {
     this._offersListener = this._offersListener.bind(this);
   }
 
+  _getDestinations() {
+    return this._destinations.map((it) => it.name);
+  }
+
+  _getOffers() {
+    return this._offers;
+  }
+
   setPriceInputListener() {
     this.getElement().querySelector('.event__input--price').addEventListener('input', this._priceInputHandler);
   }
@@ -120,7 +128,6 @@ export default class EditingPoint extends Smart {
     evt.preventDefault();
     this.updateData({
       basePrice: Math.abs(evt.target.value),
-      // isDisabled: Math.abs(evt.target.value) === 0 || !Math.abs(evt.target.value) ? 'disabled' : '',
     });
   }
 
@@ -176,18 +183,18 @@ export default class EditingPoint extends Smart {
 
   _cityChangeHandler(evt) {
     evt.preventDefault();
-    if (evt.target.value === this._destinations.filter((destination) => evt.target.value === destination.name)[0].name) {
-      this.updateData(
-        {
-          destination: {
-            description: this._destinations.filter((destination) => evt.target.value === destination.name)[0].description,
-            name: evt.target.value,
-            pictures: this._destinations.filter((destination) => evt.target.value === destination.name)[0].pictures,
-          },
-        // isDisabled: isCityExist(evt.target.value, CITIES),
-        });
-      document.querySelector('.trip-main__event-add-btn').disabled = true;
+    if (evt.target.value === '' || isCityExist(evt.target.value, this._getDestinations())) {
+      return;
     }
+    this.updateData(
+      {
+        destination: {
+          description: this._destinations.filter((destination) => evt.target.value === destination.name)[0].description,
+          name: evt.target.value,
+          pictures: this._destinations.filter((destination) => evt.target.value === destination.name)[0].pictures,
+        },
+      });
+    document.querySelector('.trip-main__event-add-btn').disabled = true;
   }
 
   setTypeChangeHandler() {

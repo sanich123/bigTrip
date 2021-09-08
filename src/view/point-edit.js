@@ -182,6 +182,9 @@ export default class EditingPoint extends Smart {
 
   _cityChangeHandler(evt) {
     evt.preventDefault();
+    if (evt.target.value === '' || isCityExist(evt.target.value, this._getDestinations())) {
+      return;
+    }
     this.updateData(
       {
         destination: {
@@ -189,7 +192,6 @@ export default class EditingPoint extends Smart {
           name: evt.target.value,
           pictures: this._destinations.filter((destination) => evt.target.value === destination.name)[0].pictures,
         },
-        // isDisabled: isCityExist(evt.target.value, CITIES),
       });
   }
 
