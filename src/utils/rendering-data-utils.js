@@ -2,6 +2,20 @@ import { humanizeDate } from './common.js';
 import { SortType } from './constants.js';
 import { nanoid } from 'nanoid';
 
+export const getFormatTime = (dateFrom, dateTo) => {
+  const fromDate = humanizeDate(dateFrom, 'MMM D');
+  const toDate = humanizeDate(dateTo, 'MMM D');
+  const fromDateMinutes = humanizeDate(dateFrom, 'HH:mm');
+  const toDateMinutes = humanizeDate(dateTo, 'HH:mm');
+  const fullDateFrom = humanizeDate(dateFrom, 'DD/MM/YY HH:mm');
+  const fullDateTo = humanizeDate(dateTo, 'DD/MM/YY HH:mm');
+  return { fromDate, toDate, fromDateMinutes, toDateMinutes, fullDateFrom, fullDateTo };
+};
+
+export const getPhotos = (pictures) => pictures.map(({ src }) => (`<img class="event__photo" src="${src}" alt="Event photo">`)).join('');
+
+export const favoritePoint = (isFavorite) => isFavorite ? 'event__favorite-btn--active' : '';
+
 const generateOffers = (offers) => offers.map(({title, price}) => {
   const uniq = nanoid();
   return `<div class="event__offer-selector">
@@ -155,16 +169,4 @@ export const getCities = (towns) => {
   return { firstCity, secondCity, thirdCity, fromDate, toDate };
 };
 
-export const getFormatTime = (dateFrom, dateTo) => {
-  const fromDate = humanizeDate(dateFrom, 'MMM D');
-  const toDate = humanizeDate(dateTo, 'MMM D');
-  const fromDateMinutes = humanizeDate(dateFrom, 'HH:mm');
-  const toDateMinutes = humanizeDate(dateTo, 'HH:mm');
-  const fullDateFrom = humanizeDate(dateFrom, 'DD/MM/YY HH:mm');
-  const fullDateTo = humanizeDate(dateTo, 'DD/MM/YY HH:mm');
-  return { fromDate, toDate, fromDateMinutes, toDateMinutes, fullDateFrom, fullDateTo };
-};
 
-export const getPhotos = (pictures) => pictures.map(({ src }) => (`<img class="event__photo" src="${src}" alt="Event photo">`)).join('');
-
-export const favoritePoint = (isFavorite) => isFavorite ? 'event__favorite-btn--active' : '';

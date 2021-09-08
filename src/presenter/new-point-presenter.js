@@ -24,7 +24,7 @@ export default class NewTripPoint {
     this._tripListLi = new TripListLi();
     render(this._pointContainer, this._tripListLi, renderPosition.AFTERBEGIN);
     const point = {
-      id: nanoid(),
+      id: '25',
       basePrice: 0,
       dateFrom: dayjs(),
       dateTo: dayjs(),

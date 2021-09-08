@@ -5,6 +5,7 @@ const Method = {
   POST: 'POST',
   DELETE: 'DELETE',
 };
+
 const Addresses = {
   POINTS: 'points',
   DESTINATIONS: 'destinations',
@@ -40,7 +41,7 @@ export default class Api {
 
   updatePoint(point) {
     return this._load({
-      url: `points/${point.id}`,
+      url: `${Addresses.POINTS}/${point.id}`,
       method: Method.PUT,
       body: JSON.stringify(PointsModel.adaptToServer(point)),
       headers: new Headers({'Content-Type': 'application/json'}),
@@ -49,9 +50,10 @@ export default class Api {
       .then(PointsModel.adaptToClient);
   }
 
+
   addPoint(point) {
     return this._load({
-      url: 'points',
+      url: Addresses.POINTS,
       method: Method.POST,
       body: JSON.stringify(PointsModel.adaptToServer(point)),
       headers: new Headers({'Content-Type': 'application/json'}),
@@ -62,7 +64,7 @@ export default class Api {
 
   deletePoint(point) {
     return this._load({
-      url: `points/${point.id}`,
+      url: `${Addresses.POINTS}/${point.id}`,
       method: Method.DELETE,
     });
   }

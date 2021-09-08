@@ -306,13 +306,14 @@ export default class EditingPoint extends Smart {
       {},
       point,
       {
+        isDisabled: true,
       },
     );
   }
 
   static parseDataToTask(data) {
     data = Object.assign({}, data);
-
+    delete data.isDisabled;
     return data;
   }
 }
