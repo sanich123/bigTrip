@@ -7,7 +7,7 @@ import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const editPoint = (point, availableOffers, destinations) => {
   const { destination, offers, type, id, dateFrom, dateTo,
-    // isDisabled,
+    isDisabled,
     basePrice } = point;
 
   const destinationListener = () => destination.name !== '' ? `<section class="event__section  event__section--destination"><h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -64,12 +64,12 @@ const editPoint = (point, availableOffers, destinations) => {
     name="event-price" value="${basePrice}">
   </div>
 
-  <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+  <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled}>Save</button>
   <button class="event__reset-btn" type="reset">Cancel</button>
     <span class="visually-hidden">Open event</span>
   </button>
 </header>
-${addOffers(offers, id)}
+${addOffers(offers)}
 ${destinationListener()}
 </section>
 </form>`;
@@ -118,6 +118,7 @@ export default class EditingPoint extends Smart {
       inputValue.setCustomValidity('');
     }
     inputValue.reportValidity();
+    document.querySelector('.trip-main__event-add-btn').disabled = true;
   }
 
   setPriceListener() {
@@ -128,6 +129,7 @@ export default class EditingPoint extends Smart {
     evt.preventDefault();
     this.updateData({
       basePrice: Math.abs(evt.target.value),
+      isDisabled: Math.abs(evt.target.value) === 0 || !Math.abs(evt.target.value) ? 'disabled' : '',
     });
   }
 
@@ -169,11 +171,12 @@ export default class EditingPoint extends Smart {
     evt.preventDefault();
     const inputValue = this.getElement().querySelector('.event__input--destination');
     const city = evt.target.value;
-    if (!city ||  !isCityExist(city, Array.from(this._destinations.map((destination) => destination.name)))) {
+    if (!city ||  isCityExist(city, this._destinations.map((it) => it.name))) {
       inputValue.setCustomValidity('Название города должно соответствовать названию города из списка и не может быть пустым полем');
     } else {
       inputValue.setCustomValidity('');
     }
+    document.querySelector('.trip-main__event-add-btn').disabled = true;
     inputValue.reportValidity();
   }
 
@@ -183,7 +186,7 @@ export default class EditingPoint extends Smart {
 
   _cityChangeHandler(evt) {
     evt.preventDefault();
-    if (evt.target.value === '' || isCityExist(evt.target.value, this._getDestinations())) {
+    if (evt.target.value === '' || isCityExist(evt.target.value, this._destinations.map((it) => it.name))) {
       return;
     }
     this.updateData(

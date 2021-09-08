@@ -95,14 +95,6 @@ export default class EditingPoint extends Smart {
     this._editClickHandler = this._editClickHandler.bind(this);
   }
 
-  _getDestinations() {
-    return this._destinations.map((it) => it.name);
-  }
-
-  _getOffers() {
-    return this._offers;
-  }
-
   setPriceInputListener() {
     this.getElement().querySelector('.event__input--price').addEventListener('input', this._priceInputHandler);
   }
@@ -127,7 +119,7 @@ export default class EditingPoint extends Smart {
     evt.preventDefault();
     this.updateData({
       basePrice: Math.abs(evt.target.value),
-      // isDisabled: Math.abs(evt.target.value) === 0 || !Math.abs(evt.target.value) ? 'disabled' : '',
+      isDisabled: Math.abs(evt.target.value) === 0 || !Math.abs(evt.target.value) ? 'disabled' : '',
     });
   }
 
@@ -168,7 +160,7 @@ export default class EditingPoint extends Smart {
     evt.preventDefault();
     const inputValue = this.getElement().querySelector('.event__input--destination');
     const city = evt.target.value;
-    if (!city ||  isCityExist(city, this._getDestinations())) {
+    if (!city ||  isCityExist(city, this._destinations.map((it) => it.name))) {
       inputValue.setCustomValidity('Название города должно соответствовать названию города из списка и не может быть пустым полем');
     } else {
       inputValue.setCustomValidity('');
@@ -182,7 +174,7 @@ export default class EditingPoint extends Smart {
 
   _cityChangeHandler(evt) {
     evt.preventDefault();
-    if (evt.target.value === '' || isCityExist(evt.target.value, this._getDestinations())) {
+    if (evt.target.value === '' || isCityExist(evt.target.value, this._destinations.map((it) => it.name))) {
       return;
     }
     this.updateData(
@@ -201,9 +193,6 @@ export default class EditingPoint extends Smart {
 
   _typeChangeHandler(evt) {
     evt.preventDefault();
-    if (this._offers.length === 0) {
-      this.getElement().querySelector('.event__type-group').disabled = true;
-    }
     this.updateData(
       {
         type: evt.target.value,

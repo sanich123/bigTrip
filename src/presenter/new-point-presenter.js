@@ -34,6 +34,7 @@ export default class NewTripPoint {
         pictures: '',
       },
       isFavorite: false,
+      isDisabled: true,
       type: 'taxi',
       offers: [
         {title: 'Upgrade to a business class', price: 190},
@@ -43,8 +44,8 @@ export default class NewTripPoint {
         {title: 'Drive slowly', price: 110},
       ],
     };
-    this._editPoint = new NewPoint(point, offers, destinations);
 
+    this._editPoint = new NewPoint(point, offers, destinations);
     this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
     this._editPoint.setDeleteClickHandler(this._handleDeleteClick);
     this._editPoint.setPriceListener(this._priceChangeHandler);
@@ -77,7 +78,7 @@ export default class NewTripPoint {
       const inputValue = this._editPoint._element[14];
       return inputValue.setCustomValidity('Нельзя отправить поле со значением 0');
     } else if (dayjs(newPoint.dateTo) < dayjs(newPoint.dateFrom)) {
-      return this._editPoint._element[12].setCustomValidity('Дата окончания не может быть раньше начала');
+      return this._editPoint._element[11].setCustomValidity('Дата окончания не может быть раньше начала');
     }
     this._changeData(
       UserAction.ADD_POINT,
