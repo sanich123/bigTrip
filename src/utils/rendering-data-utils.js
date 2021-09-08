@@ -44,16 +44,17 @@ export const titlePrice = (offers) => offers.map(({ title, price }) => (`<li cla
   <span class="event__offer-price">${price}</span>
 </li>`)).join('');
 
-export const getOffersByType = (arr, tip) => {
+export const getOffersByType = (arr, value) => {
   let result;
   arr.forEach((it) => {
-    if (it.type === tip) {
+    if (it.type === value) {
       result = it.offers;
       return result;
     }
   });
   return result;
 };
+
 export const TYPES = [
   'taxi',
   'bus',
