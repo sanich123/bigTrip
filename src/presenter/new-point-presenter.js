@@ -26,8 +26,8 @@ export default class NewTripPoint {
     const point = {
       id: nanoid(),
       basePrice: 0,
-      dateFrom: '2021-09-09T00:00:00.000Z',
-      dateTo: '2021-09-10T00:00:00.000Z',
+      dateFrom: dayjs(),
+      dateTo: dayjs(),
       destination: {
         description: '',
         name: '',
