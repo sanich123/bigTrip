@@ -1,31 +1,40 @@
 import TripListUl from '../view/trip-list-ul.js';
 import TripListLi from '../view/trip-list-li.js';
 import PointsList from '../view/points-list.js';
+import Loading from '../view/loading.js';
 import Empty from '../view/empty.js';
 import SortMenu from '../view/sort.js';
 import EditingPoint from '../view/point-edit.js';
 import NewTripPoint from './new-point-presenter.js';
 import TripPoint from './point-presenter.js';
+// import PriceTripView from '../view/price-trip.js';
 import { renderPosition, render, remove } from '../utils/rendering-utils.js';
 import { SortType, UpdateType, UserAction, FilterType } from '../utils/constants.js';
 import dayjs from 'dayjs';
 import { filter } from '../utils/filter.js';
 
 export default class PointsPresenter {
-  constructor(container, pointsModel, filtersModel) {
+  constructor(container, pointsModel, filtersModel, api, destinationsModel, offersModel) {
+    this._api = api;
     this._filtersModel = filtersModel;
     this._pointsModel = pointsModel;
+    this._destinationsModel = destinationsModel;
+    this._offersModel = offersModel;
+
     this._container = container;
     this._tripPresenter = new Map();
     this._currentSortType = SortType.DAY;
     this._filterType = FilterType.EVERYTHING;
+    this._isLoading = true;
 
     this._sortMenu = null;
-    // this._empty = null;
+    this._empty = null;
+    // this._priceTrip = new PriceTripView();
     this._tripListUl = new TripListUl();
     this._tripListLi = new TripListLi();
     this._editingPoint = new EditingPoint();
     this._pointsList = new PointsList();
+    this._loading = new Loading();
     this._newTripPoint = new NewTripPoint(this._tripListUl, this._handleViewAction, this._pointsModel);
 
     this._handleViewAction = this._handleViewAction.bind(this);
@@ -37,6 +46,8 @@ export default class PointsPresenter {
   init() {
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filtersModel.addObserver(this._handleModelEvent);
+    this._offersModel.addObserver(this._handleModelEvent);
+    this._destinationsModel.addObserver(this._handleModelEvent);
     if (this._pointsModel.getPoints().length === 0) {
       this._renderEmpty();
     } else {
@@ -47,6 +58,10 @@ export default class PointsPresenter {
   _renderEmpty() {
     this._empty = new Empty(this._filterType);
     render(this._container, this._empty, renderPosition.BEFOREEND);
+  }
+
+  _renderLoading() {
+    render(this._container, this._loading, renderPosition.BEFOREEND);
   }
 
   _renderSort() {
@@ -69,15 +84,24 @@ export default class PointsPresenter {
   }
 
   _renderPoint(point) {
+    this._offers = this._offersModel.getOffers();
+    this._destinations = this._destinationsModel.getDestinations();
     const tripPoint = new TripPoint(this._tripListUl, this._handleViewAction, this._handleModeChange);
-    tripPoint.init(point);
+    tripPoint.init(point, this._offers, this._destinations);
     this._tripPresenter.set(point.id, tripPoint);
   }
 
   _renderBoard() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
     this._filterType = this._filtersModel.getFilter();
     const points = this._pointsModel.getPoints();
     const filtredPoints = filter[this._filterType](points);
+    // if (points.length !== 0) {
+    //   this._renderPriceTrip();
+    // }
     if (filtredPoints.length === 0) {
       this._renderEmpty();
       return;
@@ -88,17 +112,19 @@ export default class PointsPresenter {
   destroy() {
     this._clearBoard({resetSortType: true});
 
-    // remove(this._sortMenu);
+    remove(this._sortMenu);
     remove(this._tripListUl);
-
-    // this._tasksModel.removeObserver(this._handleModelEvent);
+//Код ниже не работает при переключении на экран статистики, в других местах не парит вообще
+    // this._pointsModel.removeObserver(this._handleModelEvent);
     // this._filterModel.removeObserver(this._handleModelEvent);
   }
 
   createPoint() {
+    this._offers = this._offersModel.getOffers();
+    this._destinations = this._destinationsModel.getDestinations();
     this._currentSortType = SortType.DAY;
     this._filtersModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this._newTripPoint.init();
+    this._newTripPoint.init(this._offers, this._destinations);
   }
 
   _getPoints() {
@@ -111,7 +137,7 @@ export default class PointsPresenter {
       case SortType.PRICE:
         return filtredPoints.sort((a, b) => a.basePrice - b.basePrice);
     }
-    return filtredPoints.sort((a, b) => b.dateFrom - a.dateFrom);
+    return filtredPoints.sort((a, b) => dayjs(b.dateFrom) - dayjs(a.dateFrom));
   }
 
   _clearBoard({resetSortType = false} = {}) {
@@ -120,11 +146,12 @@ export default class PointsPresenter {
     this._tripPresenter.clear();
 
     remove(this._sortMenu);
+    remove(this._loading);
     if (this._empty) {
       remove(this._empty);
     }
     if (resetSortType) {
-      this._currentSortType = SortType.DEFAULT;
+      this._currentSortType = SortType.DAY;
     }
   }
 
@@ -132,13 +159,19 @@ export default class PointsPresenter {
     // console.log(actionType, updateType, update);
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this._pointsModel.updatePoint(updateType, update);
+        this._api.updatePoint(update).then((response) => {
+          this._pointsModel.updatePoint(updateType, response);
+        });
         break;
       case UserAction.ADD_POINT:
-        this._pointsModel.addPoint(updateType, update);
+        this._api.addPoint(update).then((response) => {
+          this._pointsModel.addPoint(updateType, response);
+        });
         break;
       case UserAction.DELETE_POINT:
-        this._pointsModel.deletePoint(updateType, update);
+        this._api.deletePoint(update).then(() => {
+          this._pointsModel.deletePoint(updateType, update);
+        });
         break;
     }
   }
@@ -155,6 +188,13 @@ export default class PointsPresenter {
         break;
       case UpdateType.MAJOR:
         this._clearBoard({resetSortType: true});
+        this._renderBoard();
+        break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loading);
+        remove(this._empty);
+        this._clearBoard();
         this._renderBoard();
         break;
     }

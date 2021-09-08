@@ -1,13 +1,23 @@
-import { TYPES, CITIES, OPTIONS, getOffersByType, generateDestination } from '../mock/create-data.js';
+import { TYPES, getOffersByType } from '../utils/rendering-data-utils.js';
 import { addOffers, createTypes, createCities, getFormatTime, getPhotos } from '../utils/rendering-data-utils.js';
-import { checkPrice, checkCity } from '../utils/common.js';
+import { isCityExist } from '../utils/common.js';
 import Smart from '../view/smart.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
-const editPoint = (point) => {
+const editPoint = (point, availableOffers, destinations) => {
 
-  const { basePrice, dateFrom, dateTo, destination, offers, type, id, isDisabled } = point;
+  const { basePrice, dateFrom, dateTo, type, id, isDisabled, destination, offers } = point;
+
+  const availableDestinations = destinations.map((it) => it.name);
+  const destinationListener = () => destination.name !== '' ? `<section class="event__section  event__section--destination"><h3 class="event__section-title  event__section-title--destination">Destination</h3>
+    <p class="event__destination-description">${destination.description}</p>
+      <div class="event__photos-container">
+        <div class="event__photos-tape">
+           ${destination.pictures === '' ? '' : getPhotos(destination.pictures)}
+        </div>
+       </div>
+  </section>` : '';
 
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
@@ -31,7 +41,7 @@ const editPoint = (point) => {
     </label>
     <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${destination.name}" list="destination-list-${id}">
     <datalist id="destination-list-${id}">
-    ${createCities(CITIES)}
+    ${createCities(availableDestinations)}
     </datalist>
   </div>
 
@@ -57,32 +67,18 @@ const editPoint = (point) => {
     <span class="visually-hidden">Open event</span>
   </button>
 </header>
-<section class="event__details">
-  <section class="event__section  event__section--offers">
-    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-    <div class="event__available-offers">
     ${addOffers(offers)}
-    </div>
-  </section>
-
-  <section class="event__section  event__section--destination">
-    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-    <p class="event__destination-description">${destination.description.join('')}</p>
-      <div class="event__photos-container">
-        <div class="event__photos-tape">
-          ${getPhotos(destination.pictures)}
-        </div>
-       </div>
-  </section>
+${destinationListener()}
 </section>
 </form>`;
 };
 
 export default class EditingPoint extends Smart {
-  constructor(point) {
+  constructor(point, offers, destinations) {
     super();
     this._data = EditingPoint.parseTaskToData(point);
+    this._offers = offers;
+    this._destinations = destinations;
     this._datepicker1 = null;
     this._datepicker2 = null;
     this._timeFromHandler = this._timeFromHandler.bind(this);
@@ -107,7 +103,7 @@ export default class EditingPoint extends Smart {
     evt.preventDefault();
     const inputValue = this.getElement().querySelector('.event__input--price');
     const price = evt.target.value;
-    if (!price ||  checkPrice(price) === 0) {
+    if (!price ||  Math.abs(price) === 0) {
       inputValue.setCustomValidity('Поле цены не может быть пустым или равным нулю');
     } else {
       inputValue.setCustomValidity('');
@@ -122,11 +118,10 @@ export default class EditingPoint extends Smart {
   _priceChangeHandler(evt) {
     evt.preventDefault();
     this.updateData({
-      basePrice: checkPrice(evt.target.value),
-      isDisabled: checkPrice(evt.target.value) === 0 || !checkPrice(evt.target.value) ? 'disabled' : '',
+      basePrice: Math.abs(evt.target.value),
+      isDisabled: Math.abs(evt.target.value) === 0 || !Math.abs(evt.target.value) ? 'disabled' : '',
     });
   }
-
 
   setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
@@ -165,7 +160,7 @@ export default class EditingPoint extends Smart {
     evt.preventDefault();
     const inputValue = this.getElement().querySelector('.event__input--destination');
     const city = evt.target.value;
-    if (!city ||  checkCity(city, CITIES)) {
+    if (!city ||  isCityExist(city, this._destinations.map((it) => it.name))) {
       inputValue.setCustomValidity('Название города должно соответствовать названию города из списка и не может быть пустым полем');
     } else {
       inputValue.setCustomValidity('');
@@ -179,14 +174,16 @@ export default class EditingPoint extends Smart {
 
   _cityChangeHandler(evt) {
     evt.preventDefault();
+    if (evt.target.value === '' || isCityExist(evt.target.value, this._destinations.map((it) => it.name))) {
+      return;
+    }
     this.updateData(
       {
         destination: {
-          description: generateDestination().description,
+          description: this._destinations.filter((destination) => evt.target.value === destination.name)[0].description,
           name: evt.target.value,
-          pictures: generateDestination().pictures,
+          pictures: this._destinations.filter((destination) => evt.target.value === destination.name)[0].pictures,
         },
-        isDisabled: checkCity(evt.target.value, CITIES),
       });
   }
 
@@ -199,7 +196,7 @@ export default class EditingPoint extends Smart {
     this.updateData(
       {
         type: evt.target.value,
-        offers: getOffersByType(OPTIONS, evt.target.value),
+        offers: getOffersByType(this._offers, evt.target.value),
       });
   }
 
@@ -281,7 +278,7 @@ export default class EditingPoint extends Smart {
   }
 
   getTemplate() {
-    return editPoint(this._data);
+    return editPoint(this._data, this._offers, this._destinations);
   }
 
   _setInnerHandlers() {
@@ -307,12 +304,14 @@ export default class EditingPoint extends Smart {
       {},
       point,
       {
+
       },
     );
   }
 
   static parseDataToTask(data) {
     data = Object.assign({}, data);
+
     return data;
   }
 }

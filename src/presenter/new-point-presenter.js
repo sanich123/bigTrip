@@ -3,10 +3,15 @@ import TripListLi from '../view/trip-list-li.js';
 import { renderPosition, render, remove } from '../utils/rendering-utils.js';
 import { UserAction, UpdateType } from '../utils/constants.js';
 import { nanoid } from 'nanoid';
+import dayjs from 'dayjs';
 
 export default class NewTripPoint {
-  constructor(pointContainer, changeData, pointsModel) {
+  constructor(pointContainer, changeData, pointsModel,
+    //  offersModel, destinationsModel
+  ) {
     this._pointsModel = pointsModel;
+    // this._offers = offersModel;
+    // this._destination = destinationsModel;
     this._pointContainer = pointContainer;
     this._changeData = changeData;
     this._editPoint = null;
@@ -15,7 +20,7 @@ export default class NewTripPoint {
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
-  init() {
+  init(offers, destinations) {
     this._tripListLi = new TripListLi();
     render(this._pointContainer, this._tripListLi, renderPosition.AFTERBEGIN);
     const point = {
@@ -24,61 +29,23 @@ export default class NewTripPoint {
       dateFrom: '2021-09-09T00:00:00.000Z',
       dateTo: '2021-09-10T00:00:00.000Z',
       destination: {
-        description: [
-          'Fusce tristique felis at fermentum pharetra. ',
-          'Aliquam id orci ut lectus varius viverra. ',
-          ' Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. ',
-          'Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. ',
-          'Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. ',
-          'Sed sed nisi sed augue convallis suscipit in sed felis. ',
-          'Aliquam erat volutpat. ',
-          'Nunc fermentum tortor ac porta dapibus. ',
-          'In rutrum ac purus sit amet tempus. ',
-        ],
+        description: '',
         name: '',
-        pictures: [
-          {
-            'src': 'http://picsum.photos/300/200?r=0.5051691418046964',
-            'description': 'Cras aliquet varius magna, non porta ligula feugiat eget. ',
-          },
-          {
-            'src': 'http://picsum.photos/300/200?r=0.9734774014404415',
-            'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
-          },
-          {
-            'src': 'http://picsum.photos/300/200?r=0.535029945808549',
-            'description': 'Nunc fermentum tortor ac porta dapibus. ',
-          },
-          {
-            'src': 'http://picsum.photos/300/200?r=0.7640266037521821',
-            'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
-          },
-        ],
+        pictures: '',
       },
       isFavorite: false,
-      isDisabled: 'disabled',
+      isDisabled: true,
       type: 'taxi',
       offers: [
-        {
-          'title': 'Хочу сибаса',
-          'price': 120,
-        },
-        {
-          'title': 'Стейк омара за 80 тыс рублей',
-          'price': 120,
-        },
-        {
-          'title': 'Труа буте ди водка, авек плезир',
-          'price': 120,
-        },
-        {
-          'title': 'Оливье и майонеза побольше',
-          'price': 120,
-        },
+        {title: 'Upgrade to a business class', price: 190},
+        {title: 'Choose the radio station', price: 30},
+        {title: 'Choose temperature', price: 170},
+        {title: 'Drive quickly, I\'m in a hurry', price: 100},
+        {title: 'Drive slowly', price: 110},
       ],
     };
-    this._editPoint = new NewPoint(point);
 
+    this._editPoint = new NewPoint(point, offers, destinations);
     this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
     this._editPoint.setDeleteClickHandler(this._handleDeleteClick);
     this._editPoint.setPriceListener(this._priceChangeHandler);
@@ -104,13 +71,21 @@ export default class NewTripPoint {
   }
 
   _handleFormSubmit(newPoint) {
-    if (newPoint.basePrice === 0 || newPoint.destination.name === '') {
-      return;
+    if (newPoint.destination.name === '') {
+      const inputValue = this._editPoint._element[11];
+      return inputValue.setCustomValidity('Нельзя отправить пустое поле названия города');
+    } else if (newPoint.basePrice === 0) {
+      const inputValue = this._editPoint._element[14];
+      return inputValue.setCustomValidity('Нельзя отправить поле со значением 0');
+    } else if (dayjs(newPoint.dateTo) < dayjs(newPoint.dateFrom)) {
+      return this._editPoint._element[11].setCustomValidity('Дата окончания не может быть раньше начала');
     }
     this._changeData(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
-      Object.assign({id: nanoid()}, newPoint),
+      Object.assign(
+        // {id: nanoid()},
+        newPoint),
     );
   }
 
@@ -123,5 +98,6 @@ export default class NewTripPoint {
       evt.preventDefault();
       this.destroy();
     }
+    document.querySelector('.trip-main__event-add-btn').disabled = false;
   }
 }

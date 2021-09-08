@@ -1,39 +1,36 @@
 import PriceTripView from './view/price-trip.js';
 import NavigationView from './view/navigation.js';
-// import Loading from './view/loading.js';
-// import NewWithoutDestination from './view/newWithoutDestination.js';
-// import NewWithoutOffers from './view/new-without-offers.js';
-// import NewPoint from './view/newPoint.js';
-import { generatePoint } from './mock/create-data.js';
 import { renderPosition, render, remove } from './utils/rendering-utils.js';
 import PointsPresenter from './presenter/points-presenter.js';
 import PointsModel from './model/points-model.js';
+import DestinationsModel from './model/destinations-model.js';
+import OffersModel from './model/offers-model.js';
 import FiltersModel from './model/filters-model.js';
 import FiltersPresenter from './presenter/filters-presenter.js';
-import { MenuItem } from './utils/constants.js';
+import { MenuItem, UpdateType } from './utils/constants.js';
 import StatisticsView from './view/statistics.js';
+import Api from './api.js';
 
-const COUNT_OF_POINTS = 24;
-
-const points = new Array(COUNT_OF_POINTS).fill().map(generatePoint);
-points.sort((a, b) => b.dateFrom - a.dateFrom);
-
-const pointsModel = new PointsModel();
-pointsModel.setPoints(points);
-
-const filtersModel = new FiltersModel();
+const AUTHORIZATION = 'Basic hD3sb8dfSWcl2sA5j';
+const END_POINT = 'https://14.ecmascript.pages.academy/big-trip/';
 
 const priceAndTripSection = document.querySelector('.trip-main');
 const toNavigation = document.querySelector('.trip-controls__navigation');
 const toFilters = document.querySelector('.trip-controls__filters');
 const toSort = document.querySelector('.trip-events');
 const toStat = document.querySelector('main.page-body__page-main .page-body__container');
+const newPointButton = document.querySelector('.trip-main__event-add-btn');
 
-render(priceAndTripSection, new PriceTripView(pointsModel.getPoints()), renderPosition.AFTERBEGIN);
+const pointsModel = new PointsModel();
+const destinationsModel = new DestinationsModel();
+const offersModel = new OffersModel();
+const filtersModel = new FiltersModel();
+const api = new Api(END_POINT, AUTHORIZATION);
+
 const navigationView = new NavigationView();
 render(toNavigation, navigationView, renderPosition.AFTERBEGIN);
 
-const pointsPresenter = new PointsPresenter(toSort, pointsModel, filtersModel);
+const pointsPresenter = new PointsPresenter(toSort, pointsModel, filtersModel, api, destinationsModel, offersModel);
 const filterPresenter = new FiltersPresenter(toFilters, filtersModel, pointsModel);
 
 let statisticsComponent = null;
@@ -65,32 +62,28 @@ const handleNavigationClick = (menuItem) => {
   }
 };
 
-navigationView.setMenuClickHandler(handleNavigationClick);
 pointsPresenter.init();
 filterPresenter.init();
 
-document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
+newPointButton.addEventListener('click', (evt) => {
   evt.preventDefault();
   pointsPresenter.createPoint();
+  document.querySelector('.trip-main__event-add-btn').disabled = true;
 });
 
-// render(toSort, new Loading().getElement(), renderPosition.BEFOREEND);
-// render(toSort, new Empty().getElement(), renderPosition.BEFOREEND);
+Promise.all([
+  api.getDestinations(),
+  api.getOffers(),
+  api.getPoints(),
+]).then((values) => {
+  const [destinations, offers, points] = values;
+  pointsModel.setPoints(UpdateType.INIT, points);
+  offersModel.setOffers(UpdateType.INIT, offers);
+  destinationsModel.setDestinations(UpdateType.INIT, destinations);
+  newPointButton.disabled = false;
+  render(priceAndTripSection, new PriceTripView(pointsModel.getPoints()), renderPosition.AFTERBEGIN);
+  navigationView.setMenuClickHandler(handleNavigationClick);
+}).catch(() => {
+  pointsModel.setPoints(UpdateType.INIT, []);
+});
 
-// const eventItem = document.querySelector('.trip-events__item');
-
-//Удаление div временное, чтобы просто вывести данные в надлежащем виде
-// document.querySelector('.event:nth-child(1)').remove();
-// document.querySelector('.trip-events__item:nth-child(2) .event').remove();
-// document.querySelector('.trip-events__item:nth-child(3) .event').remove();
-// document.querySelector('.trip-events__item:nth-child(4) .event').remove();
-
-// renderElement(eventItem, new EditingPoint(points[1]).getElement(), renderPosition.BEFOREEND);
-
-// const eventItem1 = document.querySelector('.trip-events__item:nth-child(3)');
-// const eventItem2 = document.querySelector('.trip-events__item:nth-child(4)');
-// const eventItem3 = document.querySelector('.trip-events__item:nth-child(5)');
-
-// render(eventItem1, new NewWithoutDestination(points[1]).getElement(), renderPosition.AFTERBEGIN);
-// render(eventItem2, new NewWithoutOffers(points[2]).getElement(), renderPosition.AFTERBEGIN);
-// render(eventItem3, new NewPoint(points[3]).getElement(), renderPosition.AFTERBEGIN);
