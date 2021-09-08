@@ -2,16 +2,11 @@ import NewPoint from '../view/new-point.js';
 import TripListLi from '../view/trip-list-li.js';
 import { renderPosition, render, remove } from '../utils/rendering-utils.js';
 import { UserAction, UpdateType } from '../utils/constants.js';
-import { nanoid } from 'nanoid';
 import dayjs from 'dayjs';
 
 export default class NewTripPoint {
-  constructor(pointContainer, changeData, pointsModel,
-    //  offersModel, destinationsModel
-  ) {
+  constructor(pointContainer, changeData, pointsModel) {
     this._pointsModel = pointsModel;
-    // this._offers = offersModel;
-    // this._destination = destinationsModel;
     this._pointContainer = pointContainer;
     this._changeData = changeData;
     this._editPoint = null;
@@ -24,7 +19,6 @@ export default class NewTripPoint {
     this._tripListLi = new TripListLi();
     render(this._pointContainer, this._tripListLi, renderPosition.AFTERBEGIN);
     const point = {
-      id: '25',
       basePrice: 0,
       dateFrom: dayjs(),
       dateTo: dayjs(),

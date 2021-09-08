@@ -116,7 +116,7 @@ export default class PointsPresenter {
 
     remove(this._sortMenu);
     remove(this._tripListUl);
-//Код ниже не работает при переключении на экран статистики, в других местах не парит вообще
+    //Код ниже не работает при переключении на экран статистики, в других местах не парит вообще
     // this._pointsModel.removeObserver(this._handleModelEvent);
     // this._filterModel.removeObserver(this._handleModelEvent);
   }
@@ -158,16 +158,17 @@ export default class PointsPresenter {
   }
 
   _handleViewAction(actionType, updateType, update) {
-    console.log(actionType, updateType, update);
+    // console.log(actionType, updateType, update);
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        console.log(this._api);//Api {_endPoint: 'https://14.ecmascript.pages.academy/big-trip/', _authorization: 'Basic hD3sb8dfSWcl2sA5j'}
+        console.log(this._api); //Api{_endPoint: 'https://14.ecmascript.pages.academy/big-trip/', _authorization: 'Basic hD3sb8dfSWcl2sA5j'}
         this._api.updatePoint(update).then((response) => {
           this._pointsModel.updatePoint(updateType, response);
         });
         break;
       case UserAction.ADD_POINT:
-        new Api('https://14.ecmascript.pages.academy/big-trip/', AUTHORIZATION).addPoint(update).then((response) => {
+        // this._api.addPoint(update).then((response) => {
+        new Api(END_POINT, AUTHORIZATION).addPoint(update).then((response) => {
           this._pointsModel.addPoint(updateType, response);
         });
         break;
@@ -180,7 +181,7 @@ export default class PointsPresenter {
   }
 
   _handleModelEvent(updateType, data) {
-    console.log(updateType, data);
+    // console.log(updateType, data);
     switch (updateType) {
       case UpdateType.PATCH:
         this._taskPresenter.get(data.id).init(data);
