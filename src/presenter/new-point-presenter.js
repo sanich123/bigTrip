@@ -78,9 +78,9 @@ export default class NewTripPoint {
       UserAction.ADD_POINT,
       UpdateType.MINOR,
       Object.assign(
-        // {id: nanoid()},
         newPoint),
     );
+    document.querySelector('.trip-main__event-add-btn').disabled = false;
   }
 
   _handleDeleteClick() {

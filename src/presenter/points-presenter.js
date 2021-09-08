@@ -167,6 +167,7 @@ export default class PointsPresenter {
         });
         break;
       case UserAction.ADD_POINT:
+        console.log(this._api); //undefined
         // this._api.addPoint(update).then((response) => {
         new Api(END_POINT, AUTHORIZATION).addPoint(update).then((response) => {
           this._pointsModel.addPoint(updateType, response);
