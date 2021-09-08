@@ -50,8 +50,8 @@ export default class Api {
       .then(PointsModel.adaptToClient);
   }
 
-
   addPoint(point) {
+    console.log(point)
     return this._load({
       url: Addresses.POINTS,
       method: Method.POST,

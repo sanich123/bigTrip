@@ -12,7 +12,9 @@ import { renderPosition, render, remove } from '../utils/rendering-utils.js';
 import { SortType, UpdateType, UserAction, FilterType } from '../utils/constants.js';
 import dayjs from 'dayjs';
 import { filter } from '../utils/filter.js';
-
+import Api from '../api.js';
+const AUTHORIZATION = 'Basic hD3sb8dfSWcl2sA5j';
+const END_POINT = 'https://14.ecmascript.pages.academy/big-trip/';
 export default class PointsPresenter {
   constructor(container, pointsModel, filtersModel, api, destinationsModel, offersModel) {
     this._api = api;
@@ -165,8 +167,7 @@ export default class PointsPresenter {
         });
         break;
       case UserAction.ADD_POINT:
-        console.log(this._api);//undefined
-        this._api.addPoint(update).then((response) => {
+        new Api('https://14.ecmascript.pages.academy/big-trip/', AUTHORIZATION).addPoint(update).then((response) => {
           this._pointsModel.addPoint(updateType, response);
         });
         break;
