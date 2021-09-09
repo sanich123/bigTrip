@@ -189,6 +189,7 @@ export default class EditingPoint extends Smart {
     if (evt.target.value === '' || isCityExist(evt.target.value, this._destinations.map((it) => it.name))) {
       return;
     }
+    document.querySelector('.trip-main__event-add-btn').disabled = true;
     this.updateData(
       {
         destination: {
@@ -197,7 +198,6 @@ export default class EditingPoint extends Smart {
           pictures: this._destinations.filter((destination) => evt.target.value === destination.name)[0].pictures,
         },
       });
-    document.querySelector('.trip-main__event-add-btn').disabled = true;
   }
 
   setTypeChangeHandler() {

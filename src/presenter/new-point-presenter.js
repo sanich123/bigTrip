@@ -61,7 +61,7 @@ export default class NewTripPoint {
 
   setAborting() {
     const resetFormState = () => {
-      this._edtiPoint.updateData({
+      this._editPoint.updateData({
         isDisabled: false,
         isSaving: false,
         isDeleting: false,
