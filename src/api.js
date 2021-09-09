@@ -51,7 +51,6 @@ export default class Api {
   }
 
   addPoint(point) {
-    console.log(point)
     return this._load({
       url: Addresses.POINTS,
       method: Method.POST,

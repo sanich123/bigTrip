@@ -86,7 +86,6 @@ export default class PointsModel extends AbstractObserver {
         'is_favorite': point.isFavorite,
       },
     );
-    console.log(adaptedPoint);
     //'due_date': task.dueDate instanceof Date ? task.dueDate.toISOString() : null, // На сервере дата хранится в ISO формате
     delete adaptedPoint.basePrice;
     delete adaptedPoint.dateFrom;

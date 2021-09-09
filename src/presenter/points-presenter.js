@@ -13,8 +13,10 @@ import { SortType, UpdateType, UserAction, FilterType } from '../utils/constants
 import dayjs from 'dayjs';
 import { filter } from '../utils/filter.js';
 import Api from '../api.js';
+
 const AUTHORIZATION = 'Basic hD3sb8dfSWcl2sA5j';
 const END_POINT = 'https://14.ecmascript.pages.academy/big-trip/';
+
 export default class PointsPresenter {
   constructor(container, pointsModel, filtersModel, api, destinationsModel, offersModel) {
     this._api = api;
@@ -161,13 +163,11 @@ export default class PointsPresenter {
     // console.log(actionType, updateType, update);
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        console.log(this._api); //Api{_endPoint: 'https://14.ecmascript.pages.academy/big-trip/', _authorization: 'Basic hD3sb8dfSWcl2sA5j'}
         this._api.updatePoint(update).then((response) => {
           this._pointsModel.updatePoint(updateType, response);
         });
         break;
       case UserAction.ADD_POINT:
-        console.log(this._api); //undefined
         // this._api.addPoint(update).then((response) => {
         new Api(END_POINT, AUTHORIZATION).addPoint(update).then((response) => {
           this._pointsModel.addPoint(updateType, response);
