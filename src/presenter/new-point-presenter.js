@@ -28,7 +28,6 @@ export default class NewTripPoint {
         pictures: '',
       },
       isFavorite: false,
-      isDisabled: true,
       type: 'taxi',
       offers: [
         {title: 'Upgrade to a business class', price: 190},
@@ -52,6 +51,13 @@ export default class NewTripPoint {
     this._editPoint._setDatePicker(this._timeToHandler);
     render(this._tripListLi, this._editPoint, renderPosition.AFTERBEGIN);
     document.addEventListener('keydown', this._escKeyDownHandler);
+  }
+
+  setSaving() {
+    this._editPoint.updateData({
+      isDisabled: true,
+      isSaving: true,
+    });
   }
 
   destroy() {

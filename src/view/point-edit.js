@@ -7,7 +7,7 @@ import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const editPoint = (point, availableOffers, destinations) => {
 
-  const { basePrice, dateFrom, dateTo, type, id, isDisabled, destination, offers } = point;
+  const { basePrice, dateFrom, dateTo, type, id, isDisabled, destination, offers, isSaving, isDeleting } = point;
 
   const availableDestinations = destinations.map((it) => it.name);
   const destinationListener = () => destination.name !== '' ? `<section class="event__section  event__section--destination"><h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -39,7 +39,7 @@ const editPoint = (point, availableOffers, destinations) => {
     <label class="event__label  event__type-output" for="event-destination-${id}">
       ${type}
     </label>
-    <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${destination.name}" list="destination-list-${id}">
+    <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${destination.name}" list="destination-list-${id}" ${isDisabled ? 'disabled' : ''}>
     <datalist id="destination-list-${id}">
     ${createCities(availableDestinations)}
     </datalist>
@@ -47,10 +47,10 @@ const editPoint = (point, availableOffers, destinations) => {
 
   <div class="event__field-group  event__field-group--time">
     <label class="visually-hidden" for="event-start-time-${id}">From</label>
-    <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${getFormatTime(dateFrom, dateTo).fullDateFrom}">
+    <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${getFormatTime(dateFrom, dateTo).fullDateFrom}" ${isDisabled ? 'disabled' : ''}>
     —
     <label class="visually-hidden" for="event-end-time-${id}">To</label>
-    <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${getFormatTime(dateFrom, dateTo).fullDateTo}">
+    <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${getFormatTime(dateFrom, dateTo).fullDateTo} ${isDisabled ? 'disabled' : ''}">
   </div>
 
   <div class="event__field-group  event__field-group--price">
@@ -58,11 +58,11 @@ const editPoint = (point, availableOffers, destinations) => {
       <span class="visually-hidden">Price</span>
       €
     </label>
-    <input class="event__input  event__input--price" id="event-price-${id}" type="number" name="event-price" value="${basePrice}">
+    <input class="event__input  event__input--price" id="event-price-${id}" type="number" name="event-price" value="${basePrice}" ${isDisabled ? 'disabled' : ''}">
   </div>
 
-  <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled}>Save</button>
-  <button class="event__reset-btn" type="reset">Delete</button>
+  <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
+  <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>
   <button class="event__rollup-btn" type="button">
     <span class="visually-hidden">Open event</span>
   </button>
@@ -304,7 +304,7 @@ export default class EditingPoint extends Smart {
       {},
       point,
       {
-        isDisabled: true,
+
       },
     );
   }

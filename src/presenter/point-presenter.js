@@ -4,7 +4,10 @@ import PointsList from '../view/points-list.js';
 import { renderPosition, render, replace, remove } from '../utils/rendering-utils.js';
 import { UserAction, UpdateType, Mode } from '../utils/constants.js';
 import dayjs from 'dayjs';
-
+export const State = {
+  SAVING: 'SAVING',
+  DELETING: 'DELETING',
+};
 export default class TripPoint {
   constructor(pointContainer, changeData, changeMode) {
     this._pointContainer = pointContainer;
@@ -57,7 +60,8 @@ export default class TripPoint {
       replace(this._pointEvent, prevPointEvent);
     }
     if (this._mode === Mode.EDITING) {
-      replace(this._editPoint, prevEditPoint);
+      replace(this._pointEvent, prevEditPoint);
+      this._mode = Mode.DEFAULT;
     }
 
     this._tripListLi = prevTripListLi;
@@ -104,6 +108,27 @@ export default class TripPoint {
     this._replaceCardToForm();
   }
 
+  setViewState(state) {
+    if (this._mode === Mode.DEFAULT) {
+      return;
+    }
+
+    switch (state) {
+      case State.SAVING:
+        this._editPoint.updateData({
+          isDisabled: true,
+          isSaving: true,
+        });
+        break;
+      case State.DELETING:
+        this._editPoint.updateData({
+          isDisabled: true,
+          isDeleting: true,
+        });
+        break;
+    }
+  }
+
   _handleFormSubmit(editPoint) {
     if (editPoint.destination.name === '') {
       const inputValue = this._editPoint._element[11];
@@ -119,7 +144,6 @@ export default class TripPoint {
       UpdateType.MINOR,
       editPoint,
     );
-    this._replaceFormToCard();
   }
 
   _handleEditClickBack() {

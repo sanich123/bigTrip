@@ -6,7 +6,7 @@ import Empty from '../view/empty.js';
 import SortMenu from '../view/sort.js';
 import EditingPoint from '../view/point-edit.js';
 import NewTripPoint from './new-point-presenter.js';
-import TripPoint from './point-presenter.js';
+import TripPoint, {State as PointPresenterViewState} from './point-presenter.js';
 // import PriceTripView from '../view/price-trip.js';
 import { renderPosition, render, remove } from '../utils/rendering-utils.js';
 import { SortType, UpdateType, UserAction, FilterType } from '../utils/constants.js';
@@ -163,17 +163,22 @@ export default class PointsPresenter {
     // console.log(actionType, updateType, update);
     switch (actionType) {
       case UserAction.UPDATE_POINT:
+        this._tripPresenter.get(update.id).setViewState(PointPresenterViewState.SAVING);
         this._api.updatePoint(update).then((response) => {
           this._pointsModel.updatePoint(updateType, response);
         });
         break;
       case UserAction.ADD_POINT:
+        console.log(this._newTripPoint);
+        new NewTripPoint(this._tripListUl, this._handleViewAction, this._pointsModel).setSaving();
+        // this._newTripPoint.setSaving();
         // this._api.addPoint(update).then((response) => {
         new Api(END_POINT, AUTHORIZATION).addPoint(update).then((response) => {
           this._pointsModel.addPoint(updateType, response);
         });
         break;
       case UserAction.DELETE_POINT:
+        this._tripPresenter.get(update.id).setViewState(PointPresenterViewState.DELETING);
         this._api.deletePoint(update).then(() => {
           this._pointsModel.deletePoint(updateType, update);
         });
