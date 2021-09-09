@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 export const State = {
   SAVING: 'SAVING',
   DELETING: 'DELETING',
+  ABORTING: 'ABORTING',
 };
 export default class TripPoint {
   constructor(pointContainer, changeData, changeMode) {
@@ -112,7 +113,13 @@ export default class TripPoint {
     if (this._mode === Mode.DEFAULT) {
       return;
     }
-
+    const resetFormState = () => {
+      this._editPoint.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
     switch (state) {
       case State.SAVING:
         this._editPoint.updateData({
@@ -125,6 +132,10 @@ export default class TripPoint {
           isDisabled: true,
           isDeleting: true,
         });
+        break;
+      case State.ABORTING:
+        this._editPoint.shake(resetFormState);
+        this._pointEvent.shake(resetFormState);
         break;
     }
   }

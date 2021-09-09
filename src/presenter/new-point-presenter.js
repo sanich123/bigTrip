@@ -37,7 +37,6 @@ export default class NewTripPoint {
         {title: 'Drive slowly', price: 110},
       ],
     };
-
     this._editPoint = new NewPoint(point, offers, destinations);
     this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
     this._editPoint.setDeleteClickHandler(this._handleDeleteClick);
@@ -60,13 +59,25 @@ export default class NewTripPoint {
     });
   }
 
+  setAborting() {
+    const resetFormState = () => {
+      this._edtiPoint.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this._editPoint.shake(resetFormState);
+  }
+
   destroy() {
     if (this._editPoint === null) {
       return;
     }
     remove(this._tripListLi);
     remove(this._editPoint);
-    // this._editPoint = null;
+    this._editPoint = null;
     document.removeEventListener('keydown', this._escKeyDownHandler);
   }
 

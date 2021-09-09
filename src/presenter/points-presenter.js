@@ -166,12 +166,14 @@ export default class PointsPresenter {
         this._tripPresenter.get(update.id).setViewState(PointPresenterViewState.SAVING);
         this._api.updatePoint(update).then((response) => {
           this._pointsModel.updatePoint(updateType, response);
-        });
+        })
+          .catch(() => {
+            this._tripPresenter.get(update.id).setViewState(PointPresenterViewState.ABORTING);
+          });
         break;
       case UserAction.ADD_POINT:
-        console.log(this._newTripPoint);
-        new NewTripPoint(this._tripListUl, this._handleViewAction, this._pointsModel).setSaving();
-        // this._newTripPoint.setSaving();
+        this._newTripPoint = new NewTripPoint(this._tripListUl, this._handleViewAction, this._pointsModel);
+        this._newTripPoint.setSaving();
         // this._api.addPoint(update).then((response) => {
         new Api(END_POINT, AUTHORIZATION).addPoint(update).then((response) => {
           this._pointsModel.addPoint(updateType, response);
@@ -181,7 +183,9 @@ export default class PointsPresenter {
         this._tripPresenter.get(update.id).setViewState(PointPresenterViewState.DELETING);
         this._api.deletePoint(update).then(() => {
           this._pointsModel.deletePoint(updateType, update);
-        });
+        })
+          .catch(() => {
+            this._tripPresenter.get(update.id).setViewState(PointPresenterViewState.ABORTING);});
         break;
     }
   }
