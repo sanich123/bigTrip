@@ -1,4 +1,5 @@
 import NewPoint from '../view/new-point.js';
+// import EditingPoint from '../view/point-edit.js';
 import TripListLi from '../view/trip-list-li.js';
 import { renderPosition, render, remove } from '../utils/rendering-utils.js';
 import { UserAction, UpdateType } from '../utils/constants.js';
@@ -6,9 +7,11 @@ import dayjs from 'dayjs';
 
 export default class NewTripPoint {
   constructor(pointContainer, changeData, pointsModel) {
-    this._pointsModel = pointsModel;
     this._pointContainer = pointContainer;
     this._changeData = changeData;
+    this._pointsModel = pointsModel;
+
+
     this._editPoint = null;
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
@@ -38,6 +41,7 @@ export default class NewTripPoint {
       ],
     };
     this._editPoint = new NewPoint(point, offers, destinations);
+
     this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
     this._editPoint.setDeleteClickHandler(this._handleDeleteClick);
     this._editPoint.setPriceListener(this._priceChangeHandler);

@@ -13,12 +13,31 @@ import { SortType, UpdateType, UserAction, FilterType } from '../utils/constants
 import dayjs from 'dayjs';
 import { filter } from '../utils/filter.js';
 import Api from '../api.js';
-
+const point1 = {
+  basePrice: 0,
+  dateFrom: dayjs(),
+  dateTo: dayjs(),
+  destination: {
+    description: '',
+    name: '',
+    pictures: '',
+  },
+  isFavorite: false,
+  type: 'taxi',
+  offers: [
+    {title: 'Upgrade to a business class', price: 190},
+    {title: 'Choose the radio station', price: 30},
+    {title: 'Choose temperature', price: 170},
+    {title: 'Drive quickly, I\'m in a hurry', price: 100},
+    {title: 'Drive slowly', price: 110},
+  ],
+};
 const AUTHORIZATION = 'Basic hD3sb8dfSWcl2sA5j';
 const END_POINT = 'https://14.ecmascript.pages.academy/big-trip/';
 
 export default class PointsPresenter {
   constructor(container, pointsModel, filtersModel, api, destinationsModel, offersModel) {
+    this._point = point1;
     this._api = api;
     this._filtersModel = filtersModel;
     this._pointsModel = pointsModel;
@@ -128,7 +147,10 @@ export default class PointsPresenter {
     this._destinations = this._destinationsModel.getDestinations();
     this._currentSortType = SortType.DAY;
     this._filtersModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this._newTripPoint.init(this._offers, this._destinations);
+    // new TripPoint(this._tripListUl, this._handleViewAction, this._handleModeChange).init();
+    const tripPoint = new TripPoint(this._tripListUl, this._handleViewAction, this._handleModeChange);
+    tripPoint.init2(this._offers, this._destinations);
+    // this._newTripPoint.init(this._offers, this._destinations);
   }
 
   _getPoints() {
@@ -172,7 +194,10 @@ export default class PointsPresenter {
           });
         break;
       case UserAction.ADD_POINT:
-        // this._newTripPoint = new NewTripPoint(this._tripListUl, this._handleViewAction, this._pointsModel).setSaving();
+console.log(this)
+        new NewTripPoint(this._tripListUl, this._handleViewAction, this._pointsModel);
+
+        // .setSaving();
 
         // this._api.addPoint(update).then((response) => {
         new Api(END_POINT, AUTHORIZATION).addPoint(update).then((response) => {
@@ -183,7 +208,7 @@ export default class PointsPresenter {
           });
         break;
       case UserAction.DELETE_POINT:
-        this._tripPresenter.get(update.id).setViewState(PointPresenterViewState.DELETING);
+        // this._tripPresenter.get(update.id).setViewState(PointPresenterViewState.DELETING);
         this._api.deletePoint(update).then(() => {
           this._pointsModel.deletePoint(updateType, update);
         })

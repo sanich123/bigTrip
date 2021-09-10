@@ -86,8 +86,7 @@ export default class EditingPoint extends Smart {
     this._destinations = destinations;
     this._timeToHandler = this._timeToHandler.bind(this);
     this._setDatePicker = this._setDatePicker.bind(this);
-    this._formSubmitHandler = this._formSubmitHandler.bind(this);
-    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
+    this._formSubmitHandler2 = this._formSubmitHandler2.bind(this);
     this._typeChangeHandler = this._typeChangeHandler.bind(this);
     this._cityChangeHandler = this._cityChangeHandler.bind(this);
     this._cityInputHandler = this._cityInputHandler.bind(this);
@@ -139,6 +138,7 @@ export default class EditingPoint extends Smart {
   }
 
   _formDeleteClickHandler(evt) {
+    console.log(';lj')
     evt.preventDefault();
     this._callback.deleteClick(EditingPoint.parseDataToTask(this._data));
     document.querySelector('.trip-main__event-add-btn').disabled = false;
@@ -213,12 +213,12 @@ export default class EditingPoint extends Smart {
       });
   }
 
-  setFormSubmitHandler(callback) {
+  setFormSubmitHandler2(callback) {
     this._callback.formSubmit = callback;
     this.getElement().addEventListener('submit', this._formSubmitHandler);
   }
 
-  _formSubmitHandler(evt) {
+  _formSubmitHandler2(evt) {
     evt.preventDefault();
     this._callback.formSubmit(EditingPoint.parseDataToTask(this._data));
   }
