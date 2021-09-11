@@ -26,6 +26,7 @@ export default class TripPoint {
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleFormSubmit2 = this._handleFormSubmit2.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
+    this._escKeyDownHandler2 = this._escKeyDownHandler2.bind(this);
     this._handleEditClickBack = this._handleEditClickBack.bind(this);
     this._handleEditClick = this._handleEditClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
@@ -98,10 +99,8 @@ export default class TripPoint {
       ],
     };
     this._editPoint = new NewPoint(point, offers, destinations);
-
     this._editPoint.setFormSubmitHandler2(this._handleFormSubmit2);
     this._editPoint.setDeleteClickHandler2(this._handleDeleteClick2);
-
     this._editPoint.setPriceListener(this._priceChangeHandler);
     this._editPoint.setPriceInputListener(this._priceInputHandler);
     this._editPoint.setCityChangeHandler(this._cityChangeHandler);
@@ -110,10 +109,8 @@ export default class TripPoint {
     this._editPoint.setOffersListener(this._offersListener);
     this._editPoint._setDatePicker(this._timeFromHandler);
     this._editPoint._setDatePicker(this._timeToHandler);
-
     render(this._tripListLi, this._editPoint, renderPosition.AFTERBEGIN);
-    document.addEventListener('keydown', this._escKeyDownHandler);
-
+    document.addEventListener('keydown', this._escKeyDownHandler2);
   }
 
   _replaceCardToForm() {
@@ -242,6 +239,14 @@ export default class TripPoint {
       evt.preventDefault();
       this._editPoint.reset(this._point);
       this._replaceFormToCard();
+    }
+  }
+
+  _escKeyDownHandler2(evt) {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      this.destroy();
+      document.querySelector('.trip-main__event-add-btn').disabled = false;
     }
   }
 
