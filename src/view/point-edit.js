@@ -131,7 +131,7 @@ export default class EditingPoint extends Smart {
   _formDeleteClickHandler(evt) {
     evt.preventDefault();
     this._callback.deleteClick(EditingPoint.parseDataToTask(this._data));
-        document.querySelector('.trip-main__event-add-btn').disabled = false;
+    document.querySelector('.trip-main__event-add-btn').disabled = false;
   }
 
   setOffersListener() {

@@ -93,6 +93,7 @@ export default class EditingPoint extends Smart {
     this._priceChangeHandler = this._priceChangeHandler.bind(this);
     this._priceInputHandler = this._priceInputHandler.bind(this);
     this._offersListener = this._offersListener.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
   }
 
   _getDestinations() {
@@ -132,15 +133,14 @@ export default class EditingPoint extends Smart {
     });
   }
 
-  setDeleteClickHandler(callback) {
+  setDeleteClickHandler2(callback) {
     this._callback.deleteClick = callback;
     this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._formDeleteClickHandler);
   }
 
   _formDeleteClickHandler(evt) {
-    console.log(';lj')
     evt.preventDefault();
-    this._callback.deleteClick(EditingPoint.parseDataToTask(this._data));
+    this._callback.deleteClick();
     document.querySelector('.trip-main__event-add-btn').disabled = false;
   }
 
@@ -215,7 +215,7 @@ export default class EditingPoint extends Smart {
 
   setFormSubmitHandler2(callback) {
     this._callback.formSubmit = callback;
-    this.getElement().addEventListener('submit', this._formSubmitHandler);
+    this.getElement().addEventListener('submit', this._formSubmitHandler2);
   }
 
   _formSubmitHandler2(evt) {
@@ -225,13 +225,14 @@ export default class EditingPoint extends Smart {
 
   _setInnerHandlers() {
     this.getElement().querySelector('.event__type-group').addEventListener('change', this._typeChangeHandler);
-    this.getElement().addEventListener('submit', this._formSubmitHandler);
+    this.getElement().addEventListener('submit', this._formSubmitHandler2);
     this.getElement().querySelector('.event__input--destination').addEventListener('change', this._cityChangeHandler);
     this.getElement().querySelector('.event__input--price').addEventListener('change', this._priceChangeHandler);
   }
 
   restoreHandlers() {
-    this.setDeleteClickHandler(this._callback.deleteClick);
+    this.setDeleteClickHandler2(this._callback.deleteClick);
+
     this._setDatePicker();
     this._setInnerHandlers();
     this.setOffersListener(this._offersListener);
