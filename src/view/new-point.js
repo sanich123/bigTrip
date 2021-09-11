@@ -7,10 +7,10 @@ import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const editPoint = (point, availableOffers, destinations) => {
   const { destination, offers, type, id, dateFrom, dateTo,
-    isDisabled,
+    isDisabled, isSaving,
     basePrice } = point;
 
-  const destinationListener = () => destination.name !== '' ? `<section class="event__section  event__section--destination"><h3 class="event__section-title  event__section-title--destination">Destination</h3>
+  const destinationListener = () => destination.name !== '' ? `<section class="event__section  event__section--destination"><h3 class="event__section-title  event__section-title--destination"${isDisabled ? 'disabled' : ''}>Destination</h3>
     <p class="event__destination-description">${destination.description}</p>
       <div class="event__photos-container">
         <div class="event__photos-tape">
@@ -28,7 +28,7 @@ const editPoint = (point, availableOffers, destinations) => {
       <span class="visually-hidden">Choose event type</span>
       <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event ${type} icon">
     </label>
-    <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${id}" type="checkbox">
+    <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${id}" type="checkbox" ${isDisabled ? 'disabled' : ''}>
         <div class="event__type-list">
       <fieldset class="event__type-group">
       <legend class="visually-hidden">Event type</legend>
@@ -41,7 +41,7 @@ const editPoint = (point, availableOffers, destinations) => {
     <label class="event__label  event__type-output" for="event-destination-${id}">
       ${type}
     </label>
-    <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${destination.name}" list="destination-list-${id}">
+    <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${destination.name}" list="destination-list-${id}" ${isDisabled ? 'disabled' : ''}>
     <datalist id="destination-list-${id}">
     ${createCities(availableDestinations)}
     </datalist>
@@ -49,10 +49,10 @@ const editPoint = (point, availableOffers, destinations) => {
 
   <div class="event__field-group  event__field-group--time">
     <label class="visually-hidden" for="event-start-time-${id}">From</label>
-    <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${getFormatTime(dateFrom, dateTo).fullDateFrom}">
+    <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${getFormatTime(dateFrom, dateTo).fullDateFrom}" ${isDisabled ? 'disabled' : ''}>
     —
     <label class="visually-hidden" for="event-end-time-${id}">To</label>
-    <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${getFormatTime(dateFrom, dateTo).fullDateTo}">
+    <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${getFormatTime(dateFrom, dateTo).fullDateTo}" ${isDisabled ? 'disabled' : ''}>
   </div>
 
   <div class="event__field-group  event__field-group--price">
@@ -61,10 +61,10 @@ const editPoint = (point, availableOffers, destinations) => {
       €
     </label>
     <input class="event__input  event__input--price" id="event-price-${id}" type="number"
-    name="event-price" value="${basePrice}">
+    name="event-price" value="${basePrice}" ${isDisabled ? 'disabled' : ''}>
   </div>
 
-  <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled}>Save</button>
+  <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
   <button class="event__reset-btn" type="reset">Cancel</button>
     <span class="visually-hidden">Open event</span>
   </button>
@@ -86,14 +86,14 @@ export default class EditingPoint extends Smart {
     this._destinations = destinations;
     this._timeToHandler = this._timeToHandler.bind(this);
     this._setDatePicker = this._setDatePicker.bind(this);
-    this._formSubmitHandler2 = this._formSubmitHandler2.bind(this);
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
     this._typeChangeHandler = this._typeChangeHandler.bind(this);
     this._cityChangeHandler = this._cityChangeHandler.bind(this);
     this._cityInputHandler = this._cityInputHandler.bind(this);
     this._priceChangeHandler = this._priceChangeHandler.bind(this);
     this._priceInputHandler = this._priceInputHandler.bind(this);
     this._offersListener = this._offersListener.bind(this);
-    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
   }
 
   _getDestinations() {
@@ -133,14 +133,14 @@ export default class EditingPoint extends Smart {
     });
   }
 
-  setDeleteClickHandler2(callback) {
+  setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
     this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._formDeleteClickHandler);
   }
 
   _formDeleteClickHandler(evt) {
     evt.preventDefault();
-    this._callback.deleteClick();
+    this._callback.deleteClick(EditingPoint.parseDataToTask(this._data));
     document.querySelector('.trip-main__event-add-btn').disabled = false;
   }
 
@@ -213,26 +213,25 @@ export default class EditingPoint extends Smart {
       });
   }
 
-  setFormSubmitHandler2(callback) {
+  setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
-    this.getElement().addEventListener('submit', this._formSubmitHandler2);
+    this.getElement().addEventListener('submit', this._formSubmitHandler);
   }
 
-  _formSubmitHandler2(evt) {
+  _formSubmitHandler(evt) {
     evt.preventDefault();
     this._callback.formSubmit(EditingPoint.parseDataToTask(this._data));
   }
 
   _setInnerHandlers() {
     this.getElement().querySelector('.event__type-group').addEventListener('change', this._typeChangeHandler);
-    this.getElement().addEventListener('submit', this._formSubmitHandler2);
+    this.getElement().addEventListener('submit', this._formSubmitHandler);
     this.getElement().querySelector('.event__input--destination').addEventListener('change', this._cityChangeHandler);
     this.getElement().querySelector('.event__input--price').addEventListener('change', this._priceChangeHandler);
   }
 
   restoreHandlers() {
-    this.setDeleteClickHandler2(this._callback.deleteClick);
-
+    this.setDeleteClickHandler(this._callback.deleteClick);
     this._setDatePicker();
     this._setInnerHandlers();
     this.setOffersListener(this._offersListener);
@@ -307,7 +306,9 @@ export default class EditingPoint extends Smart {
       {},
       point,
       {
-        isDisabled: true,
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
       },
     );
   }
@@ -315,6 +316,8 @@ export default class EditingPoint extends Smart {
   static parseDataToTask(data) {
     data = Object.assign({}, data);
     delete data.isDisabled;
+    delete data.isSaving;
+    delete data.isDeleting;
     return data;
   }
 }

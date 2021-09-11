@@ -7,14 +7,16 @@ import SortMenu from '../view/sort.js';
 import EditingPoint from '../view/point-edit.js';
 import NewTripPoint from './new-point-presenter.js';
 import TripPoint, {State as PointPresenterViewState} from './point-presenter.js';
-import Api from '../api.js';
 // import PriceTripView from '../view/price-trip.js';
 import { renderPosition, render, remove } from '../utils/rendering-utils.js';
 import { SortType, UpdateType, UserAction, FilterType } from '../utils/constants.js';
 import dayjs from 'dayjs';
 import { filter } from '../utils/filter.js';
+import Api from '../api.js';
+
 const AUTHORIZATION = 'Basic hD3sb8dfSWcl2sA5j';
 const END_POINT = 'https://14.ecmascript.pages.academy/big-trip/';
+
 export default class PointsPresenter {
   constructor(container, pointsModel, filtersModel, api, destinationsModel, offersModel) {
     this._api = api;
@@ -37,8 +39,7 @@ export default class PointsPresenter {
     this._editingPoint = new EditingPoint();
     this._pointsList = new PointsList();
     this._loading = new Loading();
-    this._tripPoint = new TripPoint(this._tripListUl, this._handleViewAction, this._handleModeChange);
-    // this._newTripPoint = new NewTripPoint(this._tripListUl, this._handleViewAction, this._pointsModel);
+    this._newTripPoint = new NewTripPoint(this._tripListUl, this._handleViewAction, this._pointsModel);
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -99,6 +100,7 @@ export default class PointsPresenter {
       this._renderLoading();
       return;
     }
+    document.querySelector('.trip-main__event-add-btn').disabled = false;
     this._filterType = this._filtersModel.getFilter();
     const points = this._pointsModel.getPoints();
     const filtredPoints = filter[this._filterType](points);
@@ -127,10 +129,7 @@ export default class PointsPresenter {
     this._destinations = this._destinationsModel.getDestinations();
     this._currentSortType = SortType.DAY;
     this._filtersModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    // const tripPoint2 = new TripPoint(this._tripListUl, this._handleViewAction, this._handleModeChange);
-    // tripPoint2.init2(this._offers, this._destinations);
-    new TripPoint(this._tripListUl, this._handleViewAction, this._handleModeChange).init2(this._offers, this._destinations);
-    // this._newTripPoint.init(this._offers, this._destinations);
+    this._newTripPoint.init(this._offers, this._destinations);
   }
 
   _getPoints() {
@@ -147,6 +146,7 @@ export default class PointsPresenter {
   }
 
   _clearBoard({resetSortType = false} = {}) {
+    this._newTripPoint.destroy();
     this._tripPresenter.forEach((presenter) => presenter.destroy());
     this._tripPresenter.clear();
 
@@ -161,7 +161,7 @@ export default class PointsPresenter {
   }
 
   _handleViewAction(actionType, updateType, update) {
-    console.log(actionType, updateType, update);
+    // console.log(actionType, updateType, update);
     switch (actionType) {
       case UserAction.UPDATE_POINT:
         this._tripPresenter.get(update.id).setViewState(PointPresenterViewState.SAVING);
@@ -173,14 +173,11 @@ export default class PointsPresenter {
           });
         break;
       case UserAction.ADD_POINT:
-        console.log(this._tripPoint);
-        // this._tripPoint.setSaving();
         new Api(END_POINT, AUTHORIZATION).addPoint(update).then((response) => {
-        // this._api.addPoint(update).then((response) => {
           this._pointsModel.addPoint(updateType, response);
         })
           .catch(() => {
-            // this._newTripPoint.setAborting();
+            this._newTripPoint.setAborting();
           });
         break;
       case UserAction.DELETE_POINT:
@@ -229,7 +226,7 @@ export default class PointsPresenter {
   }
 
   _handleModeChange() {
-    // this._newTripPoint.destroy();
+    this._newTripPoint.destroy();
     this._tripPresenter.forEach((presenter) => presenter.resetView());
   }
 }

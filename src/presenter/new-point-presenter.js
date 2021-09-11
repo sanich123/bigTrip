@@ -1,5 +1,4 @@
 import NewPoint from '../view/new-point.js';
-// import EditingPoint from '../view/point-edit.js';
 import TripListLi from '../view/trip-list-li.js';
 import { renderPosition, render, remove } from '../utils/rendering-utils.js';
 import { UserAction, UpdateType } from '../utils/constants.js';
@@ -7,11 +6,9 @@ import dayjs from 'dayjs';
 
 export default class NewTripPoint {
   constructor(pointContainer, changeData, pointsModel) {
+    this._pointsModel = pointsModel;
     this._pointContainer = pointContainer;
     this._changeData = changeData;
-    this._pointsModel = pointsModel;
-
-
     this._editPoint = null;
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
@@ -31,6 +28,8 @@ export default class NewTripPoint {
         pictures: '',
       },
       isFavorite: false,
+      isDisabled: false,
+      isSaving: false,
       type: 'taxi',
       offers: [
         {title: 'Upgrade to a business class', price: 190},
@@ -41,7 +40,6 @@ export default class NewTripPoint {
       ],
     };
     this._editPoint = new NewPoint(point, offers, destinations);
-
     this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
     this._editPoint.setDeleteClickHandler(this._handleDeleteClick);
     this._editPoint.setPriceListener(this._priceChangeHandler);
@@ -57,6 +55,7 @@ export default class NewTripPoint {
   }
 
   setSaving() {
+    console.log(this._editPoint)
     this._editPoint.updateData({
       isDisabled: true,
       isSaving: true,
@@ -95,6 +94,10 @@ export default class NewTripPoint {
     } else if (dayjs(newPoint.dateTo) < dayjs(newPoint.dateFrom)) {
       return this._editPoint._element[11].setCustomValidity('Дата окончания не может быть раньше начала');
     }
+    this._editPoint.updateData({
+      isDisabled: true,
+      isSaving: true,
+    });
     this._changeData(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
