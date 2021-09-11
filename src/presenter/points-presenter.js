@@ -7,12 +7,14 @@ import SortMenu from '../view/sort.js';
 import EditingPoint from '../view/point-edit.js';
 import NewTripPoint from './new-point-presenter.js';
 import TripPoint, {State as PointPresenterViewState} from './point-presenter.js';
+import Api from '../api.js';
 // import PriceTripView from '../view/price-trip.js';
 import { renderPosition, render, remove } from '../utils/rendering-utils.js';
 import { SortType, UpdateType, UserAction, FilterType } from '../utils/constants.js';
 import dayjs from 'dayjs';
 import { filter } from '../utils/filter.js';
-
+const AUTHORIZATION = 'Basic hD3sb8dfSWcl2sA5j';
+const END_POINT = 'https://14.ecmascript.pages.academy/big-trip/';
 export default class PointsPresenter {
   constructor(container, pointsModel, filtersModel, api, destinationsModel, offersModel) {
     this._api = api;
@@ -125,7 +127,9 @@ export default class PointsPresenter {
     this._destinations = this._destinationsModel.getDestinations();
     this._currentSortType = SortType.DAY;
     this._filtersModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this._tripPoint.init2(this._offers, this._destinations);
+    // const tripPoint2 = new TripPoint(this._tripListUl, this._handleViewAction, this._handleModeChange);
+    // tripPoint2.init2(this._offers, this._destinations);
+    new TripPoint(this._tripListUl, this._handleViewAction, this._handleModeChange).init2(this._offers, this._destinations);
     // this._newTripPoint.init(this._offers, this._destinations);
   }
 
@@ -160,7 +164,7 @@ export default class PointsPresenter {
     console.log(actionType, updateType, update);
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this._tripPresenter[update.id].setViewState(PointPresenterViewState.SAVING);
+        this._tripPresenter.get(update.id).setViewState(PointPresenterViewState.SAVING);
         this._api.updatePoint(update).then((response) => {
           this._pointsModel.updatePoint(updateType, response);
         })
@@ -169,9 +173,10 @@ export default class PointsPresenter {
           });
         break;
       case UserAction.ADD_POINT:
-        console.log(this)
-        this._tripPoint.setSaving();
-        this._api.addPoint(update).then((response) => {
+        console.log(this._tripPoint);
+        // this._tripPoint.setSaving();
+        new Api(END_POINT, AUTHORIZATION).addPoint(update).then((response) => {
+        // this._api.addPoint(update).then((response) => {
           this._pointsModel.addPoint(updateType, response);
         })
           .catch(() => {
