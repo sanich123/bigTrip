@@ -69,6 +69,9 @@ export default class PointsPresenter {
   }
 
   _renderSort() {
+    if (this._empty) {
+      remove(this._empty);
+    }
     if (this._sortMenu !== null) {
       this._sortMenu = null;
     }
@@ -173,11 +176,12 @@ export default class PointsPresenter {
           });
         break;
       case UserAction.ADD_POINT:
+        this.setSaving();
         new Api(END_POINT, AUTHORIZATION).addPoint(update).then((response) => {
           this._pointsModel.addPoint(updateType, response);
         })
           .catch(() => {
-            this._newTripPoint.setAborting();
+            this.setAborting();
           });
         break;
       case UserAction.DELETE_POINT:
@@ -227,7 +231,6 @@ export default class PointsPresenter {
 
   _handleModeChange() {
     this._newTripPoint.destroy();
-
     this._tripPresenter.forEach((presenter) => presenter.resetView());
   }
 }

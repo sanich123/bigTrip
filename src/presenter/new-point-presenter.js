@@ -66,6 +66,13 @@ export default class NewTripPoint {
     this._editPoint.shake(resetFormState);
   }
 
+  setSaving() {
+    this._editPoint.updateData({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
   destroy() {
     if (this._editPoint === null) {
       return;
@@ -86,10 +93,10 @@ export default class NewTripPoint {
     } else if (dayjs(newPoint.dateTo) < dayjs(newPoint.dateFrom)) {
       return this._editPoint._element[11].setCustomValidity('Дата окончания не может быть раньше начала');
     }
-    this._editPoint.updateData({
-      isDisabled: true,
-      isSaving: true,
-    });
+    // this._editPoint.updateData({
+    //   isDisabled: true,
+    //   isSaving: true,
+    // });
     this._changeData(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
