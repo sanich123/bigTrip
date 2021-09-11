@@ -16,10 +16,10 @@ export const getPhotos = (pictures) => pictures.map(({ src }) => (`<img class="e
 
 export const favoritePoint = (isFavorite) => isFavorite ? 'event__favorite-btn--active' : '';
 
-const generateOffers = (offers) => offers.map(({title, price}) => {
+const generateOffers = (offers, isDisabled) => offers.map(({title, price}) => {
   const uniq = nanoid();
   return `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${uniq}" type="checkbox" name="event-offer-luggage">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${uniq}" type="checkbox" name="event-offer-luggage" ${isDisabled ? 'disabled' : ''}>
     <label class="event__offer-label" for="event-offer-luggage-${uniq}">
       <span class="event__offer-title">${title}</span>
       +€&nbsp;

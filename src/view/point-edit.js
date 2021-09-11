@@ -26,7 +26,7 @@ const editPoint = (point, availableOffers, destinations) => {
       <span class="visually-hidden">Choose event type</span>
       <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event ${type} icon">
     </label>
-    <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${id}" type="checkbox">
+    <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${id}" type="checkbox" ${isDisabled ? 'disabled' : ''}>
         <div class="event__type-list">
       <fieldset class="event__type-group">
       <legend class="visually-hidden">Event type</legend>
@@ -50,7 +50,7 @@ const editPoint = (point, availableOffers, destinations) => {
     <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${getFormatTime(dateFrom, dateTo).fullDateFrom}" ${isDisabled ? 'disabled' : ''}>
     —
     <label class="visually-hidden" for="event-end-time-${id}">To</label>
-    <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${getFormatTime(dateFrom, dateTo).fullDateTo} ${isDisabled ? 'disabled' : ''}">
+    <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${getFormatTime(dateFrom, dateTo).fullDateTo}" ${isDisabled ? 'disabled' : ''}>
   </div>
 
   <div class="event__field-group  event__field-group--price">
@@ -58,7 +58,7 @@ const editPoint = (point, availableOffers, destinations) => {
       <span class="visually-hidden">Price</span>
       €
     </label>
-    <input class="event__input  event__input--price" id="event-price-${id}" type="number" name="event-price" value="${basePrice}" ${isDisabled ? 'disabled' : ''}">
+    <input class="event__input  event__input--price" id="event-price-${id}" type="number" name="event-price" value="${basePrice}" ${isDisabled ? 'disabled' : ''}>
   </div>
 
   <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>

@@ -73,6 +73,7 @@ export default class TripPoint {
   _replaceCardToForm() {
     replace(this._editPoint, this._pointEvent);
     document.addEventListener('keydown', this._escKeyDownHandler);
+    document.querySelector('.trip-main__event-add-btn').disabled = false;
     this._changeMode();
     this._mode = Mode.EDITING;
   }

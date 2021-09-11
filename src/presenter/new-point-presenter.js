@@ -54,14 +54,6 @@ export default class NewTripPoint {
     document.addEventListener('keydown', this._escKeyDownHandler);
   }
 
-  setSaving() {
-    console.log(this._editPoint)
-    this._editPoint.updateData({
-      isDisabled: true,
-      isSaving: true,
-    });
-  }
-
   setAborting() {
     const resetFormState = () => {
       this._editPoint.updateData({
