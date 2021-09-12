@@ -62,7 +62,6 @@ export default class NewTripPoint {
         isDeleting: false,
       });
     };
-
     this._editPoint.shake(resetFormState);
   }
 

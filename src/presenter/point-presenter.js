@@ -4,6 +4,7 @@ import PointsList from '../view/points-list.js';
 import { renderPosition, render, replace, remove } from '../utils/rendering-utils.js';
 import { UserAction, UpdateType, Mode } from '../utils/constants.js';
 import dayjs from 'dayjs';
+
 export const State = {
   SAVING: 'SAVING',
   DELETING: 'DELETING',
