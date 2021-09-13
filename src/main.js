@@ -1,4 +1,3 @@
-import PriceTripView from './view/price-trip.js';
 import NavigationView from './view/navigation.js';
 import { renderPosition, render, remove } from './utils/rendering-utils.js';
 import PointsPresenter from './presenter/points-presenter.js';
@@ -14,7 +13,6 @@ import Api from './api.js';
 const AUTHORIZATION = 'Basic hD3sb8dfSWcl2sA5j';
 const END_POINT = 'https://14.ecmascript.pages.academy/big-trip/';
 
-const priceAndTripSection = document.querySelector('.trip-main');
 const toNavigation = document.querySelector('.trip-controls__navigation');
 const toFilters = document.querySelector('.trip-controls__filters');
 const toSort = document.querySelector('.trip-events');
@@ -81,7 +79,6 @@ Promise.all([
   offersModel.setOffers(UpdateType.INIT, offers);
   destinationsModel.setDestinations(UpdateType.INIT, destinations);
   newPointButton.disabled = false;
-  render(priceAndTripSection, new PriceTripView(pointsModel.getPoints()), renderPosition.AFTERBEGIN);
   navigationView.setMenuClickHandler(handleNavigationClick);
 }).catch(() => {
   pointsModel.setPoints(UpdateType.INIT, []);

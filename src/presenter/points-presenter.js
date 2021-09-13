@@ -33,7 +33,6 @@ export default class PointsPresenter {
 
     this._sortMenu = null;
     this._empty = null;
-    // this._priceTrip = new PriceTripView();
     this._tripListUl = new TripListUl();
     this._tripListLi = new TripListLi();
     this._editingPoint = new EditingPoint();
@@ -103,13 +102,9 @@ export default class PointsPresenter {
       this._renderLoading();
       return;
     }
-    document.querySelector('.trip-main__event-add-btn').disabled = false;
     this._filterType = this._filtersModel.getFilter();
     const points = this._pointsModel.getPoints();
     const filtredPoints = filter[this._filterType](points);
-    // if (points.length !== 0) {
-    //   this._renderPriceTrip();
-    // }
     if (filtredPoints.length === 0) {
       this._renderEmpty();
       return;
@@ -128,11 +123,15 @@ export default class PointsPresenter {
   }
 
   createPoint() {
+    if (this._pointsModel.getPoints().length === 0) {
+      render(this._container, this._tripListUl, renderPosition.BEFOREEND);
+    }
     this._offers = this._offersModel.getOffers();
     this._destinations = this._destinationsModel.getDestinations();
     this._currentSortType = SortType.DAY;
     this._filtersModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this._newTripPoint.init(this._offers, this._destinations);
+    remove(this._empty);
   }
 
   _getPoints() {
@@ -164,7 +163,6 @@ export default class PointsPresenter {
   }
 
   _handleViewAction(actionType, updateType, update) {
-    // console.log(actionType, updateType, update);
     switch (actionType) {
       case UserAction.UPDATE_POINT:
         this._tripPresenter.get(update.id).setViewState(State.SAVING);
