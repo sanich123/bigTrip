@@ -103,7 +103,8 @@ export const difMillscs = (begin, end) => {
   return difference;
 };
 
-export const duration2 = (difference) => {
+export const duration2 = (it) => {
+  const difference = new Date(it);
   const ONE_HOUR = 3600000;
   const ONE_DAY = 86400000;
 

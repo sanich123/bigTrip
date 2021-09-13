@@ -1,8 +1,7 @@
 import Smart from './smart.js';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { duration } from '../utils/common.js';
-import { difMillscs, duration2 } from '../utils/rendering-data-utils.js';
+import { duration2 } from '../utils/rendering-data-utils.js';
 import dayjs from 'dayjs';
 
 const moneyChart = (moneyCtx, points) => {
@@ -153,11 +152,9 @@ const typeChart = (typeCtx, points) => {
 };
 
 const timeChart = (timeCtx, points) => {
-  const summary =  Array.from(points.reduce((point, { type, dateFrom, dateTo }) => point.set(type, (point.get(type) || 0) + dayjs(dateTo).diff(dateFrom)), new Map)).sort((a, b) => b[1] - a[1]).slice();
+  const summary =  Array.from(points.reduce((point, { type, dateFrom, dateTo }) => point.set(type, (point.get(type) || 0) + Math.abs(dayjs(dayjs(dateFrom).diff(dateTo)))), new Map)).sort((a, b) => b[1] - a[1]).slice();
   const types = summary.map((it) => it[0].toUpperCase());
   const time = summary.map((it) => it[1]);
-  console.log(Array.from(points.reduce((point, { type, dateFrom, dateTo }) => point.set(type, (point.get(type) || 0) + Math.abs(dayjs(dayjs(dateFrom).diff(dateTo)))), new Map)).sort((a, b) => b[1] - a[1]));
-  //  .sort((a, b) => b[1] - a[1]).slice().map((it) => it[1]))
 
   const chart = new Chart(timeCtx, {
     plugins: [ChartDataLabels],
@@ -182,7 +179,7 @@ const timeChart = (timeCtx, points) => {
           color: '#000000',
           anchor: 'end',
           align: 'start',
-          formatter: (val) => `${duration(val)}`,
+          formatter: (val) => `${duration2(val)}`,
         },
       },
       title: {
