@@ -61,6 +61,7 @@ export default class PointsPresenter {
   _renderEmpty() {
     this._empty = new Empty(this._filterType);
     render(this._container, this._empty, renderPosition.BEFOREEND);
+    // document.querySelectorAll('.trip-filters__filter-input').forEach((it) => it.disabled = true);
   }
 
   _renderLoading() {
@@ -131,7 +132,9 @@ export default class PointsPresenter {
     this._currentSortType = SortType.DAY;
     this._filtersModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this._newTripPoint.init(this._offers, this._destinations);
-    remove(this._empty);
+    if (this._empty) {
+      remove(this._empty);
+    }
   }
 
   _getPoints() {
@@ -160,6 +163,7 @@ export default class PointsPresenter {
     if (resetSortType) {
       this._currentSortType = SortType.DAY;
     }
+    document.querySelector('.trip-main__event-add-btn').disabled = false;
   }
 
   _handleViewAction(actionType, updateType, update) {
@@ -195,7 +199,6 @@ export default class PointsPresenter {
   }
 
   _handleModelEvent(updateType, data) {
-    // console.log(updateType, data);
     switch (updateType) {
       case UpdateType.PATCH:
         this._taskPresenter.get(data.id).init(data);

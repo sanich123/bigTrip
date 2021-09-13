@@ -129,7 +129,6 @@ export default class EditingPoint extends Smart {
     evt.preventDefault();
     this.updateData({
       basePrice: Math.abs(evt.target.value),
-      isDisabled: Math.abs(evt.target.value) === 0 || !Math.abs(evt.target.value) ? 'disabled' : '',
     });
   }
 

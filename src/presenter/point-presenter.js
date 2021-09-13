@@ -144,13 +144,13 @@ export default class TripPoint {
 
   _handleFormSubmit(editPoint) {
     if (editPoint.destination.name === '') {
-      const inputValue = this._editPoint._element[11];
+      const inputValue = this._editPoint.getElement().querySelector('.event__input--destination');
       return inputValue.setCustomValidity('Нельзя отправить пустое поле названия города');
     } else if (editPoint.basePrice === 0) {
-      const inputValue = this._editPoint._element[14];
+      const inputValue = this._editPoint.getElement().querySelector('.event__input--price');
       return inputValue.setCustomValidity('Нельзя отправить поле со значением 0');
     } else if (dayjs(editPoint.dateTo) < dayjs(editPoint.dateFrom)) {
-      return this._editPoint._element[11].setCustomValidity('Дата окончания не может быть раньше начала');
+      return this._editPoint.getElement().querySelector('.event__input--destination').setCustomValidity('Дата начала не может быть позже даты конца');
     }
     this._changeData(
       UserAction.UPDATE_POINT,

@@ -84,18 +84,14 @@ export default class NewTripPoint {
 
   _handleFormSubmit(newPoint) {
     if (newPoint.destination.name === '') {
-      const inputValue = this._editPoint._element[11];
+      const inputValue = this._editPoint.getElement().querySelector('.event__input--destination');
       return inputValue.setCustomValidity('Нельзя отправить пустое поле названия города');
     } else if (newPoint.basePrice === 0) {
-      const inputValue = this._editPoint._element[14];
+      const inputValue = this._editPoint.getElement().querySelector('.event__input--price');
       return inputValue.setCustomValidity('Нельзя отправить поле со значением 0');
     } else if (dayjs(newPoint.dateTo) < dayjs(newPoint.dateFrom)) {
-      return this._editPoint._element[11].setCustomValidity('Дата окончания не может быть раньше начала');
+      return this._editPoint.getElement().querySelector('.event__input--destination').setCustomValidity('Дата начала не может быть позже даты конца');
     }
-    // this._editPoint.updateData({
-    //   isDisabled: true,
-    //   isSaving: true,
-    // });
     this._changeData(
       UserAction.ADD_POINT,
       UpdateType.MINOR,

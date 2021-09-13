@@ -42,7 +42,7 @@ const handleNavigationClick = (menuItem) => {
       statisticsComponent = null;
       navigationView.addClassItem(MenuItem.POINTS);
       navigationView.removeClassItem(MenuItem.STATISTICS);
-      document.querySelector('.trip-main__event-add-btn').disabled = false;
+      newPointButton.disabled = false;
       document.querySelectorAll('.trip-filters__filter-input').forEach((it) => it.disabled = false);
       break;
     case MenuItem.STATISTICS:
@@ -54,7 +54,7 @@ const handleNavigationClick = (menuItem) => {
       render(toStat, statisticsComponent, renderPosition.AFTERBEGIN);
       navigationView.addClassItem(MenuItem.STATISTICS);
       navigationView.removeClassItem(MenuItem.POINTS);
-      document.querySelector('.trip-main__event-add-btn').disabled = true;
+      newPointButton.disabled = true;
       document.querySelectorAll('.trip-filters__filter-input').forEach((it) => it.disabled = true);
       break;
   }
