@@ -102,6 +102,56 @@ export const difMillscs = (begin, end) => {
   const difference = new Date (Math.max(time2ms, time1ms) - Math.min(time2ms, time1ms));
   return difference;
 };
+
+export const duration2 = (difference) => {
+  const ONE_HOUR = 3600000;
+  const ONE_DAY = 86400000;
+
+  if (difference < ONE_HOUR) {
+    if (difference.getUTCMinutes() < 10) {
+      return `0${difference.getUTCMinutes()}M`;
+    }
+    return `${difference.getUTCMinutes()}M`;
+  }
+  if (difference >= ONE_HOUR && difference < ONE_DAY) {
+    if (difference.getUTCHours() < 10 && difference.getUTCMinutes() < 10) {
+      return `0${difference.getUTCHours()}H 0${difference.getUTCMinutes()}M`;
+    }
+    if (difference.getUTCHours() > 10 && difference.getUTCMinutes() < 10) {
+      return `${difference.getUTCHours()}H 0${difference.getUTCMinutes()}M`;
+    }
+    if (difference.getUTCHours() < 10 && difference.getUTCMinutes() > 10) {
+      return `0${difference.getUTCHours()}H ${difference.getUTCMinutes()}M`;
+    }
+    return `${difference.getUTCHours()}H ${difference.getUTCMinutes()}M`;
+  }
+  if (difference >= ONE_DAY) {
+    if ((difference.getUTCDate() - 1) < 10 && difference.getUTCHours() < 10 && difference.getUTCMinutes() < 10) {
+      return `0${(difference.getUTCDate() - 1)}D 0${difference.getUTCHours()}H 0${difference.getUTCMinutes()}M`;
+    }
+    if ((difference.getUTCDate() - 1) < 10 && difference.getUTCHours() < 10 && difference.getUTCMinutes() >= 10) {
+      return `0${(difference.getUTCDate() - 1)}D 0${difference.getUTCHours()}H ${difference.getUTCMinutes()}M`;
+    }
+    if ((difference.getUTCDate() - 1) < 10 && difference.getUTCHours() >= 10 && difference.getUTCMinutes() >= 10) {
+      return `0${(difference.getUTCDate() - 1)}D ${difference.getUTCHours()}H ${difference.getUTCMinutes()}M`;
+    }
+    if ((difference.getUTCDate() - 1) >= 10 && difference.getUTCHours() >= 10 && difference.getUTCMinutes() >= 10) {
+      return `${(difference.getUTCDate() - 1)}D ${difference.getUTCHours()}H ${difference.getUTCMinutes()}M`;
+    }
+    if ((difference.getUTCDate() - 1) >= 10 && difference.getUTCHours() < 10 && difference.getUTCMinutes() >= 10) {
+      return `${(difference.getUTCDate() - 1)}D 0${difference.getUTCHours()}H ${difference.getUTCMinutes()}M`;
+    }
+    if ((difference.getUTCDate() - 1) >= 10 && difference.getUTCHours() < 10 && difference.getUTCMinutes() < 10) {
+      return `${(difference.getUTCDate() - 1)}D 0${difference.getUTCHours()}H 0${difference.getUTCMinutes()}M`;
+    }
+    if ((difference.getUTCDate() - 1) >= 10 && difference.getUTCHours() >= 10 && difference.getUTCMinutes() < 10) {
+      return `${(difference.getUTCDate() - 1)}D ${difference.getUTCHours()}H 0${difference.getUTCMinutes()}M`;
+    }
+    if ((difference.getUTCDate() - 1) < 10 && difference.getUTCHours() >= 10 && difference.getUTCMinutes() < 10) {
+      return `0${(difference.getUTCDate() - 1)}D ${difference.getUTCHours()}H 0${difference.getUTCMinutes()}M`;
+    }
+  }
+};
 export const duration = (begin, end) => {
   const time1 = new Date(begin);
   const time2 = new Date(end);

@@ -7,7 +7,6 @@ import SortMenu from '../view/sort.js';
 import EditingPoint from '../view/point-edit.js';
 import NewTripPoint from './new-point-presenter.js';
 import TripPoint, {State} from './point-presenter.js';
-// import PriceTripView from '../view/price-trip.js';
 import { renderPosition, render, remove } from '../utils/rendering-utils.js';
 import { SortType, UpdateType, UserAction, FilterType } from '../utils/constants.js';
 import dayjs from 'dayjs';
@@ -61,7 +60,6 @@ export default class PointsPresenter {
   _renderEmpty() {
     this._empty = new Empty(this._filterType);
     render(this._container, this._empty, renderPosition.BEFOREEND);
-    // document.querySelectorAll('.trip-filters__filter-input').forEach((it) => it.disabled = true);
   }
 
   _renderLoading() {
@@ -115,12 +113,8 @@ export default class PointsPresenter {
 
   destroy() {
     this._clearBoard({resetSortType: true});
-
     remove(this._sortMenu);
     remove(this._tripListUl);
-    //Код ниже не работает при переключении на экран статистики, в других местах не парит вообще
-    // this._pointsModel.removeObserver(this._handleModelEvent);
-    // this._filterModel.removeObserver(this._handleModelEvent);
   }
 
   createPoint() {
