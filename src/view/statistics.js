@@ -5,7 +5,7 @@ import { duration } from '../utils/common.js';
 import dayjs from 'dayjs';
 
 const moneyChart = (moneyCtx, points, TYPES) => {
-  const money =  Array.from(points.reduce((point, { type, basePrice }) => point.set(type, (point.get(type) || 0) + basePrice), new Map)).slice().map((it) => it[1]);
+  const money =  Array.from(points.reduce((point, { type, basePrice }) => point.set(type, (point.get(type) || 0) + basePrice), new Map)).sort((a, b) => b[1] - a[1]).slice().map((it) => it[1]);
   const chart = new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
@@ -74,7 +74,7 @@ const moneyChart = (moneyCtx, points, TYPES) => {
 };
 
 const typeChart = (typeCtx, points, TYPES) => {
-  const repeats =  Array.from(points.reduce((point, { type }) => point.set(type, (point.get(type) || 0) + 1), new Map)).slice().map((it) => it[1]);
+  const repeats =  Array.from(points.reduce((point, { type }) => point.set(type, (point.get(type) || 0) + 1), new Map)).sort((a, b) => b[1] - a[1]).slice().map((it) => it[1]);
 
   const chart = new Chart(typeCtx, {
     plugins: [ChartDataLabels],
@@ -147,7 +147,7 @@ const typeChart = (typeCtx, points, TYPES) => {
 };
 
 const timeChart = (timeCtx, points, TYPES) => {
-  const time =  Array.from(points.reduce((point, { type, dateFrom, dateTo }) => point.set(type, (point.get(type) || 0) + Math.abs(dayjs(dateFrom).diff(dateTo))), new Map)).slice().map((it) => it[1]);
+  const time =  Array.from(points.reduce((point, { type, dateFrom, dateTo }) => point.set(type, (point.get(type) || 0) + Math.abs(dayjs(dateFrom).diff(dateTo))), new Map)).sort((a, b) => b[1] - a[1]).slice().map((it) => it[1]);
 
   const chart = new Chart(timeCtx, {
     plugins: [ChartDataLabels],
