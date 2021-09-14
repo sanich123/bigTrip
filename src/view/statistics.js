@@ -4,159 +4,99 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { duration2 } from '../utils/rendering-data-utils.js';
 import dayjs from 'dayjs';
 
+const HEADINGS = {
+  TIMESPEND: 'TIME-SPEND',
+  TYPE: 'TYPE',
+  MONEY: 'MONEY',
+};
+
+const chart = (place, types, values, text) => new Chart(place, {
+  plugins: [ChartDataLabels],
+  type: 'horizontalBar',
+  data: {
+    labels: types,
+    datasets: [{
+      data: values,
+      backgroundColor: '#ffffff',
+      hoverBackgroundColor: '#ffffff',
+      anchor: 'start',
+    }],
+  },
+  options: {
+    plugins: {
+      datalabels: {
+        font: {
+          size: 13,
+        },
+        color: '#000000',
+        anchor: 'end',
+        align: 'start',
+        formatter: (val) => `${val}`,
+      },
+    },
+    title: {
+      display: true,
+      text: text,
+      fontColor: '#000000',
+      fontSize: 23,
+      position: 'left',
+    },
+    scales: {
+      yAxes: [{
+        ticks: {
+          fontColor: '#000000',
+          padding: 5,
+          fontSize: 13,
+        },
+        gridLines: {
+          display: false,
+          drawBorder: false,
+        },
+
+      }],
+      xAxes: [{
+        ticks: {
+          display: false,
+          beginAtZero: true,
+        },
+        gridLines: {
+          display: false,
+          drawBorder: false,
+        },
+
+      }],
+    },
+    legend: {
+      display: false,
+    },
+    tooltips: {
+      enabled: false,
+    },
+  },
+});
+
 const moneyChart = (moneyCtx, points) => {
   const summary = Array.from(points.reduce((point, { type, basePrice }) => point.set(type, (point.get(type) || 0) + basePrice), new Map)).sort((a, b) => b[1] - a[1]).slice();
   const money =  summary.map((it) => it[1]);
   const types = summary.map((it) => it[0].toUpperCase());
-
-  const chart = new Chart(moneyCtx, {
-    plugins: [ChartDataLabels],
-    type: 'horizontalBar',
-    data: {
-      labels: types,
-      datasets: [{
-        // minBarLength: 50,
-        // barThickness: 44,
-        data: money,
-        backgroundColor: '#ffffff',
-        hoverBackgroundColor: '#ffffff',
-        anchor: 'start',
-      }],
-    },
-    options: {
-      plugins: {
-        datalabels: {
-          font: {
-            size: 13,
-          },
-          color: '#000000',
-          anchor: 'end',
-          align: 'start',
-          formatter: (val) => `€ ${val}`,
-        },
-      },
-      title: {
-        display: true,
-        text: 'MONEY',
-        fontColor: '#000000',
-        fontSize: 23,
-        position: 'left',
-      },
-      scales: {
-        yAxes: [{
-          ticks: {
-            fontColor: '#000000',
-            padding: 5,
-            fontSize: 13,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false,
-          },
-        }],
-        xAxes: [{
-          ticks: {
-            display: false,
-            beginAtZero: true,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false,
-          },
-        }],
-      },
-      legend: {
-        display: false,
-      },
-      tooltips: {
-        enabled: false,
-      },
-    },
-  });
-  return chart;
+  return chart(moneyCtx, types, money, HEADINGS.MONEY);
 };
 
 const typeChart = (typeCtx, points) => {
   const summary =  Array.from(points.reduce((point, { type }) => point.set(type, (point.get(type) || 0) + 1), new Map)).sort((a, b) => b[1] - a[1]).slice();
   const types = summary.map((it) => it[0].toUpperCase());
   const repeats = summary.map((it) => it[1]);
-
-  const chart = new Chart(typeCtx, {
-    plugins: [ChartDataLabels],
-    type: 'horizontalBar',
-    data: {
-      labels: types,
-      datasets: [{
-        data: repeats,
-        backgroundColor: '#ffffff',
-        hoverBackgroundColor: '#ffffff',
-        anchor: 'start',
-        // minBarLength: 50,
-        // barThickness: 44,
-      }],
-    },
-    options: {
-      plugins: {
-        datalabels: {
-          font: {
-            size: 13,
-          },
-          color: '#000000',
-          anchor: 'end',
-          align: 'start',
-          formatter: (val) => `${val}x`,
-        },
-      },
-      title: {
-        display: true,
-        text: 'TYPE',
-        fontColor: '#000000',
-        fontSize: 23,
-        position: 'left',
-      },
-      scales: {
-        yAxes: [{
-          ticks: {
-            fontColor: '#000000',
-            padding: 5,
-            fontSize: 13,
-            // margin: 15,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false,
-          },
-
-        }],
-        xAxes: [{
-          ticks: {
-            display: false,
-            beginAtZero: true,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false,
-          },
-
-        }],
-      },
-      legend: {
-        display: false,
-      },
-      tooltips: {
-        enabled: false,
-      },
-    },
-  });
-  return chart;
+  return chart(typeCtx, types, repeats, HEADINGS.TYPE);
 };
 
 const timeChart = (timeCtx, points) => {
   const summary =  Array.from(points.reduce((point, { type, dateFrom, dateTo }) => point.set(type, (point.get(type) || 0) + Math.abs(dayjs(dayjs(dateFrom).diff(dateTo)))), new Map)).sort((a, b) => b[1] - a[1]).slice();
   const types = summary.map((it) => it[0].toUpperCase());
   const time = summary.map((it) => it[1]);
+  // console.log(time)
+  // return chart(timeCtx, types, time, HEADINGS.TIMESPEND);
 
-  const chart = new Chart(timeCtx, {
+  return new Chart(timeCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
@@ -195,7 +135,6 @@ const timeChart = (timeCtx, points) => {
             fontColor: '#000000',
             padding: 5,
             fontSize: 13,
-            // margin: 15,
           },
           gridLines: {
             display: false,
@@ -223,7 +162,6 @@ const timeChart = (timeCtx, points) => {
       },
     },
   });
-  return chart;
 };
 
 const createStatistics = () => `<section class="statistics">

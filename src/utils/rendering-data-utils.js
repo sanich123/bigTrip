@@ -1,6 +1,7 @@
 import { humanizeDate } from './common.js';
 import { SortType } from './constants.js';
 import { nanoid } from 'nanoid';
+import dayjs from 'dayjs';
 
 export const getFormatTime = (dateFrom, dateTo) => {
   const fromDate = humanizeDate(dateFrom, 'MMM D');
@@ -94,15 +95,6 @@ export const sortList = (sortTypes, currentSortType) => sortTypes.map((sortType)
   <label class="trip-sort__btn"  for="sort-${sortType.toLowerCase()}">${sortType}</label>
   </div>`);
 
-export const difMillscs = (begin, end) => {
-  const time1 = new Date(begin);
-  const time2 = new Date(end);
-  const time1ms = time1.getTime(time1);
-  const time2ms = time2.getTime(time2);
-  const difference = new Date (Math.max(time2ms, time1ms) - Math.min(time2ms, time1ms));
-  return difference;
-};
-
 export const duration2 = (it) => {
   const difference = new Date(it);
   const ONE_HOUR = 3600000;
@@ -153,71 +145,8 @@ export const duration2 = (it) => {
     }
   }
 };
+
 export const duration = (begin, end) => {
-  const time1 = new Date(begin);
-  const time2 = new Date(end);
-  const time1ms = time1.getTime(time1);
-  const time2ms = time2.getTime(time2);
-  const difference = new Date (Math.max(time2ms, time1ms) - Math.min(time2ms, time1ms));
-  const ONE_HOUR = 3600000;
-  const ONE_DAY = 86400000;
-
-  if (difference < ONE_HOUR) {
-    if (difference.getUTCMinutes() < 10) {
-      return `0${difference.getUTCMinutes()}M`;
-    }
-    return `${difference.getUTCMinutes()}M`;
-  }
-  if (difference >= ONE_HOUR && difference < ONE_DAY) {
-    if (difference.getUTCHours() < 10 && difference.getUTCMinutes() < 10) {
-      return `0${difference.getUTCHours()}H 0${difference.getUTCMinutes()}M`;
-    }
-    if (difference.getUTCHours() > 10 && difference.getUTCMinutes() < 10) {
-      return `${difference.getUTCHours()}H 0${difference.getUTCMinutes()}M`;
-    }
-    if (difference.getUTCHours() < 10 && difference.getUTCMinutes() > 10) {
-      return `0${difference.getUTCHours()}H ${difference.getUTCMinutes()}M`;
-    }
-    return `${difference.getUTCHours()}H ${difference.getUTCMinutes()}M`;
-  }
-  if (difference >= ONE_DAY) {
-    if ((difference.getUTCDate() - 1) < 10 && difference.getUTCHours() < 10 && difference.getUTCMinutes() < 10) {
-      return `0${(difference.getUTCDate() - 1)}D 0${difference.getUTCHours()}H 0${difference.getUTCMinutes()}M`;
-    }
-    if ((difference.getUTCDate() - 1) < 10 && difference.getUTCHours() < 10 && difference.getUTCMinutes() >= 10) {
-      return `0${(difference.getUTCDate() - 1)}D 0${difference.getUTCHours()}H ${difference.getUTCMinutes()}M`;
-    }
-    if ((difference.getUTCDate() - 1) < 10 && difference.getUTCHours() >= 10 && difference.getUTCMinutes() >= 10) {
-      return `0${(difference.getUTCDate() - 1)}D ${difference.getUTCHours()}H ${difference.getUTCMinutes()}M`;
-    }
-    if ((difference.getUTCDate() - 1) >= 10 && difference.getUTCHours() >= 10 && difference.getUTCMinutes() >= 10) {
-      return `${(difference.getUTCDate() - 1)}D ${difference.getUTCHours()}H ${difference.getUTCMinutes()}M`;
-    }
-    if ((difference.getUTCDate() - 1) >= 10 && difference.getUTCHours() < 10 && difference.getUTCMinutes() >= 10) {
-      return `${(difference.getUTCDate() - 1)}D 0${difference.getUTCHours()}H ${difference.getUTCMinutes()}M`;
-    }
-    if ((difference.getUTCDate() - 1) >= 10 && difference.getUTCHours() < 10 && difference.getUTCMinutes() < 10) {
-      return `${(difference.getUTCDate() - 1)}D 0${difference.getUTCHours()}H 0${difference.getUTCMinutes()}M`;
-    }
-    if ((difference.getUTCDate() - 1) >= 10 && difference.getUTCHours() >= 10 && difference.getUTCMinutes() < 10) {
-      return `${(difference.getUTCDate() - 1)}D ${difference.getUTCHours()}H 0${difference.getUTCMinutes()}M`;
-    }
-    if ((difference.getUTCDate() - 1) < 10 && difference.getUTCHours() >= 10 && difference.getUTCMinutes() < 10) {
-      return `0${(difference.getUTCDate() - 1)}D ${difference.getUTCHours()}H 0${difference.getUTCMinutes()}M`;
-    }
-  }
+  const difference2 = Math.abs(dayjs(dayjs(begin).diff(end)));
+  return duration2(difference2);
 };
-
-export const totalPrice = (points) => points.slice().reduce((accumulator, it) => accumulator + it.basePrice, 0);
-
-export const getCities = (towns) => {
-  const cities = towns.slice().map((it) => it.destination.name);
-  const firstCity = cities[cities.length - 1];
-  const thirdCity = cities[0];
-  const secondCity = cities.length === 3 ? cities[1] : '...';
-  const fromDate = humanizeDate(towns[towns.length - 1].dateFrom, 'MMMM DD');
-  const toDate = humanizeDate(towns[0].dateFrom, 'MMMM DD');
-  return { firstCity, secondCity, thirdCity, fromDate, toDate };
-};
-
-
