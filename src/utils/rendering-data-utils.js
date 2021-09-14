@@ -1,7 +1,6 @@
 import { humanizeDate } from './common.js';
 import { SortType } from './constants.js';
 import { nanoid } from 'nanoid';
-import dayjs from 'dayjs';
 
 export const getFormatTime = (dateFrom, dateTo) => {
   const fromDate = humanizeDate(dateFrom, 'MMM D');
@@ -147,6 +146,10 @@ export const duration2 = (it) => {
 };
 
 export const duration = (begin, end) => {
-  const difference2 = Math.abs(dayjs(dayjs(begin).diff(end)));
+  const time1 = new Date(begin);
+  const time2 = new Date(end);
+  const time1ms = time1.getTime(time1);
+  const time2ms = time2.getTime(time2);
+  const difference2 = Math.max(time2ms, time1ms) - Math.min(time2ms, time1ms);
   return duration2(difference2);
 };
