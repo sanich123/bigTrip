@@ -153,3 +153,14 @@ export const duration = (begin, end) => {
   const difference2 = Math.max(time2ms, time1ms) - Math.min(time2ms, time1ms);
   return duration2(difference2);
 };
+export const totalPrice = (points) => points.slice().reduce((accumulator, it) => accumulator + it.basePrice, 0);
+
+export const getCities = (towns) => {
+  const cities = towns.slice().map((it) => it.destination.name);
+  const firstCity = cities[cities.length - 1];
+  const thirdCity = cities[0];
+  const secondCity = cities.length === 3 ? cities[1] : '...';
+  const fromDate = humanizeDate(towns[towns.length - 1].dateFrom, 'MMMM DD');
+  const toDate = humanizeDate(towns[0].dateFrom, 'MMMM DD');
+  return { firstCity, secondCity, thirdCity, fromDate, toDate };
+};
