@@ -1,5 +1,6 @@
 import NavigationView from './view/navigation.js';
 import { renderPosition, render, remove } from './utils/rendering-utils.js';
+import PriceTripView from './view/price-trip.js';
 import PointsPresenter from './presenter/points-presenter.js';
 import PointsModel from './model/points-model.js';
 import DestinationsModel from './model/destinations-model.js';
@@ -33,6 +34,7 @@ const pointsPresenter = new PointsPresenter(priceAndTripSection, toSort, pointsM
 const filterPresenter = new FiltersPresenter(toFilters, filtersModel, pointsModel);
 
 let statisticsComponent = null;
+let priceTripView = null;
 
 const handleNavigationClick = (menuItem) => {
   switch (menuItem) {
@@ -40,7 +42,9 @@ const handleNavigationClick = (menuItem) => {
       pointsPresenter.destroy();
       pointsPresenter.init();
       remove(statisticsComponent);
+      remove(priceTripView);
       statisticsComponent = null;
+      priceTripView = null;
       navigationView.addClassItem(MenuItem.POINTS);
       navigationView.removeClassItem(MenuItem.STATISTICS);
       newPointButton.disabled = false;
@@ -57,6 +61,8 @@ const handleNavigationClick = (menuItem) => {
       navigationView.removeClassItem(MenuItem.POINTS);
       newPointButton.disabled = true;
       document.querySelectorAll('.trip-filters__filter-input').forEach((it) => it.disabled = true);
+      priceTripView = new PriceTripView(pointsModel.getPoints());
+      render(priceAndTripSection, priceTripView, renderPosition.AFTERBEGIN);
       break;
   }
 };
@@ -80,7 +86,6 @@ Promise.all([
   offersModel.setOffers(UpdateType.INIT, offers);
   destinationsModel.setDestinations(UpdateType.INIT, destinations);
   newPointButton.disabled = false;
-  // render(priceAndTripSection, new PriceTripView(pointsModel.getPoints()), renderPosition.AFTERBEGIN);
   navigationView.setMenuClickHandler(handleNavigationClick);
 }).catch(() => {
   pointsModel.setPoints(UpdateType.INIT, []);
