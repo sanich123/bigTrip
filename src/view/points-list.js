@@ -1,4 +1,4 @@
-import { duration, titlePrice, getFormatTime, favoritePoint, isCheckedOffers } from '../utils/rendering-data-utils.js';
+import { duration, getFormatTime, favoritePoint  } from '../utils/rendering-data-utils.js';
 import Abstract from '../view/abstract.js';
 
 const eventsList = (points) => {

@@ -77,23 +77,22 @@ const chart = (place, types, values, text) => new Chart(place, {
 
 const moneyChart = (moneyCtx, points) => {
   const summary = Array.from(points.reduce((point, { type, basePrice }) => point.set(type, (point.get(type) || 0) + basePrice), new Map)).sort((a, b) => b[1] - a[1]).slice();
-  const money =  summary.map((it) => it[1]);
-  const types = summary.map((it) => it[0].toUpperCase());
+  const money =  summary.map((coin) => coin[1]);
+  const types = summary.map((type) => type[0].toUpperCase());
   return chart(moneyCtx, types, money, HEADINGS.MONEY);
 };
 
 const typeChart = (typeCtx, points) => {
   const summary =  Array.from(points.reduce((point, { type }) => point.set(type, (point.get(type) || 0) + 1), new Map)).sort((a, b) => b[1] - a[1]).slice();
-  const types = summary.map((it) => it[0].toUpperCase());
-  const repeats = summary.map((it) => it[1]);
+  const types = summary.map((type) => type[0].toUpperCase());
+  const repeats = summary.map((repeat) => repeat[1]);
   return chart(typeCtx, types, repeats, HEADINGS.TYPE);
 };
 
 const timeChart = (timeCtx, points) => {
   const summary =  Array.from(points.reduce((point, { type, dateFrom, dateTo }) => point.set(type, (point.get(type) || 0) + Math.abs(dayjs(dayjs(dateFrom).diff(dateTo)))), new Map)).sort((a, b) => b[1] - a[1]).slice();
-  const types = summary.map((it) => it[0].toUpperCase());
-  const time = summary.map((it) => it[1]);
-  // console.log(time)
+  const types = summary.map((type) => type[0].toUpperCase());
+  const time = summary.map((duration) => duration[1]);
   // return chart(timeCtx, types, time, HEADINGS.TIMESPEND);
 
   return new Chart(timeCtx, {
@@ -106,8 +105,6 @@ const timeChart = (timeCtx, points) => {
         backgroundColor: '#ffffff',
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
-        // minBarLength: 50,
-        // barThickness: 44,
       }],
     },
     options: {
