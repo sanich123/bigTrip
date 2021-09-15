@@ -1,6 +1,5 @@
 import { TYPES, getOffersByType } from '../utils/rendering-data-utils.js';
-import { addOffers, createTypes, createCities, getPhotos, getFormatTime } from '../utils/rendering-data-utils.js';
-import { isCityExist} from '../utils/common.js';
+import { addOffers, createTypes, createCities, getPhotos, getFormatTime, existingCity } from '../utils/rendering-data-utils.js';
 import Smart from '../view/smart.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
@@ -150,16 +149,19 @@ export default class EditingPoint extends Smart {
 
   _offersListener(evt) {
     evt.preventDefault();
-    const checkedOffers = Array.from(this.getElement().querySelectorAll('[type="checkbox"]:checked'));
-    // const summaryPrice = checkedOffers.slice().reduce((accumulator, it) => accumulator + parseInt(it.labels[0].childNodes[3].outerText, 10), 0);
-    const offersPrice = checkedOffers.slice().map((it) => parseInt(it.labels[0].childNodes[3].outerText, 10));
-    const offersTitles = Array.from(this.getElement().querySelectorAll('[type="checkbox"]:checked')).slice().map((it) => it.labels[0].childNodes[1].outerText);
-    const result = {};
-    offersTitles.forEach((title, price) => result[title] = offersPrice[price]);
-    const result2 = Object.entries(result).map((it) => ({ title: it[0], price: it[1] }));
+    const checkboxElements = this.getElement().querySelectorAll('.event__offer-checkbox');
+    const currentOffers = [];
+    checkboxElements.forEach((checkbox) => {
+      if(checkbox.checked) {
+        currentOffers.push({
+          title: checkbox.dataset.title,
+          price: + checkbox.dataset.price,
+        });
+      }
+    });
     this.updateData(
       {
-        currentOffers: result2,
+        currentOffers: currentOffers,
       }, 'noUpdate');
   }
 
@@ -172,7 +174,7 @@ export default class EditingPoint extends Smart {
     evt.preventDefault();
     const inputValue = this.getElement().querySelector('.event__input--destination');
     const city = evt.target.value;
-    if (!city ||  isCityExist(city, this._destinations.map((it) => it.name))) {
+    if (!city || existingCity(city, this._destinations.map((it) => it.name))) {
       inputValue.setCustomValidity('Название города должно соответствовать названию города из списка и не может быть пустым полем');
     } else {
       inputValue.setCustomValidity('');
@@ -187,7 +189,7 @@ export default class EditingPoint extends Smart {
 
   _cityChangeHandler(evt) {
     evt.preventDefault();
-    if (evt.target.value === '' || isCityExist(evt.target.value, this._destinations.map((it) => it.name))) {
+    if (evt.target.value === '' || existingCity(evt.target.value, this._destinations.map((it) => it.name))) {
       return;
     }
     document.querySelector('.trip-main__event-add-btn').disabled = true;

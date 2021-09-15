@@ -1,7 +1,8 @@
-import { humanizeDate } from './common.js';
+import dayjs from 'dayjs';
 import { SortType } from './constants.js';
 import { nanoid } from 'nanoid';
 
+export const humanizeDate = (date, format) => dayjs(date).format(format);
 export const getFormatTime = (dateFrom, dateTo) => {
   const fromDate = humanizeDate(dateFrom, 'MMM D');
   const toDate = humanizeDate(dateTo, 'MMM D');
@@ -29,7 +30,7 @@ const generateOffers = (offers, currentOffers, isDisabled) => {
   return offers.map(({title, price}) => {
     const uniq = nanoid();
     return `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${uniq}" type="checkbox" name="event-offer-luggage" ${isDisabled ? 'disabled' : ''} ${checkedOffers(title)}>
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${uniq}" type="checkbox" name="event-offer-luggage" data-title="${title}" data-price="${price}" ${isDisabled ? 'disabled' : ''} ${checkedOffers(title)}>
     <label class="event__offer-label" for="event-offer-luggage-${uniq}">
       <span class="event__offer-title">${title}</span>
       +€&nbsp;
@@ -174,4 +175,11 @@ export const getCities = (towns) => {
   const fromDate = humanizeDate(towns[towns.length - 1].dateFrom, 'MMMM DD');
   const toDate = humanizeDate(towns[0].dateFrom, 'MMMM DD');
   return { firstCity, secondCity, thirdCity, fromDate, toDate };
+};
+
+export const existingCity = (city, array) => {
+  if (city && array.some((it) => it === city)) {
+    return '';
+  }
+  return 'disabled';
 };
