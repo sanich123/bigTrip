@@ -129,7 +129,7 @@ export default class EditingPoint extends Smart {
     evt.preventDefault();
     this.updateData({
       basePrice: Math.abs(evt.target.value),
-    });
+    }, 'noUpdate');
   }
 
   setDeleteClickHandler(callback) {
@@ -155,12 +155,13 @@ export default class EditingPoint extends Smart {
     const offersTitles = Array.from(this.getElement().querySelectorAll('[type="checkbox"]:checked')).slice().map((it) => it.labels[0].childNodes[1].outerText);
     const result = {};
     offersTitles.forEach((title, price) => result[title] = offersPrice[price]);
-    // const result2 = Object.entries(result).map((it) => ({ title: it[0], price: it[1] }));
-    // this.updateData(
-    //   {
-    //     basePrice: summaryPrice,
-    //   });
+    const result2 = Object.entries(result).map((it) => ({ title: it[0], price: it[1] }));
+    this.updateData(
+      {
+        currentOffers: result2,
+      }, 'noUpdate');
   }
+
 
   setCityInputHandler() {
     this.getElement().querySelector('.event__input--destination').addEventListener('input', this._cityInputHandler);

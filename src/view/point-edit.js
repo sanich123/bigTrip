@@ -5,9 +5,9 @@ import Smart from '../view/smart.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
-const editPoint = (point, availableOffers, destinations) => {
+const editPoint = (point, destinations) => {
 
-  const { basePrice, dateFrom, dateTo, type, id, isDisabled, destination, offers, isSaving, isDeleting } = point;
+  const { basePrice, dateFrom, dateTo, type, id, isDisabled, destination, isSaving, isDeleting, offers, currentOffers } = point;
 
   const availableDestinations = destinations.map((it) => it.name);
   const destinationListener = () => destination.name !== '' ? `<section class="event__section  event__section--destination"><h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -67,7 +67,7 @@ const editPoint = (point, availableOffers, destinations) => {
     <span class="visually-hidden">Open event</span>
   </button>
 </header>
-    ${addOffers(offers)}
+  ${addOffers(offers, currentOffers)}
 ${destinationListener()}
 </section>
 </form>`;
@@ -119,7 +119,7 @@ export default class EditingPoint extends Smart {
     evt.preventDefault();
     this.updateData({
       basePrice: Math.abs(evt.target.value),
-    });
+    }, 'noUpdate');
   }
 
   setDeleteClickHandler(callback) {
@@ -144,11 +144,12 @@ export default class EditingPoint extends Smart {
     const offersTitles = Array.from(this.getElement().querySelectorAll('[type="checkbox"]:checked')).slice().map((it) => it.labels[0].childNodes[1].outerText);
     const result = {};
     offersTitles.forEach((title, price) => result[title] = offersPrice[price]);
-    // const result2 = Object.entries(result).map((it) => ({ title: it[0], price: it[1] }));
-    // this.updateData(
-    //   {
-    //     basePrice: summaryPrice,
-    //   });
+    const result2 = Object.entries(result).map((it) => ({ title: it[0], price: it[1] }));
+
+    this.updateData(
+      {
+        currentOffers: result2,
+      }, 'noUpdate');
   }
 
   setCityInputHandler() {

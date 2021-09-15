@@ -16,16 +16,26 @@ export const getPhotos = (pictures) => pictures.map(({ src }) => (`<img class="e
 
 export const favoritePoint = (isFavorite) => isFavorite ? 'event__favorite-btn--active' : '';
 
-const generateOffers = (offers, isDisabled) => offers.map(({title, price}) => {
-  const uniq = nanoid();
-  return `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${uniq}" type="checkbox" name="event-offer-luggage" ${isDisabled ? 'disabled' : ''}>
+const generateOffers = (offers, currentOffers, isDisabled) => {
+  const checkedOffers = (title) => {
+    if (currentOffers) {
+      if (currentOffers.map((it) => it.title).includes(title)) {
+        return 'checked';
+      }
+    }
+    return '';
+  };
+
+  return offers.map(({title, price}) => {
+    const uniq = nanoid();
+    return `<div class="event__offer-selector">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${uniq}" type="checkbox" name="event-offer-luggage" ${isDisabled ? 'disabled' : ''} ${checkedOffers(title)}>
     <label class="event__offer-label" for="event-offer-luggage-${uniq}">
       <span class="event__offer-title">${title}</span>
       +€&nbsp;
       <span class="event__offer-price">${price}</span>
     </label>
-  </div>`;}).join('');
+  </div>`;}).join('');};
 
 const addSection = () => `<section class="event__section  event__section--offers">
   <h3 class="event__section-title  event__section-title--offers">Offers</h3>
@@ -36,11 +46,12 @@ const addSection2 = () => '</div></section>';
 const addSection3 = () => `<section class="event__section  event__section--offers">
 <div class="event__available-offers">`;
 
-export const addOffers = (offers) => {
+export const addOffers = (offers, currentOffers) => {
   if (offers.length === 0) {
     return `${addSection3()} ${addSection2()}`;
   } else {
-    return `${addSection()} ${generateOffers(offers)} ${addSection2()}`;}
+
+    return `${addSection()} ${generateOffers(offers, currentOffers)} ${addSection2()}`;}
 };
 
 const upperCaseFirstLetter = (type) => type[0].toUpperCase() + type.split('').splice(1).join('');
