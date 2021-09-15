@@ -166,9 +166,10 @@ export const duration = (begin, end) => {
   return duration2(difference2);
 };
 export const totalPrice = (points) => points.slice().reduce((accumulator, it) => accumulator + it.basePrice, 0);
+export const totalPrice2 = (currentPoints) => currentPoints.slice().reduce((accumulator, it) => accumulator + it.basePrice, 0);
 
 export const getCities = (towns) => {
-  const cities = towns.slice().map((it) => it.destination.name);
+  const cities = towns.slice().sort((a, b) => dayjs(b.dateFrom) - dayjs(a.dateFrom)).map((it) => it.destination.name);
   const firstCity = cities[cities.length - 1];
   const thirdCity = cities[0];
   const secondCity = cities.length === 3 ? cities[1] : '...';
