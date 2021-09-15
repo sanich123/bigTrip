@@ -3,7 +3,7 @@ import Abstract from '../view/abstract.js';
 
 const eventsList = (points) => {
   const { basePrice, dateFrom, dateTo, destination,
-    currentOffers, offers, type, isFavorite } = points;
+    currentOffers, type, isFavorite } = points;
 
   const currentOffersTemplate = (offers) => (
     `${offers ? `<h4 class="visually-hidden">Offers:</h4>
