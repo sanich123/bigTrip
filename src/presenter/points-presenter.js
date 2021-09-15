@@ -6,6 +6,7 @@ import Empty from '../view/empty.js';
 import SortMenu from '../view/sort.js';
 import EditingPoint from '../view/point-edit.js';
 import NewTripPoint from './new-point-presenter.js';
+import PriceTripView from '../view/price-trip.js';
 import TripPoint, {State} from './point-presenter.js';
 import { renderPosition, render, remove } from '../utils/rendering-utils.js';
 import { SortType, UpdateType, UserAction, FilterType } from '../utils/constants.js';
@@ -17,7 +18,8 @@ const AUTHORIZATION = 'Basic hD3sb8dfSWcl2sA5j';
 const END_POINT = 'https://14.ecmascript.pages.academy/big-trip/';
 
 export default class PointsPresenter {
-  constructor(container, pointsModel, filtersModel, api, destinationsModel, offersModel) {
+  constructor(priceTripContainer, container, pointsModel, filtersModel, api, destinationsModel, offersModel) {
+    this._priceTripContainer = priceTripContainer;
     this._api = api;
     this._filtersModel = filtersModel;
     this._pointsModel = pointsModel;
@@ -29,9 +31,10 @@ export default class PointsPresenter {
     this._currentSortType = SortType.DAY;
     this._filterType = FilterType.EVERYTHING;
     this._isLoading = true;
-
+    this._infoComponent = null;
     this._sortMenu = null;
     this._empty = null;
+    this._priceTrip = new PriceTripView();
     this._tripListUl = new TripListUl();
     this._tripListLi = new TripListLi();
     this._editingPoint = new EditingPoint();
@@ -53,6 +56,7 @@ export default class PointsPresenter {
     if (this._pointsModel.getPoints().length === 0) {
       this._renderEmpty();
     } else {
+      this._renderPriceTrip();
       this._renderSort();
     }
   }
@@ -64,6 +68,14 @@ export default class PointsPresenter {
 
   _renderLoading() {
     render(this._container, this._loading, renderPosition.BEFOREEND);
+  }
+
+  _renderPriceTrip() {
+    if(this._infoComponent !== null) {
+      this._infoComponent = null;
+    }
+    this._infoComponent = new PriceTripView(this._pointsModel.getPoints());
+    render(this._priceTripContainer, this._infoComponent, renderPosition.AFTERBEGIN);
   }
 
   _renderSort() {
@@ -101,6 +113,9 @@ export default class PointsPresenter {
       this._renderLoading();
       return;
     }
+    // if (this._pointsModel.getPoints().length !== 0) {
+    //   this._renderPriceTrip();
+    // }
     this._filterType = this._filtersModel.getFilter();
     const points = this._pointsModel.getPoints();
     const filtredPoints = filter[this._filterType](points);
@@ -108,6 +123,7 @@ export default class PointsPresenter {
       this._renderEmpty();
       return;
     }
+    this._renderPriceTrip();
     this._renderSort();
   }
 
@@ -148,9 +164,10 @@ export default class PointsPresenter {
     this._newTripPoint.destroy();
     this._tripPresenter.forEach((presenter) => presenter.destroy());
     this._tripPresenter.clear();
-
+    remove(this._infoComponent);
     remove(this._sortMenu);
     remove(this._loading);
+
     if (this._empty) {
       remove(this._empty);
     }
