@@ -6,6 +6,7 @@ import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const editPoint = (point, availableOffers, destinations) => {
+
   const { destination, offers, type, id, dateFrom, dateTo,
     isDisabled, isSaving,
     basePrice } = point;

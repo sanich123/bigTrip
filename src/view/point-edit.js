@@ -5,10 +5,9 @@ import Smart from '../view/smart.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
-const editPoint = (point, destinations) => {
+const editPoint = (point, availableOffers, destinations) => {
 
   const { basePrice, dateFrom, dateTo, type, id, isDisabled, destination, isSaving, isDeleting, offers, currentOffers } = point;
-
   const availableDestinations = destinations.map((it) => it.name);
   const destinationListener = () => destination.name !== '' ? `<section class="event__section  event__section--destination"><h3 class="event__section-title  event__section-title--destination">Destination</h3>
     <p class="event__destination-description">${destination.description}</p>
@@ -139,9 +138,9 @@ export default class EditingPoint extends Smart {
   _offersListener(evt) {
     evt.preventDefault();
     const checkedOffers = Array.from(this.getElement().querySelectorAll('[type="checkbox"]:checked'));
-    // const summaryPrice = checkedOffers.slice().reduce((accumulator, it) => accumulator + parseInt(it.labels[0].childNodes[3].outerText, 10), 0);
+    // const summaryPrice = checkedOffers.reduce((accumulator, it) => accumulator + parseInt(it.labels[0].childNodes[3].outerText, 10), 0);
     const offersPrice = checkedOffers.slice().map((it) => parseInt(it.labels[0].childNodes[3].outerText, 10));
-    const offersTitles = Array.from(this.getElement().querySelectorAll('[type="checkbox"]:checked')).slice().map((it) => it.labels[0].childNodes[1].outerText);
+    const offersTitles = Array.from(this.getElement().querySelectorAll('[type="checkbox"]:checked')).map((it) => it.labels[0].childNodes[1].outerText);
     const result = {};
     offersTitles.forEach((title, price) => result[title] = offersPrice[price]);
     const result2 = Object.entries(result).map((it) => ({ title: it[0], price: it[1] }));
