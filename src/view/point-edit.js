@@ -8,184 +8,7 @@ import dayjs from 'dayjs';
 const editPoint = (point, availableOffers, destinations, isEdit) => {
   const { id, type, basePrice, dateTo, dateFrom, offers, destination, isDisabled, isSaving, isDeleting } = point;
 
-  const availableOffers2 = [
-    {
-      'type': 'taxi',
-      'offers': [
-        {
-          'title': 'Upgrade to a business class',
-          'price': 190,
-        },
-        {
-          'title': 'Choose the radio station',
-          'price': 30,
-        },
-        {
-          'title': 'Choose temperature',
-          'price': 170,
-        },
-        {
-          'title': 'Drive quickly, I\'m in a hurry',
-          'price': 100,
-        },
-        {
-          'title': 'Drive slowly',
-          'price': 110,
-        },
-      ],
-    },
-    {
-      'type': 'bus',
-      'offers': [
-        {
-          'title': 'Infotainment system',
-          'price': 50,
-        },
-        {
-          'title': 'Order meal',
-          'price': 100,
-        },
-        {
-          'title': 'Choose seats',
-          'price': 190,
-        },
-      ],
-    },
-    {
-      'type': 'train',
-      'offers': [
-        {
-          'title': 'Book a taxi at the arrival point',
-          'price': 110,
-        },
-        {
-          'title': 'Order a breakfast',
-          'price': 80,
-        },
-        {
-          'title': 'Wake up at a certain time',
-          'price': 140,
-        },
-      ],
-    },
-    {
-      'type': 'flight',
-      'offers': [
-        {
-          'title': 'Choose meal',
-          'price': 120,
-        },
-        {
-          'title': 'Choose seats',
-          'price': 90,
-        },
-        {
-          'title': 'Upgrade to comfort class',
-          'price': 120,
-        },
-        {
-          'title': 'Upgrade to business class',
-          'price': 120,
-        },
-        {
-          'title': 'Add luggage',
-          'price': 170,
-        },
-        {
-          'title': 'Business lounge',
-          'price': 160,
-        },
-      ],
-    },
-    {
-      'type': 'check-in',
-      'offers': [
-        {
-          'title': 'Choose the time of check-in',
-          'price': 70,
-        },
-        {
-          'title': 'Choose the time of check-out',
-          'price': 190,
-        },
-        {
-          'title': 'Add breakfast',
-          'price': 110,
-        },
-        {
-          'title': 'Laundry',
-          'price': 140,
-        },
-        {
-          'title': 'Order a meal from the restaurant',
-          'price': 30,
-        },
-      ],
-    },
-    {
-      'type': 'sightseeing',
-      'offers': [],
-    },
-    {
-      'type': 'ship',
-      'offers': [
-        {
-          'title': 'Choose meal',
-          'price': 130,
-        },
-        {
-          'title': 'Choose seats',
-          'price': 160,
-        },
-        {
-          'title': 'Upgrade to comfort class',
-          'price': 170,
-        },
-        {
-          'title': 'Upgrade to business class',
-          'price': 150,
-        },
-        {
-          'title': 'Add luggage',
-          'price': 100,
-        },
-        {
-          'title': 'Business lounge',
-          'price': 40,
-        },
-      ],
-    },
-    {
-      'type': 'drive',
-      'offers': [
-        {
-          'title': 'Choose comfort class',
-          'price': 110,
-        },
-        {
-          'title': 'Choose business class',
-          'price': 180,
-        },
-      ],
-    },
-    {
-      'type': 'restaurant',
-      'offers': [
-        {
-          'title': 'Choose live music',
-          'price': 150,
-        },
-        {
-          'title': 'Choose VIP area',
-          'price': 70,
-        },
-      ],
-    },
-  ];
-
-  // const offersByType = availableOffers.find((offer) => offer.type === type).offers;
-  const offersByType = availableOffers2.find((offer) => offer.type === type).offers;
-
+  const offersByType = availableOffers.length ? availableOffers.find((offer) => offer.type === type).offers : '';
   const TYPES = availableOffers.map((offer) => offer.type);
   const availableDestinations = destinations.map((it) => it.name);
   const createRollupButton = `${isEdit? `<button class="event__rollup-btn" type="button" ${isDisabled ? 'disabled' : ''}>
@@ -365,7 +188,6 @@ export default class EditingPoint extends Smart {
       {
         offers,
       }, 'noUpdate');
-    document.querySelector('.trip-main__event-add-btn').disabled = true;
   }
 
   setCityInputHandler() {
@@ -376,7 +198,7 @@ export default class EditingPoint extends Smart {
     evt.preventDefault();
     const inputValue = this.getElement().querySelector('.event__input--destination');
     const city = evt.target.value;
-    if (!city ||  existingCity(city, this._destinations.map((it) => it.name))) {
+    if (!city ||  existingCity(city, this._destinations.map((destination) => destination.name))) {
       inputValue.setCustomValidity('Название города должно соответствовать названию города из списка и не может быть пустым полем');
     } else {
       inputValue.setCustomValidity('');
@@ -391,7 +213,7 @@ export default class EditingPoint extends Smart {
 
   _cityChangeHandler(evt) {
     evt.preventDefault();
-    if (evt.target.value === '' || existingCity(evt.target.value, this._destinations.map((it) => it.name))) {
+    if (evt.target.value === '' || existingCity(evt.target.value, this._destinations.map((destination) => destination.name))) {
       return;
     }
     this.updateData(

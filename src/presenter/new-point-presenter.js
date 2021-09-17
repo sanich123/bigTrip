@@ -1,5 +1,5 @@
 import TripListLi from '../view/trip-list-li.js';
-import { renderPosition, render, remove } from '../utils/rendering-utils.js';
+import { RenderPosition, render, remove } from '../utils/rendering-utils.js';
 import { UserAction, UpdateType } from '../utils/constants.js';
 import dayjs from 'dayjs';
 import EditingPoint from '../view/point-edit.js';
@@ -18,7 +18,7 @@ export default class NewTripPoint {
 
   init(offers, destinations) {
     this._tripListLi = new TripListLi();
-    render(this._pointContainer, this._tripListLi, renderPosition.AFTERBEGIN);
+    render(this._pointContainer, this._tripListLi, RenderPosition.AFTERBEGIN);
     this._editPoint = new EditingPoint(undefined, offers, destinations, this._isEdit);
     this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
     this._editPoint.setDeleteClickHandler(this._handleDeleteClick);
@@ -30,7 +30,7 @@ export default class NewTripPoint {
     this._editPoint.setOffersListener(this._offersListener);
     this._editPoint._setDatePicker(this._timeFromHandler);
     this._editPoint._setDatePicker(this._timeToHandler);
-    render(this._tripListLi, this._editPoint, renderPosition.AFTERBEGIN);
+    render(this._tripListLi, this._editPoint, RenderPosition.AFTERBEGIN);
     document.addEventListener('keydown', this._escKeyDownHandler);
   }
 

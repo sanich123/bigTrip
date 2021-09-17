@@ -18,17 +18,9 @@ export const getPhotos = (pictures) => pictures.map(({ src }) => (`<img class="e
 export const favoritePoint = (isFavorite) => isFavorite ? 'event__favorite-btn--active' : '';
 
 const generateOffers = (offers, id, offersByType, isDisabled) => {
-  const checkedOffers = (title) => offers
-    .map((item) => item.title)
-    .includes(title) ? 'checked' : '';
 
-  // const checkedOffers = (title) => {
+  const checkedOffers = (title) => offers.map((item) => item.title).includes(title) ? 'checked' : '';
 
-  //   if (offers.map((it) => it.title).includes(title)) {
-  //     return 'checked';
-  //   }
-  //   return '';
-  // };
   return offersByType.map(({title, price}) => `<div class="event__offer-selector">
     <input class="event__offer-checkbox  visually-hidden" id="event-offer-${title}-${id}" type="checkbox" name="event-offer-${title}" data-title="${title}" data-price="${price}" ${isDisabled ? 'disabled' : ''} ${checkedOffers(title)}>
     <label class="event__offer-label" for="event-offer-${title}-${id}">
@@ -43,33 +35,12 @@ export const addOffers = (offers, id, offersByType) => offersByType.length ? `<s
     <div class="event__available-offers"> ${generateOffers(offers, id, offersByType)} </div></section>` : `<section class="event__section  event__section--offers">
     <div class="event__available-offers"></div></section>`;
 
-// export const createEventFormOffersTemplate = (id, offers, offersByType) => {
-
-//   const getCheckedOffer = (title) => offers
-//     .map((item) => item.title)
-//     .includes(title) ? 'checked' : '';
-
-//   return `<section class="event__section  event__section--offers">
-//      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-//      <div class="event__available-offers">
-//      ${offersByType.map(({ title, price }) => (`<div class="event__offer-selector">
-//          <input class="event__offer-checkbox  visually-hidden" data-title="${title}" data-price="${price}" id="event-offer-${title}-${id}" type="checkbox" name="event-offer-${title}" ${getCheckedOffer(title)}>
-//          <label class="event__offer-label" for="event-offer-${title}-${id}">
-//            <span class="event__offer-title">${title}</span>
-//            &plus;&euro;&nbsp;
-//            <span class="event__offer-price">${price}</span>
-//          </label>
-//        </div>`)).join('\n')}
-//      </div>
-//    </section>`;
-// };
 const upperCaseFirstLetter = (type) => type[0].toUpperCase() + type.split('').splice(1).join('');
 
 export const createTypes = (id, types) => types.map((type) => `<div class="event__type-item">
-          <input id="event-type-${type}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
-          <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-${id}">${upperCaseFirstLetter(type)}</label>
-        </div>`).join('');
+<input id="event-type-${type}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
+<label class="event__type-label  event__type-label--${type}" for="event-type-${type}-${id}">${upperCaseFirstLetter(type)}</label>
+</div>`).join('');
 
 export const createCities = (cities) => cities.map((city) => (`<option value="${city}"></option>`)).join('');
 
@@ -80,20 +51,8 @@ export const titlePrice = (offers) => offers.map(({ title, price }) => (`<li cla
 </li>`)).join('');
 
 export const getOffersByType = (arr, value) => arr.find((offer) => offer.type === value).offers;
-// export const getOffersByType = (arr, value) => {
-//   let result;
-//   arr.forEach((it) => {
-//     if (it.type === value) {
-//       result = it.offers;
-//       return result;
-//     }
-//   });
-//   return result;
-// };
 
-export const sortWords = ['DAY', 'EVENT', 'TIME', 'PRICE', 'OFFERS'];
-
-export const sortList = (sortTypes, currentSortType) => sortTypes.map((sortType) =>
+export const sortList = (currentSortType) => Object.keys(SortType).map((sortType) =>
   `<div class="trip-sort__item  trip-sort__item--${sortType.toLowerCase()}">
   <input id="sort-${sortType.toLowerCase()}"
   class="trip-sort__input visually-hidden" type="radio" name="trip-sort"
@@ -164,7 +123,6 @@ export const duration = (begin, end) => {
   return duration2(difference2);
 };
 export const totalPrice = (points) => points.slice().reduce((accumulator, it) => accumulator + it.basePrice, 0);
-export const totalPrice2 = (currentPoints) => currentPoints.slice().reduce((accumulator, it) => accumulator + it.basePrice, 0);
 
 export const getCities = (towns) => {
   const cities = towns.slice().sort((a, b) => dayjs(b.dateFrom) - dayjs(a.dateFrom)).map((it) => it.destination.name);

@@ -1,7 +1,7 @@
 import EditingPoint from '../view/point-edit.js';
 import TripListLi from '../view/trip-list-li.js';
 import PointsList from '../view/points-list.js';
-import { renderPosition, render, replace, remove } from '../utils/rendering-utils.js';
+import { RenderPosition, render, replace, remove } from '../utils/rendering-utils.js';
 import { UserAction, UpdateType, Mode } from '../utils/constants.js';
 import dayjs from 'dayjs';
 
@@ -39,7 +39,7 @@ export default class TripPoint {
 
 
     if (prevTripListLi === null) {
-      render(this._pointContainer, this._tripListLi, renderPosition.AFTERBEGIN);
+      render(this._pointContainer, this._tripListLi, RenderPosition.AFTERBEGIN);
     }
     this._pointEvent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._pointEvent.setEditClickHandler(this._handleEditClick);
@@ -57,7 +57,7 @@ export default class TripPoint {
 
 
     if (prevPointEvent === null || prevEditPoint === null) {
-      render(this._tripListLi, this._pointEvent, renderPosition.BEFOREEND);
+      render(this._tripListLi, this._pointEvent, RenderPosition.BEFOREEND);
       return;
     }
     if (this._mode === Mode.DEFAULT) {

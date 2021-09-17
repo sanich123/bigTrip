@@ -8,7 +8,7 @@ import EditingPoint from '../view/point-edit.js';
 import NewTripPoint from './new-point-presenter.js';
 import PriceTripView from '../view/price-trip.js';
 import TripPoint, {State} from './point-presenter.js';
-import { renderPosition, render, remove } from '../utils/rendering-utils.js';
+import { RenderPosition, render, remove } from '../utils/rendering-utils.js';
 import { SortType, UpdateType, UserAction, FilterType } from '../utils/constants.js';
 import dayjs from 'dayjs';
 import { filter } from '../utils/filter.js';
@@ -63,11 +63,11 @@ export default class PointsPresenter {
 
   _renderEmpty() {
     this._empty = new Empty(this._filterType);
-    render(this._container, this._empty, renderPosition.BEFOREEND);
+    render(this._container, this._empty, RenderPosition.BEFOREEND);
   }
 
   _renderLoading() {
-    render(this._container, this._loading, renderPosition.BEFOREEND);
+    render(this._container, this._loading, RenderPosition.BEFOREEND);
   }
 
   _renderPriceTrip() {
@@ -75,7 +75,7 @@ export default class PointsPresenter {
       this._infoComponent = null;
     }
     this._infoComponent = new PriceTripView(this._pointsModel.getPoints());
-    render(this._priceTripContainer, this._infoComponent, renderPosition.AFTERBEGIN);
+    render(this._priceTripContainer, this._infoComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderSort() {
@@ -86,13 +86,13 @@ export default class PointsPresenter {
       this._sortMenu = null;
     }
     this._sortMenu = new SortMenu(this._currentSortType);
-    render(this._container, this._sortMenu, renderPosition.AFTERBEGIN);
+    render(this._container, this._sortMenu, RenderPosition.AFTERBEGIN);
     this._sortMenu.setSortTypeChangeHandler(this._handleSortTypeChange);
     this._renderTripListUl();
   }
 
   _renderTripListUl() {
-    render(this._container, this._tripListUl, renderPosition.BEFOREEND);
+    render(this._container, this._tripListUl, RenderPosition.BEFOREEND);
     this._renderPointsList();
   }
 
@@ -135,7 +135,7 @@ export default class PointsPresenter {
 
   createPoint() {
     if (this._pointsModel.getPoints().length === 0) {
-      render(this._container, this._tripListUl, renderPosition.BEFOREEND);
+      render(this._container, this._tripListUl, RenderPosition.BEFOREEND);
     }
     this._offers = this._offersModel.getOffers();
     this._destinations = this._destinationsModel.getDestinations();

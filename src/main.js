@@ -1,5 +1,5 @@
 import NavigationView from './view/navigation.js';
-import { renderPosition, render, remove } from './utils/rendering-utils.js';
+import { RenderPosition, render, remove } from './utils/rendering-utils.js';
 import PriceTripView from './view/price-trip.js';
 import PointsPresenter from './presenter/points-presenter.js';
 import PointsModel from './model/points-model.js';
@@ -28,7 +28,7 @@ const filtersModel = new FiltersModel();
 const api = new Api(END_POINT, AUTHORIZATION);
 
 const navigationView = new NavigationView();
-render(toNavigation, navigationView, renderPosition.AFTERBEGIN);
+render(toNavigation, navigationView, RenderPosition.AFTERBEGIN);
 
 const pointsPresenter = new PointsPresenter(priceAndTripSection, toSort, pointsModel, filtersModel, api, destinationsModel, offersModel);
 const filterPresenter = new FiltersPresenter(toFilters, filtersModel, pointsModel);
@@ -56,13 +56,13 @@ const handleNavigationClick = (menuItem) => {
       }
       pointsPresenter.destroy();
       statisticsComponent = new StatisticsView(pointsModel.getPoints());
-      render(toStat, statisticsComponent, renderPosition.AFTERBEGIN);
+      render(toStat, statisticsComponent, RenderPosition.AFTERBEGIN);
       navigationView.addClassItem(MenuItem.STATISTICS);
       navigationView.removeClassItem(MenuItem.POINTS);
       newPointButton.disabled = true;
       document.querySelectorAll('.trip-filters__filter-input').forEach((it) => it.disabled = true);
       priceTripView = new PriceTripView(pointsModel.getPoints());
-      render(priceAndTripSection, priceTripView, renderPosition.AFTERBEGIN);
+      render(priceAndTripSection, priceTripView, RenderPosition.AFTERBEGIN);
       break;
   }
 };
