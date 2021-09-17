@@ -2,19 +2,18 @@ import { duration, getFormatTime, favoritePoint  } from '../utils/rendering-data
 import Abstract from '../view/abstract.js';
 
 const eventsList = (points) => {
-  const { basePrice, dateFrom, dateTo, destination,
-    currentOffers, type, isFavorite } = points;
+  const { basePrice, dateFrom, dateTo, destination, offers, type, isFavorite } = points;
 
-  const currentOffersTemplate = (offers) => (
-    `${offers ? `<h4 class="visually-hidden">Offers:</h4>
-    <ul class="event__selected-offers">
-      ${offers.map(({title, price}) => title === 'undefined' ? '' : `<li class="event__offer">
+  const checkedOffers = offers.map(({ title, price }) => `<li class="event__offer">
           <span class="event__offer-title">${title}</span>
           &plus;&euro;&nbsp;
           <span class="event__offer-price">${price}</span>
-        </li>`).join('')}</ul>` : ''}`
-  );
+        </li>`).join(' ');
 
+  const currentOffersTemplate = () => (`${offers ? `<h4 class="visually-hidden">Offers:</h4>
+    <ul class="event__selected-offers">
+    ${checkedOffers}</ul>` : ''}`
+  );
   return `<div class="event">
       <time class="event__date" datetime="${getFormatTime(dateFrom, dateTo).fromDate}">${getFormatTime(dateFrom, dateTo).fromDate}</time>
       <div class="event__type">
@@ -34,7 +33,7 @@ const eventsList = (points) => {
       </p>
       <h4 class="visually-hidden">Offers:</h4>
       <ul class="event__selected-offers">
-      ${currentOffersTemplate(currentOffers)}
+      ${currentOffersTemplate(offers)}
       </ul>
       <button class="event__favorite-btn ${favoritePoint(isFavorite)}" type="button">
         <span class="visually-hidden">Add to favorite</span>

@@ -1,18 +1,209 @@
-import { TYPES, getOffersByType } from '../utils/rendering-data-utils.js';
+import { getOffersByType } from '../utils/rendering-data-utils.js';
 import { addOffers, createTypes, createCities, getFormatTime, getPhotos, existingCity } from '../utils/rendering-data-utils.js';
 import Smart from '../view/smart.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+import dayjs from 'dayjs';
 
-const editPoint = (point, availableOffers, destinations) => {
+const editPoint = (point, availableOffers, destinations, isEdit) => {
+  const { id, type, basePrice, dateTo, dateFrom, offers, destination, isDisabled, isSaving, isDeleting } = point;
 
-  const { basePrice, dateFrom, dateTo, type, id, isDisabled, destination, isSaving, isDeleting, offers, currentOffers } = point;
+  const availableOffers2 = [
+    {
+      'type': 'taxi',
+      'offers': [
+        {
+          'title': 'Upgrade to a business class',
+          'price': 190,
+        },
+        {
+          'title': 'Choose the radio station',
+          'price': 30,
+        },
+        {
+          'title': 'Choose temperature',
+          'price': 170,
+        },
+        {
+          'title': 'Drive quickly, I\'m in a hurry',
+          'price': 100,
+        },
+        {
+          'title': 'Drive slowly',
+          'price': 110,
+        },
+      ],
+    },
+    {
+      'type': 'bus',
+      'offers': [
+        {
+          'title': 'Infotainment system',
+          'price': 50,
+        },
+        {
+          'title': 'Order meal',
+          'price': 100,
+        },
+        {
+          'title': 'Choose seats',
+          'price': 190,
+        },
+      ],
+    },
+    {
+      'type': 'train',
+      'offers': [
+        {
+          'title': 'Book a taxi at the arrival point',
+          'price': 110,
+        },
+        {
+          'title': 'Order a breakfast',
+          'price': 80,
+        },
+        {
+          'title': 'Wake up at a certain time',
+          'price': 140,
+        },
+      ],
+    },
+    {
+      'type': 'flight',
+      'offers': [
+        {
+          'title': 'Choose meal',
+          'price': 120,
+        },
+        {
+          'title': 'Choose seats',
+          'price': 90,
+        },
+        {
+          'title': 'Upgrade to comfort class',
+          'price': 120,
+        },
+        {
+          'title': 'Upgrade to business class',
+          'price': 120,
+        },
+        {
+          'title': 'Add luggage',
+          'price': 170,
+        },
+        {
+          'title': 'Business lounge',
+          'price': 160,
+        },
+      ],
+    },
+    {
+      'type': 'check-in',
+      'offers': [
+        {
+          'title': 'Choose the time of check-in',
+          'price': 70,
+        },
+        {
+          'title': 'Choose the time of check-out',
+          'price': 190,
+        },
+        {
+          'title': 'Add breakfast',
+          'price': 110,
+        },
+        {
+          'title': 'Laundry',
+          'price': 140,
+        },
+        {
+          'title': 'Order a meal from the restaurant',
+          'price': 30,
+        },
+      ],
+    },
+    {
+      'type': 'sightseeing',
+      'offers': [],
+    },
+    {
+      'type': 'ship',
+      'offers': [
+        {
+          'title': 'Choose meal',
+          'price': 130,
+        },
+        {
+          'title': 'Choose seats',
+          'price': 160,
+        },
+        {
+          'title': 'Upgrade to comfort class',
+          'price': 170,
+        },
+        {
+          'title': 'Upgrade to business class',
+          'price': 150,
+        },
+        {
+          'title': 'Add luggage',
+          'price': 100,
+        },
+        {
+          'title': 'Business lounge',
+          'price': 40,
+        },
+      ],
+    },
+    {
+      'type': 'drive',
+      'offers': [
+        {
+          'title': 'Choose comfort class',
+          'price': 110,
+        },
+        {
+          'title': 'Choose business class',
+          'price': 180,
+        },
+      ],
+    },
+    {
+      'type': 'restaurant',
+      'offers': [
+        {
+          'title': 'Choose live music',
+          'price': 150,
+        },
+        {
+          'title': 'Choose VIP area',
+          'price': 70,
+        },
+      ],
+    },
+  ];
+
+  // const offersByType = availableOffers.find((offer) => offer.type === type).offers;
+  const offersByType = availableOffers2.find((offer) => offer.type === type).offers;
+
+  const TYPES = availableOffers.map((offer) => offer.type);
   const availableDestinations = destinations.map((it) => it.name);
-  const destinationListener = () => destination.name !== '' ? `<section class="event__section  event__section--destination"><h3 class="event__section-title  event__section-title--destination">Destination</h3>
+  const createRollupButton = `${isEdit? `<button class="event__rollup-btn" type="button" ${isDisabled ? 'disabled' : ''}>
+  <span class="visually-hidden">Open event</span></button>`: ''}`;
+
+  const createResetOrDelete = () => {
+    if (!isEdit) {
+      return 'Cancel';
+    }
+    return (isDeleting) ? 'Deleting...' : 'Delete';
+  };
+  const destinationListener = () => destination.name !== '' ?
+    `<section class="event__section  event__section--destination">
+    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
     <p class="event__destination-description">${destination.description}</p>
       <div class="event__photos-container">
         <div class="event__photos-tape">
-           ${destination.pictures === '' ? '' : getPhotos(destination.pictures)}
+           ${destination.pictures === [] ? '' : getPhotos(destination.pictures)}
         </div>
        </div>
   </section>` : '';
@@ -37,7 +228,8 @@ const editPoint = (point, availableOffers, destinations) => {
     <label class="event__label  event__type-output" for="event-destination-${id}">
       ${type}
     </label>
-    <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${destination.name}" list="destination-list-${id}" ${isDisabled ? 'disabled' : ''}>
+    <input class="event__input  event__input--destination" id="event-destination-${id}"
+    type="text" name="event-destination" value="${destination.name}" list="destination-list-${id}" ${isDisabled ? 'disabled' : ''}>
     <datalist id="destination-list-${id}">
     ${createCities(availableDestinations)}
     </datalist>
@@ -45,10 +237,12 @@ const editPoint = (point, availableOffers, destinations) => {
 
   <div class="event__field-group  event__field-group--time">
     <label class="visually-hidden" for="event-start-time-${id}">From</label>
-    <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${getFormatTime(dateFrom, dateTo).fullDateFrom}" ${isDisabled ? 'disabled' : ''}>
+    <input class="event__input  event__input--time" id="event-start-time-${id}"
+    type="text" name="event-start-time" value="${getFormatTime(dateFrom, dateTo).fullDateFrom}" ${isDisabled ? 'disabled' : ''}>
     —
     <label class="visually-hidden" for="event-end-time-${id}">To</label>
-    <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${getFormatTime(dateFrom, dateTo).fullDateTo}" ${isDisabled ? 'disabled' : ''}>
+    <input class="event__input  event__input--time" id="event-end-time-${id}"
+    type="text" name="event-end-time" value="${getFormatTime(dateFrom, dateTo).fullDateTo}" ${isDisabled ? 'disabled' : ''}>
   </div>
 
   <div class="event__field-group  event__field-group--price">
@@ -56,29 +250,44 @@ const editPoint = (point, availableOffers, destinations) => {
       <span class="visually-hidden">Price</span>
       €
     </label>
-    <input class="event__input  event__input--price" id="event-price-${id}" type="number" name="event-price" value="${basePrice}" ${isDisabled ? 'disabled' : ''}>
+    <input class="event__input  event__input--price" id="event-price-${id}"
+    type="number" name="event-price" value="${basePrice}" ${isDisabled ? 'disabled' : ''}>
   </div>
 
   <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
-  <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>
-  <button class="event__rollup-btn" type="button">
-    <span class="visually-hidden">Open event</span>
-  </button>
+  <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${createResetOrDelete(isEdit, isDeleting)}</button>
+  ${createRollupButton}
 </header>
-  ${addOffers(offers, currentOffers)}
+${addOffers(offers, id, offersByType)}
 ${destinationListener()}
 </section>
 </form>`;
 };
 
+const templatePoint = {
+  basePrice: 0,
+  dateFrom: dayjs(),
+  dateTo: dayjs(),
+  destination: {
+    description: '',
+    name: '',
+    pictures: [],
+  },
+  isFavorite: false,
+  isDisabled: false,
+  isSaving: false,
+  type: 'taxi',
+  offers: [],
+};
 export default class EditingPoint extends Smart {
-  constructor(point, offers, destinations) {
+  constructor(point = templatePoint, offers, destinations, isEditForm) {
     super();
     this._data = EditingPoint.parseTaskToData(point);
     this._offers = offers;
     this._destinations = destinations;
     this._datepicker1 = null;
     this._datepicker2 = null;
+    this._isEditForm = isEditForm;
     this._timeFromHandler = this._timeFromHandler.bind(this);
     this._timeToHandler = this._timeToHandler.bind(this);
     this._setDatePicker = this._setDatePicker.bind(this);
@@ -91,6 +300,10 @@ export default class EditingPoint extends Smart {
     this._priceInputHandler = this._priceInputHandler.bind(this);
     this._offersListener = this._offersListener.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
+  }
+
+  getTemplate() {
+    return editPoint(this._data, this._offers, this._destinations, this._isEditForm);
   }
 
   setPriceInputListener() {
@@ -107,6 +320,7 @@ export default class EditingPoint extends Smart {
       inputValue.setCustomValidity('');
     }
     inputValue.reportValidity();
+    document.querySelector('.trip-main__event-add-btn').disabled = true;
   }
 
   setPriceListener() {
@@ -118,6 +332,7 @@ export default class EditingPoint extends Smart {
     this.updateData({
       basePrice: Math.abs(evt.target.value),
     }, 'noUpdate');
+    document.querySelector('.trip-main__event-add-btn').disabled = true;
   }
 
   setDeleteClickHandler(callback) {
@@ -137,10 +352,10 @@ export default class EditingPoint extends Smart {
   _offersListener(evt) {
     evt.preventDefault();
     const checkboxElements = this.getElement().querySelectorAll('.event__offer-checkbox');
-    const currentOffers = [];
+    const offers = [];
     checkboxElements.forEach((checkbox) => {
       if(checkbox.checked) {
-        currentOffers.push({
+        offers.push({
           title: checkbox.dataset.title,
           price: + checkbox.dataset.price,
         });
@@ -148,8 +363,9 @@ export default class EditingPoint extends Smart {
     });
     this.updateData(
       {
-        currentOffers: currentOffers,
+        offers,
       }, 'noUpdate');
+    document.querySelector('.trip-main__event-add-btn').disabled = true;
   }
 
   setCityInputHandler() {
@@ -166,6 +382,7 @@ export default class EditingPoint extends Smart {
       inputValue.setCustomValidity('');
     }
     inputValue.reportValidity();
+    document.querySelector('.trip-main__event-add-btn').disabled = true;
   }
 
   setCityChangeHandler() {
@@ -185,6 +402,7 @@ export default class EditingPoint extends Smart {
           pictures: this._destinations.filter((destination) => evt.target.value === destination.name)[0].pictures,
         },
       });
+    document.querySelector('.trip-main__event-add-btn').disabled = true;
   }
 
   setTypeChangeHandler() {
@@ -198,6 +416,7 @@ export default class EditingPoint extends Smart {
         type: evt.target.value,
         offers: getOffersByType(this._offers, evt.target.value),
       });
+    document.querySelector('.trip-main__event-add-btn').disabled = true;
   }
 
   setFormSubmitHandler(callback) {
@@ -208,11 +427,14 @@ export default class EditingPoint extends Smart {
   _formSubmitHandler(evt) {
     evt.preventDefault();
     this._callback.formSubmit(EditingPoint.parseDataToTask(this._data));
+
   }
 
   setEditClickHandler(callback) {
     this._callback.editClick = callback;
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
+    if (this.getElement().querySelector('.event__rollup-btn')) {
+      this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
+    }
   }
 
   _editClickHandler(evt) {
@@ -277,14 +499,12 @@ export default class EditingPoint extends Smart {
     );
   }
 
-  getTemplate() {
-    return editPoint(this._data, this._offers, this._destinations);
-  }
-
   _setInnerHandlers() {
     this.getElement().querySelector('.event__type-group').addEventListener('change', this._typeChangeHandler);
     this.getElement().addEventListener('submit', this._formSubmitHandler);
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
+    if (this.getElement().querySelector('.event__rollup-btn')) {
+      this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
+    }
     this.getElement().querySelector('.event__input--destination').addEventListener('change', this._cityChangeHandler);
     this.getElement().querySelector('.event__input--price').addEventListener('change', this._priceChangeHandler);
   }

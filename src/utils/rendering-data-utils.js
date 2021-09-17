@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
 import { SortType } from './constants.js';
-import { nanoid } from 'nanoid';
 
 export const humanizeDate = (date, format) => dayjs(date).format(format);
+
 export const getFormatTime = (dateFrom, dateTo) => {
   const fromDate = humanizeDate(dateFrom, 'MMM D');
   const toDate = humanizeDate(dateTo, 'MMM D');
@@ -17,44 +17,53 @@ export const getPhotos = (pictures) => pictures.map(({ src }) => (`<img class="e
 
 export const favoritePoint = (isFavorite) => isFavorite ? 'event__favorite-btn--active' : '';
 
-const generateOffers = (offers, currentOffers, isDisabled) => {
-  const checkedOffers = (title) => {
-    if (currentOffers) {
-      if (currentOffers.map((it) => it.title).includes(title)) {
-        return 'checked';
-      }
-    }
-    return '';
-  };
+const generateOffers = (offers, id, offersByType, isDisabled) => {
+  const checkedOffers = (title) => offers
+    .map((item) => item.title)
+    .includes(title) ? 'checked' : '';
 
-  return offers.map(({title, price}) => {
-    const uniq = nanoid();
-    return `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${uniq}" type="checkbox" name="event-offer-luggage" data-title="${title}" data-price="${price}" ${isDisabled ? 'disabled' : ''} ${checkedOffers(title)}>
-    <label class="event__offer-label" for="event-offer-luggage-${uniq}">
+  // const checkedOffers = (title) => {
+
+  //   if (offers.map((it) => it.title).includes(title)) {
+  //     return 'checked';
+  //   }
+  //   return '';
+  // };
+  return offersByType.map(({title, price}) => `<div class="event__offer-selector">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${title}-${id}" type="checkbox" name="event-offer-${title}" data-title="${title}" data-price="${price}" ${isDisabled ? 'disabled' : ''} ${checkedOffers(title)}>
+    <label class="event__offer-label" for="event-offer-${title}-${id}">
       <span class="event__offer-title">${title}</span>
       +€&nbsp;
       <span class="event__offer-price">${price}</span>
     </label>
-  </div>`;}).join('');};
+  </div>`).join('\n');};
 
-const addSection = () => `<section class="event__section  event__section--offers">
+export const addOffers = (offers, id, offersByType) => offersByType.length ? `<section class="event__section  event__section--offers">
   <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-    <div class="event__available-offers">`;
+    <div class="event__available-offers"> ${generateOffers(offers, id, offersByType)} </div></section>` : `<section class="event__section  event__section--offers">
+    <div class="event__available-offers"></div></section>`;
 
-const addSection2 = () => '</div></section>';
+// export const createEventFormOffersTemplate = (id, offers, offersByType) => {
 
-const addSection3 = () => `<section class="event__section  event__section--offers">
-<div class="event__available-offers">`;
+//   const getCheckedOffer = (title) => offers
+//     .map((item) => item.title)
+//     .includes(title) ? 'checked' : '';
 
-export const addOffers = (offers, currentOffers) => {
-  if (offers.length === 0) {
-    return `${addSection3()} ${addSection2()}`;
-  } else {
+//   return `<section class="event__section  event__section--offers">
+//      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
-    return `${addSection()} ${generateOffers(offers, currentOffers)} ${addSection2()}`;}
-};
-
+//      <div class="event__available-offers">
+//      ${offersByType.map(({ title, price }) => (`<div class="event__offer-selector">
+//          <input class="event__offer-checkbox  visually-hidden" data-title="${title}" data-price="${price}" id="event-offer-${title}-${id}" type="checkbox" name="event-offer-${title}" ${getCheckedOffer(title)}>
+//          <label class="event__offer-label" for="event-offer-${title}-${id}">
+//            <span class="event__offer-title">${title}</span>
+//            &plus;&euro;&nbsp;
+//            <span class="event__offer-price">${price}</span>
+//          </label>
+//        </div>`)).join('\n')}
+//      </div>
+//    </section>`;
+// };
 const upperCaseFirstLetter = (type) => type[0].toUpperCase() + type.split('').splice(1).join('');
 
 export const createTypes = (id, types) => types.map((type) => `<div class="event__type-item">
@@ -70,28 +79,17 @@ export const titlePrice = (offers) => offers.map(({ title, price }) => (`<li cla
   <span class="event__offer-price">${price}</span>
 </li>`)).join('');
 
-export const getOffersByType = (arr, value) => {
-  let result;
-  arr.forEach((it) => {
-    if (it.type === value) {
-      result = it.offers;
-      return result;
-    }
-  });
-  return result;
-};
-
-export const TYPES = [
-  'taxi',
-  'bus',
-  'train',
-  'ship',
-  'drive',
-  'flight',
-  'check-in',
-  'sightseeing',
-  'restaurant',
-];
+export const getOffersByType = (arr, value) => arr.find((offer) => offer.type === value).offers;
+// export const getOffersByType = (arr, value) => {
+//   let result;
+//   arr.forEach((it) => {
+//     if (it.type === value) {
+//       result = it.offers;
+//       return result;
+//     }
+//   });
+//   return result;
+// };
 
 export const sortWords = ['DAY', 'EVENT', 'TIME', 'PRICE', 'OFFERS'];
 

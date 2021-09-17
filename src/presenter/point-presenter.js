@@ -18,6 +18,7 @@ export default class TripPoint {
     this._tripListLi = null;
     this._pointEvent = null;
     this._editPoint = null;
+    this._isEdit = true;
     this._mode = Mode.DEFAULT;
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._handleEditClick = this._handleEditClick.bind(this);
@@ -34,7 +35,8 @@ export default class TripPoint {
     const prevTripListLi = this._tripListLi;
     this._tripListLi = new TripListLi();
     this._pointEvent = new PointsList(point);
-    this._editPoint = new EditingPoint(point, offers, destinations);
+    this._editPoint = new EditingPoint(point, offers, destinations, this._isEdit);
+
 
     if (prevTripListLi === null) {
       render(this._pointContainer, this._tripListLi, renderPosition.AFTERBEGIN);
@@ -152,6 +154,7 @@ export default class TripPoint {
     } else if (dayjs(editPoint.dateTo) < dayjs(editPoint.dateFrom)) {
       return this._editPoint.getElement().querySelector('.event__input--destination').setCustomValidity('Дата начала не может быть позже даты конца');
     }
+    document.querySelector('.trip-main__event-add-btn').disabled = false;
     this._changeData(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,

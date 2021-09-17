@@ -1,14 +1,15 @@
-import NewPoint from '../view/new-point.js';
 import TripListLi from '../view/trip-list-li.js';
 import { renderPosition, render, remove } from '../utils/rendering-utils.js';
 import { UserAction, UpdateType } from '../utils/constants.js';
 import dayjs from 'dayjs';
+import EditingPoint from '../view/point-edit.js';
 
 export default class NewTripPoint {
   constructor(pointContainer, changeData, pointsModel) {
     this._pointsModel = pointsModel;
     this._pointContainer = pointContainer;
     this._changeData = changeData;
+    this._isEdit = false;
     this._editPoint = null;
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
@@ -18,28 +19,7 @@ export default class NewTripPoint {
   init(offers, destinations) {
     this._tripListLi = new TripListLi();
     render(this._pointContainer, this._tripListLi, renderPosition.AFTERBEGIN);
-    const point = {
-      basePrice: 0,
-      dateFrom: dayjs(),
-      dateTo: dayjs(),
-      destination: {
-        description: '',
-        name: '',
-        pictures: '',
-      },
-      isFavorite: false,
-      isDisabled: false,
-      isSaving: false,
-      type: 'taxi',
-      offers: [
-        {title: 'Upgrade to a business class', price: 190},
-        {title: 'Choose the radio station', price: 30},
-        {title: 'Choose temperature', price: 170},
-        {title: 'Drive quickly, I\'m in a hurry', price: 100},
-        {title: 'Drive slowly', price: 110},
-      ],
-    };
-    this._editPoint = new NewPoint(point, offers, destinations);
+    this._editPoint = new EditingPoint(undefined, offers, destinations, this._isEdit);
     this._editPoint.setFormSubmitHandler(this._handleFormSubmit);
     this._editPoint.setDeleteClickHandler(this._handleDeleteClick);
     this._editPoint.setPriceListener(this._priceChangeHandler);
@@ -103,6 +83,7 @@ export default class NewTripPoint {
 
   _handleDeleteClick() {
     this.destroy();
+    document.querySelector('.trip-main__event-add-btn').disabled = false;
   }
 
   _escKeyDownHandler(evt) {
