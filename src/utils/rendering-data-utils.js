@@ -122,7 +122,18 @@ export const duration = (begin, end) => {
   const difference2 = Math.max(time2ms, time1ms) - Math.min(time2ms, time1ms);
   return duration2(difference2);
 };
-export const totalPrice = (points) => points.slice().reduce((accumulator, it) => accumulator + it.basePrice, 0);
+
+export const totalPrice = (points) => {
+  const totalCost = points.reduce((total, point) => {
+    const { basePrice, offers } = point;
+    let offersTotal = 0;
+    if (offers.length) {
+      offersTotal = offers.reduce((accumulator, offer) => (accumulator += offer.price), 0);
+    }
+    return total += basePrice + offersTotal;
+  }, 0);
+  return totalCost;
+};
 
 export const getCities = (towns) => {
   const cities = towns.slice().sort((a, b) => dayjs(b.dateFrom) - dayjs(a.dateFrom)).map((it) => it.destination.name);

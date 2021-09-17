@@ -2,6 +2,7 @@ import { duration, getFormatTime, favoritePoint  } from '../utils/rendering-data
 import Abstract from '../view/abstract.js';
 
 const eventsList = (points) => {
+
   const { basePrice, dateFrom, dateTo, destination, offers, type, isFavorite } = points;
 
   const checkedOffers = offers.map(({ title, price }) =>
@@ -9,7 +10,7 @@ const eventsList = (points) => {
       <span class="event__offer-title">${title}</span>
           &plus;&euro;&nbsp;
        <span class="event__offer-price">${price}</span>
-    </li>`).join(' ');
+    </li>`).join('');
 
   const currentOffersTemplate = () => (`${offers ? `<h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">

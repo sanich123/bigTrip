@@ -34,3 +34,5 @@ export const MenuItem = {
   POINTS: 'POINTS',
   STATISTICS: 'STATISTICS',
 };
+
+
