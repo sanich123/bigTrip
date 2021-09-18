@@ -10,6 +10,7 @@ export const State = {
   DELETING: 'DELETING',
   ABORTING: 'ABORTING',
 };
+
 export default class TripPoint {
   constructor(pointContainer, changeData, changeMode) {
     this._pointContainer = pointContainer;

@@ -10,6 +10,14 @@ const HEADINGS = {
   MONEY: 'MONEY',
 };
 
+const FORMATTER = {
+  [HEADINGS.MONEY]: (value) => `€ ${value}`,
+
+  [HEADINGS.TYPE]: (value) => `${value}x`,
+
+  [HEADINGS.TIMESPEND]: (value) => `${duration2(value)}`,
+};
+
 const chart = (place, types, values, text) => new Chart(place, {
   plugins: [ChartDataLabels],
   type: 'horizontalBar',
@@ -31,7 +39,7 @@ const chart = (place, types, values, text) => new Chart(place, {
         color: '#000000',
         anchor: 'end',
         align: 'start',
-        formatter: (val) => `${val}`,
+        formatter: FORMATTER[text],
       },
     },
     title: {
@@ -93,72 +101,7 @@ const timeChart = (timeCtx, points) => {
   const summary =  Array.from(points.reduce((point, { type, dateFrom, dateTo }) => point.set(type, (point.get(type) || 0) + Math.abs(dayjs(dayjs(dateFrom).diff(dateTo)))), new Map)).sort((a, b) => b[1] - a[1]).slice();
   const types = summary.map((type) => type[0].toUpperCase());
   const time = summary.map((duration) => duration[1]);
-  // return chart(timeCtx, types, time, HEADINGS.TIMESPEND);
-
-  return new Chart(timeCtx, {
-    plugins: [ChartDataLabels],
-    type: 'horizontalBar',
-    data: {
-      labels: types,
-      datasets: [{
-        data: time,
-        backgroundColor: '#ffffff',
-        hoverBackgroundColor: '#ffffff',
-        anchor: 'start',
-      }],
-    },
-    options: {
-      plugins: {
-        datalabels: {
-          font: {
-            size: 13,
-          },
-          color: '#000000',
-          anchor: 'end',
-          align: 'start',
-          formatter: (val) => `${duration2(val)}`,
-        },
-      },
-      title: {
-        display: true,
-        text: 'TIME-SPEND',
-        fontColor: '#000000',
-        fontSize: 23,
-        position: 'left',
-      },
-      scales: {
-        yAxes: [{
-          ticks: {
-            fontColor: '#000000',
-            padding: 5,
-            fontSize: 13,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false,
-          },
-
-        }],
-        xAxes: [{
-          ticks: {
-            display: false,
-            beginAtZero: true,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false,
-          },
-
-        }],
-      },
-      legend: {
-        display: false,
-      },
-      tooltips: {
-        enabled: false,
-      },
-    },
-  });
+  return chart(timeCtx, types, time, HEADINGS.TIMESPEND);
 };
 
 const createStatistics = () => `<section class="statistics">

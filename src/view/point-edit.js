@@ -130,12 +130,17 @@ export default class EditingPoint extends Smart {
     return editPoint(this._data, this._offers, this._destinations, this._isEditForm);
   }
 
+  _isEdit() {
+    this._isEditForm ? document.querySelector('.trip-main__event-add-btn').disabled = false : document.querySelector('.trip-main__event-add-btn').disabled = true;
+  }
+
   setPriceInputListener() {
     this.getElement().querySelector('.event__input--price').addEventListener('input', this._priceInputHandler);
   }
 
   _priceInputHandler(evt) {
     evt.preventDefault();
+    this._isEdit();
     const inputValue = this.getElement().querySelector('.event__input--price');
     const price = evt.target.value;
     if (!price ||  Math.abs(price) === 0) {
@@ -144,7 +149,7 @@ export default class EditingPoint extends Smart {
       inputValue.setCustomValidity('');
     }
     inputValue.reportValidity();
-    document.querySelector('.trip-main__event-add-btn').disabled = true;
+
   }
 
   setPriceListener() {
@@ -153,10 +158,10 @@ export default class EditingPoint extends Smart {
 
   _priceChangeHandler(evt) {
     evt.preventDefault();
+    this._isEdit();
     this.updateData({
       basePrice: Math.abs(evt.target.value),
     }, 'noUpdate');
-    document.querySelector('.trip-main__event-add-btn').disabled = true;
   }
 
   setDeleteClickHandler(callback) {
@@ -175,6 +180,7 @@ export default class EditingPoint extends Smart {
 
   _offersListener(evt) {
     evt.preventDefault();
+    this._isEdit();
     const checkboxElements = this.getElement().querySelectorAll('.event__offer-checkbox');
     const offers = [];
     checkboxElements.forEach((checkbox) => {
@@ -197,6 +203,7 @@ export default class EditingPoint extends Smart {
 
   _cityInputHandler(evt) {
     evt.preventDefault();
+    this._isEdit();
     const inputValue = this.getElement().querySelector('.event__input--destination');
     const city = evt.target.value;
     if (!city ||  existingCity(city, this._destinations.map((destination) => destination.name))) {
@@ -205,7 +212,6 @@ export default class EditingPoint extends Smart {
       inputValue.setCustomValidity('');
     }
     inputValue.reportValidity();
-    document.querySelector('.trip-main__event-add-btn').disabled = true;
   }
 
   setCityChangeHandler() {
@@ -214,6 +220,7 @@ export default class EditingPoint extends Smart {
 
   _cityChangeHandler(evt) {
     evt.preventDefault();
+    this._isEdit();
     if (evt.target.value === '' || existingCity(evt.target.value, this._destinations.map((destination) => destination.name))) {
       return;
     }
@@ -225,7 +232,6 @@ export default class EditingPoint extends Smart {
           pictures: this._destinations.filter((destination) => evt.target.value === destination.name)[0].pictures,
         },
       });
-    document.querySelector('.trip-main__event-add-btn').disabled = true;
   }
 
   setTypeChangeHandler() {
@@ -234,12 +240,12 @@ export default class EditingPoint extends Smart {
 
   _typeChangeHandler(evt) {
     evt.preventDefault();
+    this._isEdit();
     this.updateData(
       {
         type: evt.target.value,
         offers: getOffersByType(this._offers, evt.target.value),
       });
-    document.querySelector('.trip-main__event-add-btn').disabled = true;
   }
 
   setFormSubmitHandler(callback) {
@@ -250,7 +256,6 @@ export default class EditingPoint extends Smart {
   _formSubmitHandler(evt) {
     evt.preventDefault();
     this._callback.formSubmit(EditingPoint.parseDataToTask(this._data));
-
   }
 
   setEditClickHandler(callback) {
