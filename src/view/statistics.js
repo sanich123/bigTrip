@@ -3,22 +3,17 @@ import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { duration2 } from '../utils/rendering-data-utils.js';
 import dayjs from 'dayjs';
-
-const HEADINGS = {
-  TIMESPEND: 'TIME-SPEND',
-  TYPE: 'TYPE',
-  MONEY: 'MONEY',
-};
+import { Headings } from '../utils/constants.js';
 
 const FORMATTER = {
-  [HEADINGS.MONEY]: (value) => `€ ${value}`,
+  [Headings.MONEY]: (value) => `€ ${value}`,
 
-  [HEADINGS.TYPE]: (value) => `${value}x`,
+  [Headings.TYPE]: (value) => `${value}x`,
 
-  [HEADINGS.TIMESPEND]: (value) => `${duration2(value)}`,
+  [Headings.TIMESPEND]: (value) => `${duration2(value)}`,
 };
 
-const chart = (place, types, values, text) => new Chart(place, {
+const getChart = (place, types, values, text) => new Chart(place, {
   plugins: [ChartDataLabels],
   type: 'horizontalBar',
   data: {
@@ -87,21 +82,21 @@ const moneyChart = (moneyCtx, points) => {
   const summary = Array.from(points.reduce((point, { type, basePrice }) => point.set(type, (point.get(type) || 0) + basePrice), new Map)).sort((a, b) => b[1] - a[1]).slice();
   const money =  summary.map((coin) => coin[1]);
   const types = summary.map((type) => type[0].toUpperCase());
-  return chart(moneyCtx, types, money, HEADINGS.MONEY);
+  return getChart(moneyCtx, types, money, Headings.MONEY);
 };
 
 const typeChart = (typeCtx, points) => {
   const summary =  Array.from(points.reduce((point, { type }) => point.set(type, (point.get(type) || 0) + 1), new Map)).sort((a, b) => b[1] - a[1]).slice();
   const types = summary.map((type) => type[0].toUpperCase());
   const repeats = summary.map((repeat) => repeat[1]);
-  return chart(typeCtx, types, repeats, HEADINGS.TYPE);
+  return getChart(typeCtx, types, repeats, Headings.TYPE);
 };
 
 const timeChart = (timeCtx, points) => {
   const summary =  Array.from(points.reduce((point, { type, dateFrom, dateTo }) => point.set(type, (point.get(type) || 0) + Math.abs(dayjs(dayjs(dateFrom).diff(dateTo)))), new Map)).sort((a, b) => b[1] - a[1]).slice();
   const types = summary.map((type) => type[0].toUpperCase());
   const time = summary.map((duration) => duration[1]);
-  return chart(timeCtx, types, time, HEADINGS.TIMESPEND);
+  return getChart(timeCtx, types, time, Headings.TIMESPEND);
 };
 
 const createStatistics = () => `<section class="statistics">

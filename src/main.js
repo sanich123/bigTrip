@@ -49,7 +49,7 @@ const handleNavigationClick = (menuItem) => {
       navigationView.addClassItem(MenuItem.POINTS);
       navigationView.removeClassItem(MenuItem.STATISTICS);
       newPointButton.disabled = false;
-      document.querySelectorAll('.trip-filters__filter-input').forEach((it) => it.disabled = false);
+      document.querySelectorAll('.trip-filters__filter-input').forEach((filter) => filter.disabled = false);
       break;
     case MenuItem.STATISTICS:
       if (statisticsComponent !== null) {
@@ -61,7 +61,7 @@ const handleNavigationClick = (menuItem) => {
       navigationView.addClassItem(MenuItem.STATISTICS);
       navigationView.removeClassItem(MenuItem.POINTS);
       newPointButton.disabled = true;
-      document.querySelectorAll('.trip-filters__filter-input').forEach((it) => it.disabled = true);
+      document.querySelectorAll('.trip-filters__filter-input').forEach((filter) => filter.disabled = true);
       priceTripView = new PriceTripView(pointsModel.getPoints());
       render(priceAndTripSection, priceTripView, RenderPosition.AFTERBEGIN);
       break;

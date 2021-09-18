@@ -35,4 +35,14 @@ export const MenuItem = {
   STATISTICS: 'STATISTICS',
 };
 
+export const State = {
+  SAVING: 'SAVING',
+  DELETING: 'DELETING',
+  ABORTING: 'ABORTING',
+};
 
+export const Headings = {
+  TIMESPEND: 'TIME-SPEND',
+  TYPE: 'TYPE',
+  MONEY: 'MONEY',
+};

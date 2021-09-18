@@ -30,33 +30,30 @@ const generateOffers = (offers, id, offersByType, isDisabled) => {
     </label>
   </div>`).join('\n');};
 
-export const addOffers = (offers, id, offersByType) => offersByType.length ? `<section class="event__section  event__section--offers">
+export const addOffers = (offers, id, offersByType) =>
+  offersByType.length ? `<section class="event__section  event__section--offers">
   <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-    <div class="event__available-offers"> ${generateOffers(offers, id, offersByType)} </div></section>` : `<section class="event__section  event__section--offers">
+    <div class="event__available-offers">${generateOffers(offers, id, offersByType)}</div></section>` :
+    `<section class="event__section  event__section--offers">
     <div class="event__available-offers"></div></section>`;
 
 const upperCaseFirstLetter = (type) => type[0].toUpperCase() + type.split('').splice(1).join('');
 
-export const createTypes = (id, types) => types.map((type) => `<div class="event__type-item">
+export const createTypes = (id, types) =>
+  types.map((type) => `<div class="event__type-item">
 <input id="event-type-${type}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
 <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-${id}">${upperCaseFirstLetter(type)}</label>
 </div>`).join('');
 
 export const createCities = (cities) => cities.map((city) => (`<option value="${city}"></option>`)).join('');
 
-export const titlePrice = (offers) => offers.map(({ title, price }) => (`<li class="event__offer">
-  <span class="event__offer-title">${title}</span>
-  +€&nbsp;
-  <span class="event__offer-price">${price}</span>
-</li>`)).join('');
-
 export const getOffersByType = (arr, value) => arr.find((offer) => offer.type === value).offers;
 
-export const sortList = (currentSortType) => Object.keys(SortType).map((sortType) =>
-  `<div class="trip-sort__item  trip-sort__item--${sortType.toLowerCase()}">
-  <input id="sort-${sortType.toLowerCase()}"
-  class="trip-sort__input visually-hidden" type="radio" name="trip-sort"
-  value="sort-${sortType.toLowerCase()}"
+export const sortList = (currentSortType) =>
+  Object.keys(SortType).map((sortType) =>
+    `<div class="trip-sort__item  trip-sort__item--${sortType.toLowerCase()}">
+  <input id="sort-${sortType.toLowerCase()}" class="trip-sort__input visually-hidden"
+  type="radio" name="trip-sort" value="sort-${sortType.toLowerCase()}"
   data-sort-type="${sortType === SortType.OFFERS || sortType === SortType.EVENT ? '' : SortType[sortType]}"
   ${SortType[sortType] === currentSortType  ? 'checked' : ''}
   ${sortType === SortType.OFFERS || sortType === SortType.EVENT ? 'disabled' : ''}>

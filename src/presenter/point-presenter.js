@@ -2,14 +2,8 @@ import EditingPoint from '../view/point-edit.js';
 import TripListLi from '../view/trip-list-li.js';
 import PointsList from '../view/points-list.js';
 import { RenderPosition, render, replace, remove } from '../utils/rendering-utils.js';
-import { UserAction, UpdateType, Mode } from '../utils/constants.js';
+import { UserAction, UpdateType, Mode, State } from '../utils/constants.js';
 import dayjs from 'dayjs';
-
-export const State = {
-  SAVING: 'SAVING',
-  DELETING: 'DELETING',
-  ABORTING: 'ABORTING',
-};
 
 export default class TripPoint {
   constructor(pointContainer, changeData, changeMode) {
