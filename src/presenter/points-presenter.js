@@ -34,7 +34,6 @@ export default class PointsPresenter {
     this._infoComponent = null;
     this._sortMenu = null;
     this._empty = null;
-    this._priceTrip = new PriceTripView();
     this._tripListUl = new TripListUl();
     this._tripListLi = new TripListLi();
     this._editingPoint = new EditingPoint();
@@ -97,7 +96,7 @@ export default class PointsPresenter {
   }
 
   _renderPointsList() {
-    this._getPoints().slice().forEach((point) => this._renderPoint(point));
+    this._getPoints().forEach((point) => this._renderPoint(point));
   }
 
   _renderPoint(point) {
@@ -113,9 +112,6 @@ export default class PointsPresenter {
       this._renderLoading();
       return;
     }
-    // if (this._pointsModel.getPoints().length !== 0) {
-    //   this._renderPriceTrip();
-    // }
     this._filterType = this._filtersModel.getFilter();
     const points = this._pointsModel.getPoints();
     const filtredPoints = filter[this._filterType](points);

@@ -38,10 +38,10 @@ export default class TripPoint {
     this._pointEvent = new PointsList(point);
     this._editPoint = new EditingPoint(point, offers, destinations, this._isEdit);
 
-
     if (prevTripListLi === null) {
       render(this._pointContainer, this._tripListLi, RenderPosition.AFTERBEGIN);
     }
+
     this._pointEvent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._pointEvent.setEditClickHandler(this._handleEditClick);
     this._editPoint.setEditClickHandler(this._handleEditClickBack);

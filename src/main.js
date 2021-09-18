@@ -15,11 +15,11 @@ const AUTHORIZATION = 'Basic hD3sb8dfSWcl2sA5j';
 const END_POINT = 'https://15.ecmascript.pages.academy/big-trip/';
 
 const priceAndTripSection = document.querySelector('.trip-main');
-const toNavigation = document.querySelector('.trip-controls__navigation');
-const toFilters = document.querySelector('.trip-controls__filters');
-const toSort = document.querySelector('.trip-events');
+const toNavigation = priceAndTripSection.querySelector('.trip-controls__navigation');
+const toFilters = priceAndTripSection.querySelector('.trip-controls__filters');
 const toStat = document.querySelector('main.page-body__page-main .page-body__container');
-const newPointButton = document.querySelector('.trip-main__event-add-btn');
+const toSort = toStat.querySelector('.trip-events');
+const newPointButton = priceAndTripSection.querySelector('.trip-main__event-add-btn');
 
 const pointsModel = new PointsModel();
 const destinationsModel = new DestinationsModel();
@@ -45,6 +45,7 @@ const handleNavigationClick = (menuItem) => {
       remove(priceTripView);
       statisticsComponent = null;
       priceTripView = null;
+      priceTripView = new PriceTripView(pointsModel.getPoints());
       navigationView.addClassItem(MenuItem.POINTS);
       navigationView.removeClassItem(MenuItem.STATISTICS);
       newPointButton.disabled = false;
@@ -73,7 +74,7 @@ filterPresenter.init();
 newPointButton.addEventListener('click', (evt) => {
   evt.preventDefault();
   pointsPresenter.createPoint();
-  document.querySelector('.trip-main__event-add-btn').disabled = true;
+  newPointButton.disabled = true;
 });
 
 Promise.all([
