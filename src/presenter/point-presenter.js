@@ -1,8 +1,8 @@
 import EditingPoint from '../view/point-edit.js';
 import TripListLi from '../view/trip-list-li.js';
 import PointsList from '../view/points-list.js';
-import { RenderPosition, render, replace, remove } from '../utils/rendering-utils.js';
-import { UserAction, UpdateType, Mode, State } from '../utils/constants.js';
+import { render, replace, remove } from '../utils/rendering-utils.js';
+import { UserAction, UpdateType, Mode, State, RenderPosition } from '../utils/constants.js';
 import dayjs from 'dayjs';
 
 export default class TripPoint {

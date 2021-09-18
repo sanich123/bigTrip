@@ -46,3 +46,8 @@ export const Headings = {
   TYPE: 'TYPE',
   MONEY: 'MONEY',
 };
+
+export const RenderPosition = {
+  AFTERBEGIN: 'afterbegin',
+  BEFOREEND: 'beforeend',
+};

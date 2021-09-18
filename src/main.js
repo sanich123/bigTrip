@@ -1,5 +1,5 @@
 import NavigationView from './view/navigation.js';
-import { RenderPosition, render, remove } from './utils/rendering-utils.js';
+import { render, remove } from './utils/rendering-utils.js';
 import PriceTripView from './view/price-trip.js';
 import PointsPresenter from './presenter/points-presenter.js';
 import PointsModel from './model/points-model.js';
@@ -7,7 +7,7 @@ import DestinationsModel from './model/destinations-model.js';
 import OffersModel from './model/offers-model.js';
 import FiltersModel from './model/filters-model.js';
 import FiltersPresenter from './presenter/filters-presenter.js';
-import { MenuItem, UpdateType } from './utils/constants.js';
+import { MenuItem, UpdateType, RenderPosition } from './utils/constants.js';
 import StatisticsView from './view/statistics.js';
 import Api from './api.js';
 

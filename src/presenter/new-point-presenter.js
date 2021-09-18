@@ -1,6 +1,6 @@
 import TripListLi from '../view/trip-list-li.js';
-import { RenderPosition, render, remove } from '../utils/rendering-utils.js';
-import { UserAction, UpdateType } from '../utils/constants.js';
+import { render, remove } from '../utils/rendering-utils.js';
+import { UserAction, UpdateType, RenderPosition } from '../utils/constants.js';
 import dayjs from 'dayjs';
 import EditingPoint from '../view/point-edit.js';
 
