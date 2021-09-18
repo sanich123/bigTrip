@@ -12,7 +12,7 @@ import StatisticsView from './view/statistics.js';
 import Api from './api.js';
 
 const AUTHORIZATION = 'Basic hD3sb8dfSWcl2sA5j';
-const END_POINT = 'https://14.ecmascript.pages.academy/big-trip/';
+const END_POINT = 'https://15.ecmascript.pages.academy/big-trip/';
 
 const priceAndTripSection = document.querySelector('.trip-main');
 const toNavigation = document.querySelector('.trip-controls__navigation');

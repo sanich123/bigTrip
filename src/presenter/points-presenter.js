@@ -15,7 +15,7 @@ import { filter } from '../utils/filter.js';
 import Api from '../api.js';
 
 const AUTHORIZATION = 'Basic hD3sb8dfSWcl2sA5j';
-const END_POINT = 'https://14.ecmascript.pages.academy/big-trip/';
+const END_POINT = 'https://15.ecmascript.pages.academy/big-trip/';
 
 export default class PointsPresenter {
   constructor(priceTripContainer, container, pointsModel, filtersModel, api, destinationsModel, offersModel) {
@@ -195,6 +195,7 @@ export default class PointsPresenter {
         })
           .catch(() => {
             this.setAborting();
+            document.querySelector('.trip-main__event-add-btn').disabled = true;
           });
         break;
       case UserAction.DELETE_POINT:

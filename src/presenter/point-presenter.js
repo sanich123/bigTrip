@@ -155,12 +155,12 @@ export default class TripPoint {
     } else if (dayjs(editPoint.dateTo) < dayjs(editPoint.dateFrom)) {
       return this._editPoint.getElement().querySelector('.event__input--destination').setCustomValidity('Дата начала не может быть позже даты конца');
     }
-    document.querySelector('.trip-main__event-add-btn').disabled = false;
     this._changeData(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,
       editPoint,
     );
+    document.querySelector('.trip-main__event-add-btn').disabled = false;
   }
 
   _handleEditClickBack() {
