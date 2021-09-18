@@ -19,7 +19,7 @@ export const favoritePoint = (isFavorite) => isFavorite ? 'event__favorite-btn--
 
 const generateOffers = (offers, id, offersByType, isDisabled) => {
 
-  const checkedOffers = (title) => offers.map((item) => item.title).includes(title) ? 'checked' : '';
+  const checkedOffers = (title) => offers.map((offer) => offer.title).includes(title) ? 'checked' : '';
 
   return offersByType.map(({title, price}) => `<div class="event__offer-selector">
     <input class="event__offer-checkbox  visually-hidden" id="event-offer-${title}-${id}" type="checkbox" name="event-offer-${title}" data-title="${title}" data-price="${price}" ${isDisabled ? 'disabled' : ''} ${checkedOffers(title)}>

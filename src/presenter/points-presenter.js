@@ -12,39 +12,41 @@ import { render, remove } from '../utils/rendering-utils.js';
 import { SortType, UpdateType, UserAction, FilterType, State, RenderPosition } from '../utils/constants.js';
 import dayjs from 'dayjs';
 import { filter } from '../utils/filter.js';
-import Api from '../api.js';
-
-const AUTHORIZATION = 'Basic hD3sb8dfSWcl2sA5j';
-const END_POINT = 'https://15.ecmascript.pages.academy/big-trip/';
 
 export default class PointsPresenter {
   constructor(priceTripContainer, container, pointsModel, filtersModel, api, destinationsModel, offersModel) {
     this._priceTripContainer = priceTripContainer;
-    this._api = api;
-    this._filtersModel = filtersModel;
+    this._container = container;
     this._pointsModel = pointsModel;
+    this._filtersModel = filtersModel;
+    this._api = api;
     this._destinationsModel = destinationsModel;
     this._offersModel = offersModel;
 
-    this._container = container;
-    this._tripPresenter = new Map();
     this._currentSortType = SortType.DAY;
     this._filterType = FilterType.EVERYTHING;
     this._isLoading = true;
+
+    this._tripPresenter = new Map();
+
     this._infoComponent = null;
     this._sortMenu = null;
     this._empty = null;
+
+
     this._tripListUl = new TripListUl();
     this._tripListLi = new TripListLi();
     this._editingPoint = new EditingPoint();
     this._pointsList = new PointsList();
     this._loading = new Loading();
-    this._newTripPoint = new NewTripPoint(this._tripListUl, this._handleViewAction, this._pointsModel);
+
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+
+    this._newTripPoint = new NewTripPoint(this._tripListUl, this._handleViewAction, this._pointsModel);
   }
 
   init() {
@@ -185,12 +187,12 @@ export default class PointsPresenter {
           });
         break;
       case UserAction.ADD_POINT:
-        this.setSaving();
-        new Api(END_POINT, AUTHORIZATION).addPoint(update).then((response) => {
+        this._newTripPoint.setSaving();
+        this._api.addPoint(update).then((response) => {
           this._pointsModel.addPoint(updateType, response);
         })
           .catch(() => {
-            this.setAborting();
+            this._newTripPoint.setAborting();
             document.querySelector('.trip-main__event-add-btn').disabled = true;
           });
         break;
