@@ -44,7 +44,6 @@ const handleNavigationClick = (menuItem) => {
       remove(statisticsComponent);
       remove(priceTripView);
       statisticsComponent = null;
-      priceTripView = null;
       priceTripView = new PriceTripView(pointsModel.getPoints());
       navigationView.addClassItem(MenuItem.POINTS);
       navigationView.removeClassItem(MenuItem.STATISTICS);
