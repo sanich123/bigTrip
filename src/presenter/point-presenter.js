@@ -31,6 +31,7 @@ export default class TripPoint {
     this._tripListLi = new TripListLi();
     this._pointEvent = new PointsList(point);
     this._editPoint = new EditingPoint(point, offers, destinations, this._isEdit);
+    this._newPointButton = document.querySelector('.trip-main__event-add-btn');
 
     if (prevTripListLi === null) {
       render(this._pointContainer, this._tripListLi, RenderPosition.AFTERBEGIN);
@@ -68,10 +69,53 @@ export default class TripPoint {
     remove(prevEditPoint);
   }
 
+  destroy() {
+    remove(this._tripListLi);
+    remove(this._pointEvent);
+    remove(this._editPoint);
+  }
+
+  resetView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceFormToCard();
+    }
+  }
+
+  setViewState(state) {
+    if (this._mode === Mode.DEFAULT) {
+      return;
+    }
+    const resetFormState = () => {
+      this._editPoint.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+    switch (state) {
+      case State.SAVING:
+        this._editPoint.updateData({
+          isDisabled: true,
+          isSaving: true,
+        });
+        break;
+      case State.DELETING:
+        this._editPoint.updateData({
+          isDisabled: true,
+          isDeleting: true,
+        });
+        break;
+      case State.ABORTING:
+        this._editPoint.shake(resetFormState);
+        this._pointEvent.shake(resetFormState);
+        break;
+    }
+  }
+
   _replaceCardToForm() {
     replace(this._editPoint, this._pointEvent);
     document.addEventListener('keydown', this._escKeyDownHandler);
-    document.querySelector('.trip-main__event-add-btn').disabled = false;
+    this._newPointButton.disabled = false;
     this._changeMode();
     this._mode = Mode.EDITING;
   }
@@ -108,37 +152,6 @@ export default class TripPoint {
     this._replaceCardToForm();
   }
 
-  setViewState(state) {
-    if (this._mode === Mode.DEFAULT) {
-      return;
-    }
-    const resetFormState = () => {
-      this._editPoint.updateData({
-        isDisabled: false,
-        isSaving: false,
-        isDeleting: false,
-      });
-    };
-    switch (state) {
-      case State.SAVING:
-        this._editPoint.updateData({
-          isDisabled: true,
-          isSaving: true,
-        });
-        break;
-      case State.DELETING:
-        this._editPoint.updateData({
-          isDisabled: true,
-          isDeleting: true,
-        });
-        break;
-      case State.ABORTING:
-        this._editPoint.shake(resetFormState);
-        this._pointEvent.shake(resetFormState);
-        break;
-    }
-  }
-
   _handleFormSubmit(editPoint) {
     if (editPoint.destination.name === '') {
       const inputValue = this._editPoint.getElement().querySelector('.event__input--destination');
@@ -154,7 +167,7 @@ export default class TripPoint {
       UpdateType.MINOR,
       editPoint,
     );
-    document.querySelector('.trip-main__event-add-btn').disabled = false;
+    this._newPointButton.disabled = false;
   }
 
   _handleEditClickBack() {
@@ -165,18 +178,6 @@ export default class TripPoint {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
       this._editPoint.reset(this._point);
-      this._replaceFormToCard();
-    }
-  }
-
-  destroy() {
-    remove(this._tripListLi);
-    remove(this._pointEvent);
-    remove(this._editPoint);
-  }
-
-  resetView() {
-    if (this._mode !== Mode.DEFAULT) {
       this._replaceFormToCard();
     }
   }

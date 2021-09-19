@@ -1,16 +1,16 @@
 import Smart from './smart.js';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { duration2 } from '../utils/rendering-data-utils.js';
+import { getDuration2 } from '../utils/rendering-data-utils.js';
 import dayjs from 'dayjs';
 import { Headings } from '../utils/constants.js';
 
-const FORMATTER = {
+const Formatter = {
   [Headings.MONEY]: (value) => `€ ${value}`,
 
   [Headings.TYPE]: (value) => `${value}x`,
 
-  [Headings.TIMESPEND]: (value) => `${duration2(value)}`,
+  [Headings.TIMESPEND]: (value) => `${getDuration2(value)}`,
 };
 
 const getChart = (place, types, values, text) => new Chart(place, {
@@ -34,7 +34,7 @@ const getChart = (place, types, values, text) => new Chart(place, {
         color: '#000000',
         anchor: 'end',
         align: 'start',
-        formatter: FORMATTER[text],
+        formatter: Formatter[text],
       },
     },
     title: {
@@ -78,21 +78,21 @@ const getChart = (place, types, values, text) => new Chart(place, {
   },
 });
 
-const moneyChart = (moneyCtx, points) => {
+const createMoneyChart = (moneyCtx, points) => {
   const summary = Array.from(points.reduce((point, { type, basePrice }) => point.set(type, (point.get(type) || 0) + basePrice), new Map)).sort((a, b) => b[1] - a[1]).slice();
   const money =  summary.map((coin) => coin[1]);
   const types = summary.map((type) => type[0].toUpperCase());
   return getChart(moneyCtx, types, money, Headings.MONEY);
 };
 
-const typeChart = (typeCtx, points) => {
+const createTypeChart = (typeCtx, points) => {
   const summary =  Array.from(points.reduce((point, { type }) => point.set(type, (point.get(type) || 0) + 1), new Map)).sort((a, b) => b[1] - a[1]).slice();
   const types = summary.map((type) => type[0].toUpperCase());
   const repeats = summary.map((repeat) => repeat[1]);
   return getChart(typeCtx, types, repeats, Headings.TYPE);
 };
 
-const timeChart = (timeCtx, points) => {
+const createTimeChart = (timeCtx, points) => {
   const summary =  Array.from(points.reduce((point, { type, dateFrom, dateTo }) => point.set(type, (point.get(type) || 0) + Math.abs(dayjs(dayjs(dateFrom).diff(dateTo)))), new Map)).sort((a, b) => b[1] - a[1]).slice();
   const types = summary.map((type) => type[0].toUpperCase());
   const time = summary.map((duration) => duration[1]);
@@ -150,9 +150,9 @@ export default class StatisticsView extends Smart {
     typeCtx.height = BAR_HEIGHT * 5;
     timeCtx.height = BAR_HEIGHT * 5;
     const TYPES = [...new Set((this._points.slice().map((point) => point.type.toUpperCase())))];
-    this._renderMoneyChart = moneyChart(moneyCtx, this._points, TYPES);
-    this._renderTypeChart = typeChart(typeCtx, this._points, TYPES);
-    this._renderTimeChart = timeChart(timeCtx, this._points, TYPES);
+    this._renderMoneyChart = createMoneyChart(moneyCtx, this._points, TYPES);
+    this._renderTypeChart = createTypeChart(typeCtx, this._points, TYPES);
+    this._renderTimeChart = createTimeChart(timeCtx, this._points, TYPES);
   }
 
 }

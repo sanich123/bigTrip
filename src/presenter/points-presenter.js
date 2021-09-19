@@ -45,6 +45,7 @@ export default class PointsPresenter {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
     this._newTripPoint = new NewTripPoint(this._tripListUl, this._handleViewAction, this._pointsModel);
+    this._newPointButton = document.querySelector('.trip-main__event-add-btn');
   }
 
   init() {
@@ -57,6 +58,26 @@ export default class PointsPresenter {
     } else {
       this._renderPriceTrip();
       this._renderSort();
+    }
+  }
+
+  destroy() {
+    this._clearBoard({resetSortType: true});
+    remove(this._sortMenu);
+    remove(this._tripListUl);
+  }
+
+  createPoint() {
+    if (this._pointsModel.getPoints().length === 0) {
+      render(this._container, this._tripListUl, RenderPosition.BEFOREEND);
+    }
+    this._offers = this._offersModel.getOffers();
+    this._destinations = this._destinationsModel.getDestinations();
+    this._currentSortType = SortType.DAY;
+    this._filtersModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this._newTripPoint.init(this._offers, this._destinations);
+    if (this._empty) {
+      remove(this._empty);
     }
   }
 
@@ -123,26 +144,6 @@ export default class PointsPresenter {
     this._renderSort();
   }
 
-  destroy() {
-    this._clearBoard({resetSortType: true});
-    remove(this._sortMenu);
-    remove(this._tripListUl);
-  }
-
-  createPoint() {
-    if (this._pointsModel.getPoints().length === 0) {
-      render(this._container, this._tripListUl, RenderPosition.BEFOREEND);
-    }
-    this._offers = this._offersModel.getOffers();
-    this._destinations = this._destinationsModel.getDestinations();
-    this._currentSortType = SortType.DAY;
-    this._filtersModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this._newTripPoint.init(this._offers, this._destinations);
-    if (this._empty) {
-      remove(this._empty);
-    }
-  }
-
   _getPoints() {
     this._filterType = this._filtersModel.getFilter();
     const points = this._pointsModel.getPoints();
@@ -170,7 +171,7 @@ export default class PointsPresenter {
     if (resetSortType) {
       this._currentSortType = SortType.DAY;
     }
-    document.querySelector('.trip-main__event-add-btn').disabled = false;
+    this._newPointButton.disabled = false;
   }
 
   _handleViewAction(actionType, updateType, update) {
@@ -191,7 +192,7 @@ export default class PointsPresenter {
         })
           .catch(() => {
             this._newTripPoint.setAborting();
-            document.querySelector('.trip-main__event-add-btn').disabled = true;
+            this._newPointButton.disabled = true;
           });
         break;
       case UserAction.DELETE_POINT:

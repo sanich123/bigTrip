@@ -9,7 +9,7 @@ const generateFilters = (currentFilterType = FilterType.EVERYTHING) =>
   <label class="trip-filters__filter-label" for="filter-${filterType}">${filterType}</label>
   </div>`).join('');
 
-export const filters = (currentFilterType) => (
+const createFilters = (currentFilterType) => (
   `<form class="trip-filters" action="#" method="get">
   ${generateFilters(currentFilterType)}
   <button class="visually-hidden" type="submit">Accept filter</button>
@@ -24,7 +24,7 @@ export default class FiltersView extends Abstract {
   }
 
   getTemplate() {
-    return filters(this._currentFilterType);
+    return createFilters(this._currentFilterType);
   }
 
   _filterTypeChangeHandler(evt) {

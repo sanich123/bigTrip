@@ -49,7 +49,7 @@ export const createCities = (cities) => cities.map((city) => (`<option value="${
 
 export const getOffersByType = (arr, value) => arr.find((offer) => offer.type === value).offers;
 
-export const sortList = (currentSortType) =>
+export const createSortList = (currentSortType) =>
   Object.keys(SortType).map((sortType) =>
     `<div class="trip-sort__item  trip-sort__item--${sortType.toLowerCase()}">
   <input id="sort-${sortType.toLowerCase()}" class="trip-sort__input visually-hidden"
@@ -60,7 +60,7 @@ export const sortList = (currentSortType) =>
   <label class="trip-sort__btn"  for="sort-${sortType.toLowerCase()}">${sortType}</label>
   </div>`);
 
-export const duration2 = (it) => {
+export const getDuration2 = (it) => {
   const difference = new Date(it);
   const ONE_HOUR = 3600000;
   const ONE_DAY = 86400000;
@@ -111,16 +111,16 @@ export const duration2 = (it) => {
   }
 };
 
-export const duration = (begin, end) => {
+export const getDuration = (begin, end) => {
   const time1 = new Date(begin);
   const time2 = new Date(end);
   const time1ms = time1.getTime(time1);
   const time2ms = time2.getTime(time2);
   const difference2 = Math.max(time2ms, time1ms) - Math.min(time2ms, time1ms);
-  return duration2(difference2);
+  return getDuration2(difference2);
 };
 
-export const totalPrice = (points) => {
+export const getTotalPrice = (points) => {
   const totalCost = points.reduce((total, point) => {
     const { basePrice, offers } = point;
     let offersTotal = 0;
@@ -142,7 +142,7 @@ export const getCities = (towns) => {
   return { firstCity, secondCity, thirdCity, fromDate, toDate };
 };
 
-export const existingCity = (city, array) => {
+export const matchExistingCity = (city, array) => {
   if (city && array.some((it) => it === city)) {
     return '';
   }

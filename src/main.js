@@ -15,10 +15,10 @@ const AUTHORIZATION = 'Basic hD3sb8dfSWcl2sA5j';
 const END_POINT = 'https://15.ecmascript.pages.academy/big-trip/';
 
 const priceAndTripSection = document.querySelector('.trip-main');
-const toNavigation = priceAndTripSection.querySelector('.trip-controls__navigation');
-const toFilters = priceAndTripSection.querySelector('.trip-controls__filters');
-const toStat = document.querySelector('main.page-body__page-main .page-body__container');
-const toSort = toStat.querySelector('.trip-events');
+const navigationSection = priceAndTripSection.querySelector('.trip-controls__navigation');
+const filtersSection = priceAndTripSection.querySelector('.trip-controls__filters');
+const statisticsSection = document.querySelector('main.page-body__page-main .page-body__container');
+const sortSection = statisticsSection.querySelector('.trip-events');
 const newPointButton = priceAndTripSection.querySelector('.trip-main__event-add-btn');
 
 const pointsModel = new PointsModel();
@@ -28,10 +28,10 @@ const filtersModel = new FiltersModel();
 const api = new Api(END_POINT, AUTHORIZATION);
 
 const navigationView = new NavigationView();
-render(toNavigation, navigationView, RenderPosition.AFTERBEGIN);
+render(navigationSection, navigationView, RenderPosition.AFTERBEGIN);
 
-const pointsPresenter = new PointsPresenter(priceAndTripSection, toSort, pointsModel, filtersModel, api, destinationsModel, offersModel);
-const filterPresenter = new FiltersPresenter(toFilters, filtersModel, pointsModel);
+const pointsPresenter = new PointsPresenter(priceAndTripSection, sortSection, pointsModel, filtersModel, api, destinationsModel, offersModel);
+const filterPresenter = new FiltersPresenter(filtersSection, filtersModel, pointsModel);
 
 let statisticsComponent = null;
 let priceTripView = null;
@@ -56,7 +56,7 @@ const handleNavigationClick = (menuItem) => {
       }
       pointsPresenter.destroy();
       statisticsComponent = new StatisticsView(pointsModel.getPoints());
-      render(toStat, statisticsComponent, RenderPosition.AFTERBEGIN);
+      render(statisticsSection, statisticsComponent, RenderPosition.AFTERBEGIN);
       navigationView.addClassItem(MenuItem.STATISTICS);
       navigationView.removeClassItem(MenuItem.POINTS);
       newPointButton.disabled = true;

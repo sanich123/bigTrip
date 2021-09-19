@@ -1,7 +1,7 @@
-import { duration, getFormatTime, favoritePoint  } from '../utils/rendering-data-utils.js';
+import { getDuration, getFormatTime, favoritePoint } from '../utils/rendering-data-utils.js';
 import Abstract from '../view/abstract.js';
 
-const eventsList = (points) => {
+const createPointsList = (points) => {
 
   const { basePrice, dateFrom, dateTo, destination, offers, type, isFavorite } = points;
 
@@ -28,7 +28,7 @@ const eventsList = (points) => {
           —
           <time class="event__end-time" datetime="${getFormatTime(dateFrom, dateTo).toDate}">${getFormatTime(dateFrom, dateTo).toDateMinutes}</time>
         </p>
-        <p class="event__duration">${duration(dateFrom, dateTo)}</p>
+        <p class="event__duration">${getDuration(dateFrom, dateTo)}</p>
       </div>
       <p class="event__price">
         €&nbsp;<span class="event__price-value">${basePrice}</span>
@@ -58,7 +58,17 @@ export default class PointsList extends Abstract {
   }
 
   getTemplate() {
-    return eventsList(this._points);
+    return createPointsList(this._points);
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector('.event__favorite-btn').addEventListener('click', this._favoriteClickHandler);
+  }
+
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
   }
 
   _editClickHandler(evt) {
@@ -69,16 +79,5 @@ export default class PointsList extends Abstract {
   _favoriteClickHandler(evt) {
     evt.preventDefault();
     this._callback.favoriteClick();
-  }
-
-  setFavoriteClickHandler(callback) {
-    this._callback.favoriteClick = callback;
-    this.getElement().querySelector('.event__favorite-btn').addEventListener('click', this._favoriteClickHandler);
-  }
-
-
-  setEditClickHandler(callback) {
-    this._callback.editClick = callback;
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
   }
 }

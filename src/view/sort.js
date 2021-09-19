@@ -1,10 +1,10 @@
 import Abstract from '../view/abstract.js';
-import { sortList } from '../utils/rendering-data-utils.js';
+import { createSortList } from '../utils/rendering-data-utils.js';
 import { SortType } from '../utils/constants.js';
 
-const sort = (currentSortType = SortType.DAY) =>
+const createSortButtons = (currentSortType = SortType.DAY) =>
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-  ${sortList(currentSortType).join('')}
+  ${createSortList(currentSortType).join('')}
 </form>`;
 
 export default class SortMenu extends Abstract {
@@ -15,7 +15,12 @@ export default class SortMenu extends Abstract {
   }
 
   getTemplate() {
-    return sort(this._currentSortType);
+    return createSortButtons(this._currentSortType);
+  }
+
+  setSortTypeChangeHandler(callback) {
+    this._callback.sortTypeChange = callback;
+    this.getElement().addEventListener('click', this._sortTypeChangeHandler);
   }
 
   _sortTypeChangeHandler(evt) {
@@ -24,10 +29,5 @@ export default class SortMenu extends Abstract {
     }
     evt.preventDefault();
     this._callback.sortTypeChange(evt.target.dataset.sortType);
-  }
-
-  setSortTypeChangeHandler(callback) {
-    this._callback.sortTypeChange = callback;
-    this.getElement().addEventListener('click', this._sortTypeChangeHandler);
   }
 }

@@ -1,11 +1,11 @@
 import { FilterType } from '../utils/constants.js';
 import dayjs from 'dayjs';
 
-export const getCurrentDates = (dateFrom, dateTo) => dayjs(dateFrom) <= dayjs() && dayjs(dateTo) >= dayjs();
+const getCurrentDates = (dateFrom, dateTo) => dayjs(dateFrom) <= dayjs() && dayjs(dateTo) >= dayjs();
 
-export const getFutureDate = (dateFrom) => dayjs(dateFrom) >= dayjs();
+const getFutureDate = (dateFrom) => dayjs(dateFrom) >= dayjs();
 
-export const getPastDate = (dateTo) => dayjs(dateTo) <= dayjs();
+const getPastDate = (dateTo) => dayjs(dateTo) <= dayjs();
 
 export const filter = {
   [FilterType.EVERYTHING]: (points) => points,

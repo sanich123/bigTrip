@@ -11,6 +11,7 @@ export default class NewTripPoint {
     this._changeData = changeData;
     this._isEdit = false;
     this._editPoint = null;
+    this._newPointButton = document.querySelector('.trip-main__event-add-btn');
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
@@ -78,12 +79,12 @@ export default class NewTripPoint {
       Object.assign(
         newPoint),
     );
-    document.querySelector('.trip-main__event-add-btn').disabled = false;
+    this._newPointButton.disabled = false;
   }
 
   _handleDeleteClick() {
     this.destroy();
-    document.querySelector('.trip-main__event-add-btn').disabled = false;
+    this._newPointButton.disabled = false;
   }
 
   _escKeyDownHandler(evt) {
@@ -91,6 +92,6 @@ export default class NewTripPoint {
       evt.preventDefault();
       this.destroy();
     }
-    document.querySelector('.trip-main__event-add-btn').disabled = false;
+    this._newPointButton.disabled = false;
   }
 }
