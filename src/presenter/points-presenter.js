@@ -33,13 +33,11 @@ export default class PointsPresenter {
     this._sortMenu = null;
     this._empty = null;
 
-
     this._tripListUl = new TripListUl();
     this._tripListLi = new TripListLi();
     this._editingPoint = new EditingPoint();
     this._pointsList = new PointsList();
     this._loading = new Loading();
-
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
