@@ -104,7 +104,6 @@ const templatePoint = {
   offers: [],
 };
 
-
 export default class EditingPoint extends Smart {
   constructor(point = templatePoint, offers, destinations, isEditForm) {
     super();
