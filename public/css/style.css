@@ -978,3 +978,24 @@ main {
 
 .statistics__item:not(:last-child) {
   margin-bottom: 78px; }
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  10%, 50%, 90% {
+    transform: translateY(-10px);
+  }
+  20%, 60% {transform: translateX(10px);}
+  30%, 70% {transform: translateX(-10px);}
+
+  40%, 80% {
+    transform: translateY(10px);
+  }
+}
+
+.shake {
+  animation: shake 0.4s;
+}

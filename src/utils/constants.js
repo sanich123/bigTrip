@@ -34,3 +34,20 @@ export const MenuItem = {
   POINTS: 'POINTS',
   STATISTICS: 'STATISTICS',
 };
+
+export const State = {
+  SAVING: 'SAVING',
+  DELETING: 'DELETING',
+  ABORTING: 'ABORTING',
+};
+
+export const Headings = {
+  TIMESPEND: 'TIME-SPEND',
+  TYPE: 'TYPE',
+  MONEY: 'MONEY',
+};
+
+export const RenderPosition = {
+  AFTERBEGIN: 'afterbegin',
+  BEFOREEND: 'beforeend',
+};

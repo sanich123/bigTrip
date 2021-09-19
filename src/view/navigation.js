@@ -14,11 +14,6 @@ export default class NavigationView extends Abstract {
     this._menuClickHandler = this._menuClickHandler.bind(this);
   }
 
-  // setMenuItem(menuItem) {
-  //   const item = this.getElement().querySelector(`[data-name=${menuItem}]`);
-  //   item.dataset.name === menuItem ? item.classList.add('trip-tabs__btn--active') : item.classList.remove('trip-tabs__btn--active');
-  // }
-
   getTemplate() {
     return navigationMenu();
   }
