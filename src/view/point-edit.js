@@ -88,7 +88,7 @@ ${createDestinationSection()}
 </form>`;
 };
 
-const templatePoint = {
+const TEMPLATE_POINT = {
   basePrice: 0,
   dateFrom: dayjs(),
   dateTo: dayjs(),
@@ -105,7 +105,7 @@ const templatePoint = {
 };
 
 export default class EditingPoint extends Smart {
-  constructor(point = templatePoint, offers, destinations, isEditForm) {
+  constructor(point = TEMPLATE_POINT, offers, destinations, isEditForm) {
     super();
     this._data = EditingPoint.parseTaskToData(point);
     this._offers = offers;
