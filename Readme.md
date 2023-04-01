@@ -12,7 +12,7 @@
 ### Done 07/2021
 
 ### Tech stack:
-JavaScript, CSS
+JavaScript, CSS, WebPack, ChartJS, DatePicker
 
 ### Implemented:
 
